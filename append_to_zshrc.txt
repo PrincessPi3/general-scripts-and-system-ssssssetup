@@ -1,5 +1,5 @@
 # CUSTOM STUFFS
-# custom scripts https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup
+# custom scripts https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup
 PATH="$PATH:/usr/share/customscripts"
 
 # pico SDK https://github.com/raspberrypi/pico-sdk

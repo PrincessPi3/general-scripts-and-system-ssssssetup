@@ -4,7 +4,7 @@ reboot_time: '03:00'
 reboot_offset: '20m'
 login_shell: '/usr/bin/zsh' # which zsh
 custom_scripts_dir: '/usr/share/customscripts'
-custom_scripts_repo: 'https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup.git'
+custom_scripts_repo: 'https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
 # password is precalculated hash
 # mkpasswd --method=sha-512
 # defaultpassword###

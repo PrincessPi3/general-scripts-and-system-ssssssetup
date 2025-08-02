@@ -70,7 +70,7 @@ Manage Files with WinSCP:
 sudo apt install -y git
 # download and install scripts and tools
 cd ~
-git clone https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup.git
+git clone https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git
 sudo -i
 apt install -y apache2 snapd mysql-server byobu nmap screen iotop zip unzip lynx htop php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unattended-upgrades net-tools python3 python3-pip unison
 snap install btop
