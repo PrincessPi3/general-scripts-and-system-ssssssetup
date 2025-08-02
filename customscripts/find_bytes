@@ -4,9 +4,13 @@ if [ -z "$1" -o -z "$2" ]; then
 	exit
 else
 	# ugrep
+	# ugrep docs https://ugrep.com
 	# -W hexdump binary matches, while keeping text matches as text
 	# -z decompress files if need be to scan them
 	# -R recursive
-	# ug -W -z -R '<bytes regex>' "<path>"
+	# ug -W -z -R <bytes regex> <path>
+	# bytes in sequence '\x{0d}\x{0a}'
+	# mix of bytes sans sequence '[\x{0d}\x{0a}]'
+	# normal regex applies '[\x{0d}\x{0a}]{4,6}'
 	ug -W -z -R $1 $2
 fi
