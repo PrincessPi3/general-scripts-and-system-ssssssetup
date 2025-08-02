@@ -1,0 +1,40 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+  echo "Showing Wifi Interfaces:"
+  iwconfig
+  echo "Please Enter Wifi Interface:"
+  read interface
+else
+  interface="$1"
+fi
+
+echo "Scanning Wifi Networks"
+nmcli dev wifi list
+
+if [ -z "$2" ]; then
+  echo "Please Enter SSID"
+  read ssid
+else
+  ssid="$2"
+fi
+
+if [ -z "$3" ]; then
+  echo "Please Enter Password"
+  read password
+else
+  password="$2"
+fi
+
+echo -e "\n\nConnect to $ssid with password $password on interface $interface \n\n"
+pause
+
+echo "Running ./fix-wifi.sh"
+sudo bash ./fix-wifi.sh $interface
+
+echo "Rescanning"
+nmcli dev wifi rescan
+
+echo "Connecting to $ssid"
+nmcli device wifi connect $ssid password $password ifname $interface # --rescan yes
+
+echo -e "\nnyaa mrrp done~ :D\n"

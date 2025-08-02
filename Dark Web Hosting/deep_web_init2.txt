@@ -1,0 +1,84 @@
+1) acquire btc
+	spot app
+	coinmama
+2) tumble btc deep web
+3) put btc in deep web wallet
+4) launch host on bithost
+	https://bithost.io
+	// Ubuntu 20.04 LTS with minimum 1gb RAM
+5) lock down bitohst jump box to VPN IP
+6) generate keys on bithost
+5) get key from sporehost and launch server
+	http://spore64i5sofqlfz5gq2ju4msgzojjwifls7rok2cti624zyq3fcelad.onion/
+6) log in from bithost on VPN
+sudo -i
+apt update
+apt upgrade
+ufw allow ssh
+ufw enable
+apt install apache2 tor mysql-server php libapache2-mod-php php-mysql php-curl php-gd screen iotop zip unzip lynx htop chkrootkit lynis certbot fail2ban python3 python3-pip curl nmap
+a2enmod sslsystemctl restart apache2
+mysql_secure_installation
+	password validation: 2
+	// this is a workaround for an old phpmyadmin repo on  the 20.04 LTS
+	// mysql -h localhost -u root -p
+	// UNINSTALL COMPONENT 'file://component_validate_password';
+	// CREATE USER 'rootuser'@'localhost' IDENTIFIED BY '<Secure Password>'; // REMEMBER THIS PASSWORD
+	// GRANT ALL PRIVILEGES ON *.* TO 'rootuser'@'localhost';
+	// FLUSH PRIVILEGES;
+	// quit;
+apt install phpmyadmin //change to git pull OR updated manual repo
+	[x] apache2
+	[x] YES
+	[Secure Password] // REMEMBER THIS PASSWORD
+cd /var/www/html
+ln -s /usr/share/phpmyadmin
+mv phpmyadmin pma
+//to access phpmyadmin,  go to http://<ip address>/pma //log in with user rootuser and your password from before
+systemctl enable tor
+systemctl start tor
+mkdir /var/www/<servicename>
+nano /etc/tor/torrc
+	Ctrl+W "hidden"
+	>uncomment hidden service 127.0.0.1:80
+	>uncomment hidden service dir, name /var/lib/tor/<servicename>
+	Ctrl+X
+	Y
+systemctl restart tor
+	comment out logging
+nano /etc/apache2/sites-available/<service name>.conf
+
+	<VirtualHost localhost:80>
+	DocumentRoot /var/www/<servicename>
+	</VirtualHost>
+	Ctrl+X
+	Y
+a2ensite <service name>
+systemctl restart apache2
+cat /var/lib/tor/<service name>/hostname
+	save onion address, its your hostname!
+// scallion
+
+
+mkdir /usr/share/scripts
+nano /usr/share/scripts/perms.sh
+```
+#!/bin/bash
+chown -R www-data:www-data /var/www/*
+find /var/www/* -type d -exec chmod g=rwx "{}" \;
+find /var/www/* -type f -exec chmod g=rw "{}" \;
+```
+	Ctrl+X
+	Y
+chmod +x /usr/share/scripts/perms.sh
+sh /usr/share/scripts/perms.sh
+crontab -e
+	1
+at bottom add
+```
+0 8 * * * chkrootkit -q
+0 11 * * 0 lynis -q
+0 */6 * * * apt update; apt -y upgrade;
+```
+	Ctrl+X
+	Y

@@ -1,0 +1,85 @@
+#!/bin/bash
+# usage
+#     bash watch.sh /path/t/dir processname logfile
+set -e
+
+if [ -z $1 ]; then
+    dir='.'
+else
+    dir=$1
+fi
+
+if [ -z $2 ]; then
+    process_name='none'
+else
+    process_name=$2
+fi
+
+if [ ! -f $3 ]; then
+    log_name=/dev/null
+else
+    log_name=$3
+fi
+
+# uptime
+uptime_dirty=$(uptime | awk '{print $3,$4}')
+uptime_cleaned=${uptime_dirty:0:-1}
+
+# date and time (default date command)
+# ex. Sat May 17 11:36:04 PM MDT 2025
+date_time=$(date)
+
+echo -e "Uptime: $uptime_cleaned\t\tTime: $date_time\n"
+
+# list filenames ordered by size large to small
+list_files=$(ls -lAhS $dir | awk '{print $9}')
+eval "list_files_names=($list_files)"
+# echo -e "\nda names\n${list_files_names[1]}\n\n"
+
+# size (human) ordered by size large to small
+list_human=$(ls -lAhS $dir | awk '{print $5}')
+eval "list_files_human=($list_human)"
+# echo -e "\nda humans\n${list_files_human[1]}\n\n"
+
+# size (bytes) ordered by size large to small
+list_bytes=$(du -d 1 $dir/* | awk '{print $1}' | sort -r -n)
+eval "list_files_bytes=($list_bytes)"
+# echo -e "\nda bytes\n${list_files_bytes[1]}\n\n"
+
+echo -e "Size (h)\tBytes\tName"
+
+count=0
+for name in ${list_files_names[@]}; do
+	echo -e "${list_files_human[$count]}\t\t${list_files_bytes[$count]} \t$name"
+    count=$(($count + 1))
+done
+
+# pid
+list_processes_pid=$(ps aux | grep $process_name | awk '{print $2}')
+eval "list_processes_pid=($list_processes_pid)"
+# echo -e "\nda pids\n${list_processes_pid[1]}\n\n"
+
+# %CPU usage
+list_processes_cpu=$(ps aux | grep $process_name | awk '{print $3}')
+eval "list_processes_cpu=($list_processes_cpu)"
+# echo -e "\nda cpu%\n${list_processes_cpu[1]}\n\n"
+
+# %MEMORY usage
+list_processes_mem=$(ps aux | grep $process_name | awk '{print $4}')
+eval "list_processes_mem=($list_processes_mem)"
+# echo -e "\nda mem%\n${list_processes_mem[1]}\n\n"
+
+# process names
+list_processes_name=$(ps aux | grep $process_name | awk '{print $12,$13,$14,$15,$16,$17,$18}' | sed 's/\s/_/g')
+eval "list_processes_name=($list_processes_name)"
+# echo -e "\nda name\n${list_processes_name[1]}\n\n"
+
+echo -e "\nPID\t\t%MEM\t%CPU\tNAME"
+count=0
+for name in ${list_processes_name[@]}; do
+	echo -e "${list_processes_pid[$count]}\t\t${list_processes_mem[$count]}%\t${list_processes_cpu[$count]}%\t$name"
+    count=$(($count + 1))
+done
+
+echo -e "\n$log_name"
+tail -10 $log_name

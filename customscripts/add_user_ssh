@@ -1,0 +1,11 @@
+#!/bin/bash
+# usage:
+#   add_user_ssh.sh "$USER" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP2D+9oYQlTnu1zeVi2gHfTKE7+DDWiu1EibXNwB9g72 princesspi@proton.me"
+
+[ "root" != "$USER" ] && exec sudo $0 "$@"
+KEY="$2"
+mkdir /home/$1/.ssh
+echo $KEY >> /home/$1/.ssh/authorized_keys
+chmod 700 /home/$1/.ssh
+chmod 600 /home/$1/.ssh/authorized_keys
+chown -R $1:$1 /home/$1/.ssh

@@ -1,0 +1,15 @@
+#!/bin/bash
+if [ -z "$1" -o -z "$2" ]; then
+	echo -e "usage:\n\tbash find_bytes.sh <path> <bytes string>\n\t\tex. bash find_bytes.sh /path/to/dir \"\\\x20\\\x20\""
+	exit
+fi
+
+# took a fuckton of experimentation to figure out da escapes lmfao
+double_bytes="$2" # rename it
+path=$1 # rename it
+
+# format ddmmyyyy-HHMM-SS
+log="./recursive-binwalk-$(date +"%d%m%Y-%H%M-%S").txt" # make da log name
+
+# watch your escapes here. some needs escape, redundant escape, or no escape
+find "$path" -type f -exec /bin/bash -c "cmd=\"binwalk --log=$log --raw=$double_bytes {}\"; echo -e \"\n\n==\nfile: {}\nlog: $log\ncommand: \$(printf \\\"%q\\\" \$cmd)\" | tee -a $log; exec \$cmd" \;

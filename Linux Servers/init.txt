@@ -1,0 +1,148 @@
+Ubuntu 24.04.3LTS
+PHP-default
+Apache2
+MySQL+phpmyadmin
+
+# Step 1
+sudo -i
+apt update
+apt -y upgrade
+reboot
+
+# Step 2
+nano /etc/ssh/sshd_config
+Change `#PasswordAuthentication yes` to `PasswordAuthentication no`
+Add line
+	`AllowUsers <username>`
+
+# Step 3
+ON WINDOWS:
+Via PowerShell
+    enable OpenSSH in PowerShell: https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse
+	ssh-keygen -t ed25519 -C "<your email address>"
+	use a STRONG PASSPHRASE
+	Hit [Enter] to save keys at DEFAULT location
+	to get your rsa PUBLIC key, do:
+		Press [Windows Logo Key/Start]+R
+		Put in `notepad %USERPROFILE%/.ssh/id_ed25519.pub`
+		hit Enter
+		copy all the text in that file
+	# Technical details: it saves private key at %USERPROFILE%/.ssh/id_ed25519
+		# private key example: C:\Users\potatouser\.ssh\id_ed25519
+		# public key example: C:\Users\potatouser\.ssh\id_ed25519.pub
+
+
+ON UBUNTU
+	mkdir ~/.ssh
+	chmod 700 ~/.ssh
+	nano ~/.ssh/authorized_keys
+	<paste rsa PUBLIC key>
+	chmod 600 ~/.ssh/authorized_keys
+	sudo systemctl reload sshd
+
+TO CONNECT
+SSH with Windows PowerShell
+    Powershell is installed by default on Windows 10/11
+	ssh <username>@<ipaddress>
+
+Manage Files with WinSCP:
+        install winscp https://winscp.net/eng/download.php
+    	install puttygen https://www.puttygen.com/download.php?val=4																			
+	    run puttygen
+        Click Load
+        Select private key at %USERPROFILE%/.ssh/id_ed25519
+        copy and paste the string of text beginning in ssh-ed25519 and paste 
+        save public and private key to %USERPROFILE%/.ssh/ under a  %USERPROFILE%/.ssh/id_ed25519.ppk (private)
+            and  %USERPROFILE%/.ssh/id_ed25519.ppk.pub (public)
+	run winscp
+	click new site
+		protocol: SFTP
+		host name: <server/ip>
+		username: <username>
+		port number: 22
+	click Advanced
+	on left panel under SSH click Authentication
+	Browse for private key at %USERPROFILE%/.ssh/id_ed25519.ppk
+	ok
+	save
+
+# Step 4
+sudo apt install -y git
+# download and install scripts and tools
+cd ~
+git clone https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup.git
+sudo -i
+apt install -y apache2 snapd mysql-server byobu nmap screen iotop zip unzip lynx htop php php-cli php-fpm php-json php-common php-mysql php-zip php-gd php-mbstring php-curl php-xml php-pear php-bcmath unattended-upgrades net-tools python3 python3-pip unison
+snap install btop
+# secure mysql
+mysql_secure_installation
+	# follow directions, defaults are fine just remember what you set as the root password
+# install and config phpmyadmin
+apt install -y phpmyadmin
+ln -s /usr/share/phpmyadmin /var/www/html/pma
+	# phpmyadmin will be accessable from the public internet at http://<your server ip>/pma
+	# ensure your passwords are up to snuff
+	// TODO: prolly should do some other security shit to protect phpmyadmin
+systemctl restart apache2
+systemctl restart mysql
+# add user to web server group
+usermod -a -G www-data <username>
+# unattended upgrades
+dpkg-reconfigure unattended-upgrades
+nano /etc/apt/apt.conf.d/50unattended-upgrades
+	change `//Unattended-Upgrade::Automatic-Reboot "false";` to `Unattended-Upgrade::Automatic-Reboot "true";`
+	change `//Unattended-Upgrade::Remove-Unused-Dependencies "false";` to `Unattended-Upgrade::Remove-Unused-Dependencies "true";`
+	change `//Unattended-Upgrade::Mail "root@localhost";` to Unattended-Upgrade::Mail "<your admin email>";`
+systemctl start unattended-upgrades && systemctl enable unattended-upgrades
+unattended-upgrade -d -v //test unattended upgrades
+# uncomplicated firewall setup
+ufw allow http
+ufw allow https
+ufw allow ssh
+ufw enable
+reboot
+
+
+// TODO: backups setup needs more work, not working at current
+// make unison script pls
+// SKIP backups section for now
+# backups
+sudo -i
+mkdir -p /backups/log
+mkdir /backups/backups
+ln -s /var/backups /backups/system
+cp -r /home/<user>/general-scripts-and-system-ssssssetup/customscripts /usr/share
+chmod +x /usr/share/customscripts/*sh
+nano /usr/share/customscripts/backup.sh //edit to add dirs to back up
+sh /usr/share/customscripts/crowdsec.sh
+screen -R backups
+	sh /usr/share/customscripts/backup.sh
+	Ctrl+A+D
+sh /usr/share/customscripts/fix_permissions.sh
+
+# Step 5
+# install some cool securiy tools
+apt install -y chkrootkit lynis certbot fail2ban 
+crontab -e //instal crons from /home/<user>/general-scripts-and-system-ssssssetup/crontab.txt
+apt install -y tripwire
+	Follow directions and utilize secure passphrase DO NOT LOSE PASSPHRASE
+# as primary user (NOT root or sudo, run `exit` if in doubt)
+pip3 install thefuck
+echo "# user addons" >> ~/.bashrc
+echo "PATH=~/.local/bin/:$PATH" >> ~/.bashrc
+echo 'eval "$(thefuck --alias)"' >> ~/.bashrc
+echo 'HISTTIMEFORMAT="%Y-%m-%d %T "' >> ~/.bashrc
+source ~/.bashrc
+
+Step 6: # optional
+IF you want to use sudo without password check:
+sudo visudo
+	for ONE user:
+		select editor of your choice
+		add `<username> ALL=(ALL) NOPASSWD: ALL`
+
+	OR for all users in the sudo group
+		comment out the line beginning with %sudo soi it looks like #%sudo
+		add `%sudo ALL=(ALL) NOPASSWD: ALL` on any new line
+		save and exit
+sudo reboot

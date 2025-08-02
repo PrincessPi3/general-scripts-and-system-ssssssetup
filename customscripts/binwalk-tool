@@ -1,0 +1,57 @@
+#!/bin/bash
+# usage
+#   binwalk.sh filename [default/opcodes/basicextract/compressionextract/opcodeextract
+set -e
+filename="$2"
+unix_seconds=$(date +%s)
+dir="binwalk-exracted-$filename-$unix_seconds"
+log="binwalk-log-$filename-$unix_seconds.txt"
+
+basic="Bf"
+basicextract="Bef"
+compressionextract="BeMXZCf"
+opcodecompressextract="ABeMXZCf"
+opcodeextract="ABeCf"
+opcode="ABf"
+
+basic_cmd="--signature"
+basicextract_cmd="--signature --extract --directory=$dir"
+compressionextract_cmd="--signature --extract --matryoshka --deflate --lzma --directory=$dir"
+opcodecompressextract_cmd="--opcodes --signature --extract --matryoshka --deflate -lzma --directory=$dir"
+opcodeextract_cmd="--opcodes --signature --extract --directory=$dir"
+opcode_cmd="--opcodes --signature"
+
+usage_string="Usage:\n\tbinwalk.sh <option> <file>\n\t\tb/d/basic/default\n\t\to/op/opcode/opcodes\n\t\tbe/eb/basicextract/extractbasic\n\t\tce/ec/compressionextract/extractcompression\n\t\tope/oce/oec/opcodecompressionextract\n\t\toe/eo/opcodeextract/extractopcode"
+
+if [ "$1" == "o" -o "$1" == "opcode" -o "$1" == "opcodes" -o "$1" == "op" ]; then
+    tag="$opcode"
+    cmd="$opcode_cmd"
+elif [ "$1" == "d" -o "$1" == "default" -o "$1" == "b" -o "$1" == "basic" ]; then
+    tag="$basic"
+    cmd="$basic_cmd"
+elif [ "$1" == "be" -o "$1" == "basicextract" -o "$1" == "eb" -o "$1" == "extractbasic" ]; then
+    tag="$basicextract"
+    cmd="$basicextract_cmd"
+elif [ "$1" == "ce" -o "$1" == "compressionextract" -o "$1" == "ec" -o "$1" == "extractcompression" ]; then
+    tag="$compressionextract"
+    cmd="$compressionextract_cmd"
+elif [ "$1" == "oce" -o "$1" == "opcodecompressionextract" -o "$1" == "eoc" -o "$1" == "oec" ]; then
+    tag="$opcodecompressextract"
+    cmd="$opcodecompressextract_cmd"
+elif [ "$1" == "oe" -o "$1" == "opcodeextract" -o "$1" == "eo" -o "$1" == "extractopcode" ]; then
+    tag="$opcodeextract_cmd"
+    cmd="$opcodeextract_cmd"
+else
+    echo -e "$usage_string"
+    exit
+fi
+
+echo -e $cmd
+
+if [ -z $2 ]; then
+    echo -e "$usage_string"
+    exit
+fi
+
+to_run="binwalk $cmd --log=$log"
+eval($to_run)

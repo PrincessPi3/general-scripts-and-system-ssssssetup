@@ -1,0 +1,57 @@
+#!/bin/bash
+# sync a local git repo with a remote one over ssh
+# usage: gitsync <remote_host> <remote_dir>
+# defaults pi3 and /var/www/html/Media-Viewer
+
+# handle defaultz
+handle_args () { 
+    if [ -z $1 ]; then
+        remote_host='pi3'
+    else
+        remote_host="$1"
+    fi
+
+    if [ -z $2 ]; then
+        remote_dir='/var/www/html/Media-Viewer'
+    else
+        remote_dir="$2"
+    fi
+}
+
+syncstatus () {
+    # view local and remote status before proceeding
+    echo -e "\nLOCAL status\n"
+    git status
+
+    echo -e "\nREMOTE status\n"
+    ssh $remote_host "/bin/bash -c git -C $remote_dir status"
+}
+
+gitsync () {
+    # todo: param and defaults these up
+    # todo: format this properly as multiline
+    $remote_cmd = "echo -e \"\nREMOTE pull $remote_dir\n\"; git -C $remote_dir pull; echo -e \"\nREMOTE adding on $remote_dir\n\"; git -C $remote_dir add .; echo -e \"\nREMOTE commit $remote_dir\n\"; git -C $remote_dir commit -m \"autosync $(date +%s)\"; echo -e \"\nREMOTE push $remote_dir\n\"; git -C $remote_dir push; echo -e \"\nREMOTE status $remote_dir\n\"; git -C $remote_dir status;"
+
+    echo -e "\nLOCAL pulling\n"
+    git pull
+
+    echo -e "\nLOCAL adding, comitting and pushing\n"
+    git add .
+    git commit -m "autosync $(date +%s)"
+    git push
+
+    echo -e "\nLOCAL status\n"
+    git status
+
+    # run da REMOTE shiz
+    echo -e "\nREMOTE running sync\n"
+    ssh $remote_host "/bin/bash -c \"$remote_cmd\""
+
+    echo -e "\nLOCAL status\n"
+    git status
+}
+
+handle_args
+syncstatus
+gitsync
+syncstatus

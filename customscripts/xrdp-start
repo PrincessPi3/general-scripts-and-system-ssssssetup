@@ -1,0 +1,7 @@
+port=$(grep '^port=33' /etc/xrdp/xrdp.ini | sed 's/port=//')
+ip=$(ip addr | grep 'inet 10.\|inet 192.168.' | awk '{print $2}' | sed 's/\/24//')
+
+sudo /etc/xrdp/startwm.sh
+sudo systemctl restart xrdp
+echo "connect on $ip:$port"
+

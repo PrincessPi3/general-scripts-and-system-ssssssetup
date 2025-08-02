@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e # fail on error
+
+if [ -f './version.txt' ]; then
+    message=$(cat './version.txt')
+else
+    if [ -z "$1" ]; then
+        message=$(date +%s)
+    else
+        message="$*"
+    fi
+fi
+
+git add .
+git commit -m "$message"
+git push

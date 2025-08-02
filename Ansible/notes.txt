@@ -1,0 +1,10 @@
+cd ~ && mkdir ansible-playbook && cd ansible-playbook
+ansible-playbook ansible-playbook.yml -i inventory.ini
+ansible remoteservers -m ping 
+
+# errata
+ssh root@ip
+    passwd princesspi
+sudo nano /etc/ssh/sshd_config
+sudo ufw allow 8888
+sudo bash /usr/share/customscripts/crowdsec.sh

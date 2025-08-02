@@ -1,0 +1,2 @@
+#!/bin/bash
+< passes.txt parallel --block 10M -C 5 --pipe grep --count --max-count=1 --fixed-strings $1

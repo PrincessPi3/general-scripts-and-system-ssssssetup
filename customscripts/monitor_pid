@@ -1,0 +1,29 @@
+#!/bin/bash
+if [ -z $1 ]; then
+    echo -e "Usage:\n\tmonitor_pid \"MESSAGE\""
+    exit
+fi
+
+pid=$1
+
+clear
+echo -e "\nMonitoring for process PID $pid to end"
+
+# get da webhook tag
+tag=$(cat /usr/share/customscripts/tag.txt)
+
+# infinite loop
+while [ 1 -eq 1 ]; do
+    # check for da pid
+    ps -q $pid > /dev/null
+    ret=$?
+    
+    # check if the process exists via retcode of the ps -q $pid
+    if [ $ret -ne 0 ]; then
+        webhook "Process $pid Ended at $(date)! \n\t$tag"
+        echo "Process $pid Ended at $(date)! \n\t$tag"
+        exit
+    fi
+
+    sleep 10
+done

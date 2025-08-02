@@ -1,0 +1,48 @@
+new_username: 'princesspi'
+install_time: '02:00'
+reboot_time: '03:00'
+reboot_offset: '20m'
+login_shell: '/usr/bin/zsh' # which zsh
+custom_scripts_dir: '/usr/share/customscripts'
+custom_scripts_repo: 'https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup.git'
+# password is precalculated hash
+# mkpasswd --method=sha-512
+# defaultpassword###
+# user_password: '$6$n3ybB6uVX.BwKiR4$vjENClERci2hmAkn9d9a8EUFAfnUlsH.R6/8EIXx1bu.k.bC7l/aE//s9ONw/PcbSQ2.hRdUgjxFrJ54/NhBm0'
+ssh_key_auth: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP2D+9oYQlTnu1zeVi2gHfTKE7+DDWiu1EibXNwB9g72'
+list_of_packages:
+  - 'unattended-upgrades'
+  - 'python3'
+  - 'python3-pip'
+  - 'python3-virtualenv'
+  - 'python3-setuptools'
+  - 'thefuck'
+  - 'nginx'
+  - 'wget'
+  - 'htop'
+  - 'btop'
+  - 'lynx'
+  - 'neovim'
+  - 'docker.io'
+  - 'docker-compose'
+  - 'screen'
+  - 'byobu'
+  - 'zsh'
+  - 'nmap'
+  - 'iptraf'
+  - 'iotop'
+  - 'zip'
+  - 'unzip'
+  - 'net-tools'
+  - 'git'
+  - 'chkrootkit'
+  - 'fail2ban'
+  - 'lynis'
+open_services:
+  - { name: 'ssh', proto: 'tcp' }
+  - { name: 'http', proto: 'tcp' }
+  - { name: 'https', proto: 'tcp' }
+custom_scripts:
+  - 'crowdsec.sh'
+  - 'add_user_ssh.sh'
+  - 'fix_permissions.sh'

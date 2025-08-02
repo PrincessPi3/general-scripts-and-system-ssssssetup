@@ -1,0 +1,5 @@
+#!/bin/bash
+[ "root" != "$USER" ] && exec sudo $0 "$@"
+chown -R www-data:www-data /var/www/*
+find /var/www/* -type d -exec chmod g=rwx "{}" \;
+find /var/www/* -type f -exec chmod g=rw "{}" \;

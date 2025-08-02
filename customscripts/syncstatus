@@ -1,0 +1,31 @@
+#!/bin/bash
+# helper to show status of git repos on both local and a remote  host
+# usage: syncstatus <remote_host> <remote_directiory>
+# defaults pi3 and /var/www/html/Media-Viewer
+
+# handle defaultz
+handle_args () { 
+    if [ -z $1 ]; then
+        remote_host='pi3'
+    else
+        remote_host="$1"
+    fi
+
+    if [ -z $2 ]; then
+        remote_dir='/var/www/html/Media-Viewer'
+    else
+        remote_dir="$2"
+    fi
+}
+
+syncstatus () {
+    # view local and remote status before proceeding
+    echo -e "\nLOCAL status\n"
+    git status
+
+    echo -e "\nREMOTE status\n"
+    ssh $remote_host "/bin/bash -c \"git -C '$remote_dir' status\""
+}
+
+handle_args
+syncstatus

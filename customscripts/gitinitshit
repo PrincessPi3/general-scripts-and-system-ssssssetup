@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e # die on any error
+
+# get current directory name without the path
+reponame=${PWD##*/}
+
+# init to main branch (github default)
+git init -b main
+git add .
+git commit -m "initial commit via gitinitshit"
+
+# use github cli to create repo with the dir name
+gh repo create "$thisdirname" --public --source=. --remote=upstream --push
+
+# print git link and url
+git remote -v | sed -n -e 1p | awk '{print "\ngit link:", $2; gsub(".git", "", $2); print "repo url:", $2, "\n"}'

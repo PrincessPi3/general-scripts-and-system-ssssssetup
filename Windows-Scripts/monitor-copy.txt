@@ -1,0 +1,25 @@
+$counter = 1;
+$paths_file = ".\paths.txt"
+$destination_dir = ""
+$sleep_seconds = 90
+
+# infinite loop to run through to and loop every $sleep_seconds seconeds
+while($true) {
+    Write-Host "`n`nNew Rotation!`n`tRotation $counter `n`tCopying...`n`n"
+    # loop through paths in $paths_file
+    foreach($line in Get-Content "$paths_file") {
+            Clear-Host
+            Write-Host "Handling $line on rotation $counter"
+            # copy the path
+            $path = $line
+            # split $line by \ and return last element
+            $dirname = $line -split "\\" | Select-Object -Last 1
+            # do the copy
+            robocopy /e /z $path $destination_dir\$dirname
+    }
+    Clear-Host
+    Write-Host "`n`nFinished Rotation $counter`n`tSleeping 90 Seconds...`n`n"
+    # sleep wont start until robopy loop is finished
+    Start-Sleep -Seconds $sleep_seconds # sleep $sleep_seconds seconds
+    $counter++;
+}

@@ -1,0 +1,218 @@
+---
+- name: 'Configure Remote Servers'
+  hosts: remoteservers
+  vars_files:
+    - './variables.yml'
+  tasks:
+# packages
+  - name: 'Updating apt cache'
+    apt:
+      force_apt_get: True
+      update_cache: True
+  - name: 'Upgrading all apt packages'
+    apt:
+      force_apt_get: True
+      upgrade: full
+    become: yes
+  - name: 'Selected packages to install:'
+    debug:
+      msg: "{{ item }}"
+    loop: "{{ list_of_packages }}"
+  - name: "Installing packages"
+    apt:
+      force_apt_get: True
+      name: "{{ list_of_packages }}"
+      state: present
+  - name: 'Remove useless packages from the cache'
+    apt:
+      force_apt_get: True
+      autoclean: yes
+  - name: 'Run the equivalent of apt-get clean'
+    apt:
+      force_apt_get: True
+      clean: yes
+# add and configure the user
+  - name: "Add the user {{ new_username }}"
+    user:
+      name: "{{ new_username }}"
+      shell: "{{ login_shell }}"
+      # password: "{{ user_password }}"
+      groups: 'sudo,www-data'
+      append: yes
+  - name: "Set authorized key for {{ new_username }}"
+    ansible.posix.authorized_key:
+      user: "{{ new_username }}"
+      key: "{{ ssh_key_auth }}"
+      state: present
+# zsh
+  - name: 'Setting up zsh'
+    blockinfile:
+      path: "/home/{{ new_username }}/.zshrc"
+      block: |
+        # Set up the prompt
+        autoload -Uz promptinit
+        promptinit
+        prompt adam1
+        setopt histignorealldups sharehistory
+        # Use emacs keybindings even if our EDITOR is set to vi
+        bindkey -e
+        # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+        HISTSIZE=1000
+        SAVEHIST=1000
+        HISTFILE=~/.zsh_history
+        # Use modern completion system
+        autoload -Uz compinit
+        compinit
+        zstyle ':completion:*' auto-description 'specify: %d'
+        zstyle ':completion:*' completer _expand _complete _correct _approximate
+        zstyle ':completion:*' format 'Completing %d'
+        zstyle ':completion:*' group-name ''
+        zstyle ':completion:*' menu select=2
+        eval "$(dircolors -b)"
+        zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+        zstyle ':completion:*' list-colors ''
+        zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+        zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+        zstyle ':completion:*' menu select=long
+        zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+        zstyle ':completion:*' use-compctl false
+        zstyle ':completion:*' verbose true
+        zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+        zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+        eval $(thefuck --alias fuck)
+        PATH=~/.local/bin/:$PATH
+      mode: '0744'
+      owner: "{{ new_username }}"
+      group: "{{ new_username }}"
+      state: present
+      create: True
+# ufw
+  - name: 'UFW default allow everything outgoing'
+    community.general.ufw:
+      default: allow
+      direction: 'outgoing'
+  - name: 'UFW default deny everything incoming'
+    community.general.ufw:
+      default: deny # reject to throw error instead of drop quietly
+      direction: 'incoming'
+  - name: 'UFW enable logging'
+    community.general.ufw:
+      logging: 'on'
+  - name: 'UFW selected rules:'
+    debug:
+      msg: "{{item.name}}/{{item.proto}}"
+    loop: "{{ open_services }}"
+  - name: 'UFW setting rules'
+    community.general.ufw:
+      rule: allow
+      port: "{{ item.name }}"
+      proto: "{{ item.proto }}"
+    loop: "{{ open_services }}"
+  - name: 'UFW enable'
+    community.general.ufw:
+      state: enabled
+    become: yes
+# unattended upgrades
+  - name: 'Unattended upgrades initial dpkg reconfigure'
+    command:
+      cmd: 'dpkg-reconfigure -f noninteractive unattended-upgrades'
+    become: yes
+  - name: 'Unattended upgrades configure 20auto-upgrades'
+    blockinfile:
+      dest: '/etc/apt/apt.conf.d/20auto-upgrades'
+      block: |
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::Unattended-Upgrade "1";
+      mode: '0644'
+      owner: 'root'
+      group: 'root'
+      state: present
+      insertafter: EOF
+    become: yes
+  - name: 'Unattended upgrades configure 50unattended-upgrades'
+    blockinfile:
+      dest: '/etc/apt/apt.conf.d/50unattended-upgrades'
+      block: |
+        Unattended-Upgrade::Automatic-Reboot "true";
+        Unattended-Upgrade::Automatic-Reboot-Time "{{ reboot_time }}";
+      create: True
+      insertafter: EOF
+      mode: '0644'
+      owner: 'root'
+      group: 'root'
+    become: yes
+  - name: 'Unattended upgrades configure daily timer'
+    lineinfile:
+      path: '/lib/systemd/system/apt-daily-upgrade.timer'
+      regexp: '^OnCalendar'
+      line: "OnCalendar=*-*-* {{ install_time }}"
+      state: present
+    become: yes
+  - name: 'Unattended upgrades configure reboot offset'
+    lineinfile:
+      path: '/lib/systemd/system/apt-daily-upgrade.timer'
+      regexp: '^RandomizedDelaySec'
+      line: "RandomizedDelaySec={{ reboot_offset }}"
+      state: present
+    become: yes
+  - name: 'Unattended upgrades last dpkg reconfigure'
+    command:
+      cmd: 'dpkg-reconfigure -f noninteractive unattended-upgrades'
+    become: yes
+# customscripts
+  - name: 'Customscripts download'
+    git:
+      repo: "{{ custom_scripts_repo }}"
+      dest: '/tmp/cscripts'
+  - name: "Create directory {{ custom_scripts_dir }}"
+    file:
+      path: "{{ custom_scripts_dir }}"
+      state: directory
+      mode: '0755'
+      owner: 'root'
+      group: 'root'
+    become: yes
+  - name: 'Customscripts installing'
+    command:
+      cmd: "cp /tmp/cscripts/customscripts/{{ item }} {{ custom_scripts_dir }}"
+    loop: "{{ custom_scripts }}"
+    become: yes
+  - name: 'Customscripts activating'
+    command:
+      cmd: "chmod 755 {{ custom_scripts_dir }}/{{ item }}"
+    loop: "{{ custom_scripts }}"
+    become: yes
+# crontabs
+  - name: 'Crontab chkrootkit'
+    cron:
+      name: 'chkrootkit'
+      minute: '0'
+      hour: '8'
+      user: 'root'
+      job: 'chkrootkit -q'
+      state: present
+    become: yes
+  - name: 'Crontab lynis'
+    cron:
+      name: 'lynis'
+      minute: '0'
+      hour: '11'
+      user: 'root'
+      job: 'lynis -q'
+      state: present
+    become: yes
+# enable services
+  - name: 'enable/restart nginx'
+    service:
+      name: 'nginx'
+      enabled: True
+      state: 'restarted'
+    become: yes
+  - name: 'enable/restart ssh'
+    service:
+      name: 'ssh'
+      enabled: True
+      state: 'restarted'
+    become: yes
+
+    

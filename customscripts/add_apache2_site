@@ -1,0 +1,42 @@
+#!/bin/bash
+[ "root" != "$USER" ] && exec sudo $0 "$@"
+#usage sudo sh add_site_apache2.sh 192.168.1.1 example.com
+#note: the web server will go down for the duration this script is running
+#set needed A records to domain DNS before beginning
+#bind IP desired before beginning
+
+IP=$1
+DOMAIN=$2
+
+#stop apache
+systemctl stop apache2
+
+#cert get interface
+certbot certonly
+
+mkdir /var/www/$DOMAIN
+echo "<h1>its live</h1>" > /var/www/$DOMAIN/index.html
+
+#make and place config file
+cat << EOF | echo > /etc/apache2/sites-available/{$DOMAIN}.config
+<VirtualHost  {$IP}:443>
+DocumentRoot /var/www/{$DOMAIN}
+ServerName $DOMAIN
+SSLEngine on
+SSLCertificateFile /etc/letsencrypt/live/{$DOMAIN}/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/{$DOMAIN}/privkey.pem
+SSLProtocol all -SSLv2 -SSLv3
+SSLHonorCipherOrder on
+SSLCipherSuite "HIGH:!aNULL:!MD5:!3DES:!CAMELLIA:!AES128"
+SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+</VirtualHost>
+
+<VirtualHost {$IP}:80>
+ServerName $DOMAIN
+Redirect permanent / https://{$DOMAIN}/
+</VirtualHost>
+EOF
+
+a2ensite $DOMAIN
+sh fix_permissions.sh
+systemctl start apache2

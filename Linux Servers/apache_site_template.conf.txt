@@ -1,0 +1,16 @@
+<VirtualHost  $IP:443>
+DocumentRoot /var/www/$DOMAIN
+ServerName $DOMAIN
+SSLEngine on
+SSLCertificateFile /etc/letsencrypt/live/$DOMAIN/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/$DOMAIN/privkey.pem
+SSLProtocol all -SSLv2 -SSLv3
+SSLHonorCipherOrder on
+SSLCipherSuite "HIGH:!aNULL:!MD5:!3DES:!CAMELLIA:!AES128"
+SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+</VirtualHost>
+
+<VirtualHost $IP:80>
+ServerName $DOMAIN
+Redirect permanent / https://$DOMAIN/
+</VirtualHost>

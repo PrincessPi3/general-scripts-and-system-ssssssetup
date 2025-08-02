@@ -1,0 +1,74 @@
+#!/bin/bash
+set -e # fail on error
+
+# default to scan pwd if arg 1 is empty
+if [ -z $1 ]; then
+        scan_path="$PWD"
+else
+        scan_path="$1"
+fi
+
+# configure dir structure
+analysis_dir="recursive-analysis" # top level
+file_dir="$analysis_dir/file"
+strings_dir="$analysis_dir/strings"
+sha256sum_dir="$analysis_dir/sha256sum"
+binwalk_dir="$analysis_dir/binwalk"
+
+# make the directory structure if absent or fail without error
+mkdir -p "$file_dir" "$strings_dir" "$sha256sum_dir" "$binwalk_dir"
+
+# log paths
+timestamp=$(date +"%Y%m%d-%H%M-%S-%Z") # format YYYYmmdd-HHMM-SS-TZ
+log_main="./recursive-log.txt"
+log_binwalk="$binwalk_dir/recursive-binwalk-$timestamp.txt"
+log_file="$file_dir/recursive-file-$timestamp.txt"
+log_strings="$strings_dir/recursive-strings-hex-offsets-$timestamp.txt"
+log_sha256sum="$sha256sum_dir/recursive-sha256sum-$timestamp.txt"
+
+# full command except filename
+pre_cmd_binwalk="binwalk"
+pre_cmd_file="file"
+strings_len=8
+pre_cmd_strings="strings --bytes=$strings_len --print-file-name --radix=x"
+pre_cmd_sha256sum="sha256sum"
+
+echo -e "\nRunning Princess Pi's Recursive Analysis on $scan_path at $timestamp\n\tMaster log: $log_main\n"
+
+# do da scanssss
+## binwalk
+echo "Recursive binwalk! Saving to $log_binwalk . . ."
+find "$scan_path" -type f \
+        -not -path "*/.git/*" \
+        -not -path "*/__pycache__/*" \
+        -not -path "*/recursive-analysis/*" \
+        -exec /bin/bash -c "cmd=\"$pre_cmd_binwalk {}\" && echo -e \"File: {}\nCommand: \$cmd\nTimestamp: $timestamp\" >> $log_binwalk && exec \$cmd >> $log_binwalk" \; # watch your escapes here
+
+## file
+echo "Recursive file! Saving to $log_file . . ."
+find "$scan_path" -type f \
+        -not -path "*/.git/*" \
+        -not -path "*/__pycache__/*" \
+        -not -path "*/recursive-analysis/*" \
+        -exec $pre_cmd_file {} >> $log_file \;
+
+## strings
+echo "Recursive strings! Saving to $log_strings . . ."
+find "$scan_path" -type f \
+        -not -path "*/.git/*" \
+        -not -path "*/__pycache__/*" \
+        -not -path "*/recursive-analysis/*" \
+        -exec $pre_cmd_strings {} >> $log_strings \;
+
+## sha256sum
+echo "Recursive sha256sum! Saving to $log_sha256sum . . ."
+find "$scan_path" -type f \
+        -not -path "*/.git/*" \
+        -not -path "*/__pycache__/*" \
+        -not -path "*/recursive-analysis/*" \
+        -exec $pre_cmd_sha256sum {} >> $log_sha256sum \;
+
+# log to master log
+echo -e "$timestamp:\n\tscan path: $scan_path\n\tbinwalk:\n\t\tlog: $log_binwalk\n\t\tcmd: $pre_cmd_sha256sum {}\n\tfile:\n\t\tlog: $log_file\n\t\tcmd: $pre_cmd_file {}\n\tstrings:\n\t\tlog: $log_strings\n\t\tcmd: $pre_cmd_strings {}\n\tsha256sum:\n\t\tlog: $log_sha256sum\n\t\tcmd: $pre_cmd_sha256sum {}\n" >> $log_main
+
+echo -e "\nDone! :3"
