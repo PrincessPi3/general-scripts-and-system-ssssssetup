@@ -17,7 +17,7 @@ binwalk_dir="$analysis_dir/binwalk"
 md5_dir="$analysis_dir/md5sum"
 
 # make the directory structure if absent or fail without error
-mkdir -p "$file_dir" "$strings_dir" "$sha256sum_dir" "$binwalk_dir"
+mkdir -p "$file_dir" "$strings_dir" "$sha256sum_dir" "$binwalk_dir" "$md5_dir"
 
 # log paths
 timestamp=$(date +"%Y%m%d-%H%M-%S-%Z") # format YYYYmmdd-HHMM-SS-TZ
