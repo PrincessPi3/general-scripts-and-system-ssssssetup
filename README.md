@@ -4,7 +4,7 @@
 * General Windows 10 and mobile security guide
 
 Install customscripts on linux with  
-`curl -s https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup/-/raw/master/customscripts/install_script.sh?nocache=$RANDOM | sudo "$SHELL"`
+`curl -s https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup/blob/main/customscripts/install_script.sh?nocache=$RANDOM | sudo "$SHELL"`
 
 ## Usage
 ### Linux
