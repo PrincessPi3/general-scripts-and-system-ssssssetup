@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -e # make sure da silly thing dont continue when there be errorZ
 
-gitRepo='https://gitlab.com/princesspi/general-scripts-and-system-ssssssetup.git'
+gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
 tmpDir='/tmp/customscripts'
 finalDir='/usr/share/customscripts'
 
