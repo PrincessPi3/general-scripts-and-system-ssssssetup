@@ -50,7 +50,7 @@ find "$scan_path" -type f \
         -not -path "*/.git/*" \
         -not -path "*/__pycache__/*" \
         -not -path "*/recursive-analysis/*" \
-        -exec $pre_cmd_file {} >> $log_file \;
+        -exec $pre_cmd_file "{}" >> $log_file \;
 
 ## strings
 echo "Recursive strings! Saving to $log_strings . . ."
@@ -58,7 +58,7 @@ find "$scan_path" -type f \
         -not -path "*/.git/*" \
         -not -path "*/__pycache__/*" \
         -not -path "*/recursive-analysis/*" \
-        -exec $pre_cmd_strings {} >> $log_strings \;
+        -exec $pre_cmd_strings "{}" >> $log_strings \;
 
 ## sha256sum
 echo "Recursive sha256sum! Saving to $log_sha256sum . . ."
@@ -66,7 +66,7 @@ find "$scan_path" -type f \
         -not -path "*/.git/*" \
         -not -path "*/__pycache__/*" \
         -not -path "*/recursive-analysis/*" \
-        -exec $pre_cmd_sha256sum {} >> $log_sha256sum \;
+        -exec $pre_cmd_sha256sum "{}" >> $log_sha256sum \;
 
 # log to master log
 echo -e "$timestamp:\n\tscan path: $scan_path\n\tbinwalk:\n\t\tlog: $log_binwalk\n\t\tcmd: $pre_cmd_sha256sum {}\n\tfile:\n\t\tlog: $log_file\n\t\tcmd: $pre_cmd_file {}\n\tstrings:\n\t\tlog: $log_strings\n\t\tcmd: $pre_cmd_strings {}\n\tsha256sum:\n\t\tlog: $log_sha256sum\n\t\tcmd: $pre_cmd_sha256sum {}\n" >> $log_main
