@@ -73,4 +73,4 @@ fi
 # sudo bash -c "echo '$url' > /usr/share/customscripts/webhook.txt"
 # sudo bash -c "echo '$tag' > /usr/share/customscripts/tag.txt"
 
-echo -e "\n\nDone! Restart shell:\n\texec \$SHELL\n\n"
+echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n\n"
