@@ -7,6 +7,6 @@ else
 	# -W hexdump binary matches, while keeping text matches as text
 	# -z decompress files if need be to scan them
 	# -R recursive
-	# ug -W -z -R <bytes regex> <path>
-	ug -W -z -R "'$1'"   "'$2'"
+	# ug -W -z -R '<bytes regex>' "<path>"
+	ug -W -z -R "'$1'" "$2"
 fi
