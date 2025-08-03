@@ -6,13 +6,13 @@
 # handle defaultz
 handle_args () { 
     if [ -z $1 ]; then
-        remote_host='pi3'
+        remote_host="pi3"
     else
         remote_host="$1"
     fi
 
     if [ -z $2 ]; then
-        remote_dir='/var/www/html/Media-Viewer'
+        remote_dir="/var/www/html/Media-Viewer"
     else
         remote_dir="$2"
     fi
@@ -24,7 +24,7 @@ syncstatus () {
     git status
 
     echo -e "\nREMOTE status\n"
-    ssh $remote_host "/bin/bash -c git -C $remote_dir status"
+    ssh $remote_host "/bin/bash -c \"git -C $remote_dir status\""
 }
 
 # synchronize git repos on local and remote
@@ -32,35 +32,35 @@ gitsync () {
     echo "INFO | Starting gitsync"
 
     # run on remote
-    ssh $remote_host "git -C \"$remote_dir\" pull | tee -a \"$log_file\""
+    ssh $remote_host "git -C \"$remote_dir\" pull"
     echo "REMOTE | Finished git pull on $remote_host:$remote_dir" $?
 
-    ssh $remote_host "git -C \"$remote_dir\" add . | tee -a \"$log_file\""
+    ssh $remote_host "git -C \"$remote_dir\" add ."
     echo "REMOTE | Finished git adding on $remote_host:$remote_dir" $?
 
-    ssh $remote_host "git -C \"$remote_dir\" commit -m \"autosync at $(date +%s)\" | tee -a \"$log_file\""
+    ssh $remote_host "git -C \"$remote_dir\" commit -m \"autosync at $(date +%s)\""
     echo "REMOTE | Finished git commit on $remote_host:$remote_dir" $?
 
-    ssh $remote_host "git -C \"$remote_dir\" push | tee -a \"$log_file\""
+    ssh $remote_host "git -C \"$remote_dir\" push"
     echo "REMOTE | Finished git push on $remote_host:$remote_dir" $?
 
-    ssh $remote_host "git -C \"$remote_dir\" status | tee -a \"$log_file\""
+    ssh $remote_host "git -C \"$remote_dir\" status"
     echo "REMOTE | Finished git status on $remote_host:$remote_dir" $?
 
     # run on local
-    git pull | tee -a "$log_file"
+    git pull
     echo "LOCAL | Finished git pulling" $?
 
-    git add .  | tee -a "$log_file"
+    git add .
     echo "LOCAL | Finished git adding" $?
 
-    git commit -m "autosync at $(date +%s)"  | tee -a "$log_file"
+    git commit -m "autosync at $(date +%s)"
     echo "LOCAL | Finished git comitting" $?
 
-    git push  | tee -a "$log_file"
+    git push
     echo "LOCAL | Finished git pushing" $?
 
-    git status  | tee -a "$log_file"
+    git status
     echo "LOCAL | Finished git status" $?
 
     echo "INFO | Finished gitsync"
