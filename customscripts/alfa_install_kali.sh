@@ -1,4 +1,7 @@
 #!/bin/bash
+# installs the Alpha AWUS036ACH on kali linux
+# has some slowdowns and pauses to work around a stupid issuie i have
+
 # make sure environment is up to date
 sudo apt update
 # sudo apt upgrade -y

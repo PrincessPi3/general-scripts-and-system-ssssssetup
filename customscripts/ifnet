@@ -1,6 +1,6 @@
 #!/bin/bash
 # from https://askubuntu.com/questions/3299/how-to-run-cron-job-when-network-is-up
-# usage in cron
+# usage in root cron
 ##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup" 2>> /var/log/cron.error.log
 function check_online
 {
