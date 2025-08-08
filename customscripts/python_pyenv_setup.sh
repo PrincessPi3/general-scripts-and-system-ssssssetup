@@ -10,7 +10,7 @@ rcfile="$HOME/.zshrc" # zsh
 check_purge_package () {
     package_name=$1
 
-    which -s $package_name # silently test for command
+    which -s $package_name 2>/dev/null 1>/dev/null # silently test for command
     package_check=$? # get return code. 0 for found, any other for not found
 
     if [ $package_check -eq 0 ]; then # if package is found, purge it
@@ -30,6 +30,17 @@ check_purge_package python
 check_purge_package pip
 check_purge_package pip3
 check_purge_package pip2
+
+# remove any existing pyenv install
+pyenv root 2>/dev/null 1>/dev/null # do it silently
+pyenv_root_check=$?
+
+if [ $pyenv_root_check -eq 0 ]; then
+    echo "Removing existing pyenv installation"
+    rm -rf $(pyenv root)
+else
+    echo "No existing pyenv installation found, skipping removal"
+fi
 
 # install pyenv
 curl -fsSL https://pyenv.run | bash
