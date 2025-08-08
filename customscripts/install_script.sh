@@ -38,23 +38,37 @@ if [[ -d "$tmpDir" ]]; then
     rm -rf "$tmpDir"
 fi
 
+# clean up any exisiting repo dir
 if [[ -d "$finalDir" ]]; then
     echo "Cleaning Up Existing $finalDir"
     rm -rf "$finalDir"
 fi
 
+# ddownload repo
 echo "Cloning Repo $gitRepo"
 git clone $gitRepo $tmpDir --single-branch --depth 1
 
+# put the customscripts dir into place
 echo "Placing in $finalDir"
-mv "$tmpDir/customscripts" "$finalDir"
+sudo mv "$tmpDir/customscripts" "$finalDir"
 
+# configure webhook
+echo "Enter Discord Webhook URL"
+read url
+echo "Enter Tag to Notify"
+read tag
+sudo bash -c "echo '$url' > $finalDir/webhook.txt"
+sudo bash -c "echo '$tag' > $finalDir/tag.txt"
+
+# fix ownership
 echo "Changing ownership of $finalDir to $username:$username recursively"
-chown -R $username:$username "$finalDir"
+sudo chown -R $username:$username "$finalDir"
 
+# fix perms
 echo "Setting perms of $finalDir and contents to 775"
-chmod -R 775 "$finalDir"
+sudo chmod -R 775 "$finalDir"
 
+# check if $finalDir is in $rcfile
 grep -q $finalDir $rcfile
 pathgrep=$?
 
@@ -65,14 +79,7 @@ else
     echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
 fi
 
-# configure webhook
-echo "Enter Discord Webhook URL"
-read url
-echo "Enter Tag to Notify"
-read tag
-sudo bash -c "echo '$url' > $finalDir/webhook.txt"
-sudo bash -c "echo '$tag' > $finalDir/tag.txt"
-
+# cleanup
 sudo rm -f $finalDir/install_script.sh
 
 echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n\n"
