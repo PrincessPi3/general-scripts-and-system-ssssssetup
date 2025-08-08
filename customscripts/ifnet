@@ -33,4 +33,4 @@ if [[ $IS_ONLINE -eq 0 ]]; then
     exit 1
 fi
 
-bash $1 2>> /var/log/cron.error.log
+sudo bash $1 2>> /var/log/cron.error.log

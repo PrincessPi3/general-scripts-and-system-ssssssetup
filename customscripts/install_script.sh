@@ -53,12 +53,12 @@ echo "Placing in $finalDir"
 sudo mv "$tmpDir/customscripts" "$finalDir"
 
 # configure webhook
-echo "Enter Discord Webhook URL"
-read url
-echo "Enter Tag to Notify"
-read tag
-sudo bash -c "echo '$url' > $finalDir/webhook.txt"
-sudo bash -c "echo '$tag' > $finalDir/tag.txt"
+# echo "Enter Discord Webhook URL"
+# read url
+# echo "Enter Tag to Notify"
+# read tag
+# sudo bash -c "echo '$url' > $finalDir/webhook.txt"
+# sudo bash -c "echo '$tag' > $finalDir/tag.txt"
 
 # fix ownership
 echo "Changing ownership of $finalDir to $username:$username recursively"
