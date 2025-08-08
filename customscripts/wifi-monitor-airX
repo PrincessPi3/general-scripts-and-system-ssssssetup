@@ -1,3 +1,35 @@
-sudo airmon-ng check kill
-sudo airmon-ng start wlan1
-sudo airodump-ng wlan1mon
+#!/bin/bash
+if [ -z $1 ]; then
+    echo "Defaulting to wlan0 for wifi device"
+    wifi=wlan0
+else
+    echo "Using $1 for wifi device"
+    wifi=$1
+fi
+
+check_package () {
+    which -s $1 1>/dev/null 2>/dev/null
+    package_check=$?
+
+    if [ $package_check -ne 0 ]; then
+        echo "FAIL: $1 is not installed, exiting"
+        exit
+    fi
+}
+
+check_package airmon-ng
+check_package airodump-ng
+
+wifi_mon="${wifi}mon" # name the monitor device
+
+# seems to be fuckin errything up
+sudo airmon-ng check kill # clean up any existing bullshit
+echo $?
+
+sudo airmon-ng start $wifi # start the device
+echo $?
+
+sudo airodump-ng $wifi_mon # put it in monitor mode
+echo $?
+
+echo "Done! Use wifi device $wifi_mon"
