@@ -13,7 +13,7 @@ check_purge_package () {
     which -s $package_name # silently test for command
     package_check=$? # get return code. 0 for found, any other for not found
 
-    if [ $package_check -ne 0 ]; then # if package is found, purge it
+    if [ $package_check -eq 0 ]; then # if package is found, purge it
         echo "sudo apt purge $package_name -y"
     else # otherwise skip
         echo "no $package_name installation found, skipping uninstall"
@@ -34,9 +34,9 @@ curl -fsSL https://pyenv.run | bash
 ## setup shell
 ### check for pyenv in rcfile
 grep -q .pyenv $rcfile
-rc_pyenv_check=$?
+rc_pyenv_check=$? # get retcode, 0 for found not 0 for not found
 
-if [ $rc_pyenv_check -ne 0 ]; then # if pyenv found
+if [ $rc_pyenv_check -eq 0 ]; then # if pyenv found
     echo "pyenv already set up in $rcfile, skipping add init"
 else # if pyenv not found
     echo "Setting up pyenv in $rcfile"
@@ -48,11 +48,11 @@ fi
 ## add aliases
 ### check for aliases in rcfile
 grep -q '## python aliases' $rcfile
-rc_pyalias_check=$? # get retcode
+rc_pyalias_check=$? # get retcode, 0 for found not 0 for not found
 
-if [ $rc_pyalias_check -ne 0 ]; then # if ailases found
+if [ $rc_pyalias_check -eq 0 ]; then # if aliases found
     echo "pyenv aliases already set up in $rcfile, skipping"
-else # if aliases not found
+else # if aliases not found, add python shit
     echo "Setting up pyenv aliases in $rcfile" 
     echo "## python aliases" >> $rcfile
     echo 'alias py=python' >> $rcfile
