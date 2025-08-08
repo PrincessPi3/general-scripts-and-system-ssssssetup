@@ -14,7 +14,9 @@ check_purge_package () {
     package_check=$? # get return code. 0 for found, any other for not found
 
     if [ $package_check -eq 0 ]; then # if package is found, purge it
-        echo "sudo apt purge $package_name -y"
+        echo "purging $package_name"
+        sudo apt purge $package_name -y
+        echo "finished purging $package_name"
     else # otherwise skip
         echo "no $package_name installation found, skipping uninstall"
     fi
