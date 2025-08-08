@@ -9,8 +9,6 @@
 #       hold: 30
 #       ex. `.\wait-on-host.ps1 -hostname google.com -sleep 10 -pingcount 5`
 
-
-
 param(
     [string]
     $hostname = "cable-wind.local",
@@ -33,7 +31,6 @@ param(
 
 if($hostname -eq 'help') {
     echo "usage:`n`twait-on-host [help] -hostname <DOMAIN_NAME_OR_IP> -sleep <SECONDS_TO_SLEEP_PER_CYCLE> -pingcount <NUMBER_OF_TIMES_TO_PING_PER_ITERATION> -max <MAX_NUMBER_OF_ITERATIONS> -hold <SECONDS_TO_WAIT_AFTER_FIRST_RESPONSE>`n`twait-on-host help`n`t`tthis help message`n`twait-on-host 8.8.8.8`n`t`twait on 8.8.8.8 with defaults`n`tdefaults:`n`t`thostname: cable-wind.local`n`t`tsleep: 25`n`t`tpingcount: 1`n`t`tmax: 500`n`t`thold: 30`n`tex. wait-on-host -hostname google.com -sleep 10 -pingcount 5`n";
-    
     exit;
 }
 
@@ -74,12 +71,10 @@ while(1 -eq 1) {  # infinite loop
         sleep $sleep # sleepy time
     }
 
-
     if($iterations -gt $max) {
         echo "`nMAX ITERATIONS OF $max REACHED! EXITINTG`n"
         exit
     }
 
     $iterations++
-
 }
