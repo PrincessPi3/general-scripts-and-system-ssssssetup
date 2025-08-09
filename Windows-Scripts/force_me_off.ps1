@@ -12,7 +12,10 @@ $wait_seconds = ($wait_minutes*60)
 $total_wait_minutes = ($wait_minutes+$grace_minutes)
 $grace_seconds = ($grace_minutes*60)
 
-# Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes"
+Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes"
+
+# schedule chkdsk to take up fuckin tons of time
+chkdsk /r C:
 
 Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
 
@@ -26,9 +29,6 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes...`n"
 
 # sleep
 Start-Sleep -Seconds $wait_seconds
-
-# chkdsk to take up fuckin tons of time
-chkdsk /r
 
 # force reboot
 Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
