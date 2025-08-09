@@ -52,4 +52,4 @@ function do_admin_shit {
     Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
 }
 
-do_admin_shit | Out-Null
+Start-Job -ScriptBlock ${function:do_admin_shit} | Out-Null
