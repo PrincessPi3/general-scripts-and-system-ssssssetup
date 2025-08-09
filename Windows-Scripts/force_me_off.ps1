@@ -33,4 +33,4 @@ Start-Sleep -Seconds ($wait_seconds)
 
 # force reboot
 Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
-Restart-Computer -Force -Timeout $grace_seconds
+Restart-Computer -Force -Wait -Timeout $grace_seconds
