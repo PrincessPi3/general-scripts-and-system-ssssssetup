@@ -12,15 +12,16 @@ param (
 # some calcs
 $wait_minutes = (($Hours*60) + $Minutes)
 $wait_seconds = ($wait_minutes*60)
+$total_wait_minutes = ($wait_minutes+$grace_minutes)
 $grace_seconds = ($grace_minutes*60)
 
-Write-Host "FORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
+Write-Host "FORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $total_wait_minutes minutes grace period`n"
 
 # current time
-Write-Host "Time is currently $(Get-Date -Format 'hh:mm:ss tt')"
+Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
-Write-Host "Shutting down in $Hours hour(s) and $Minutes minute(s) at $((Get-Date).AddHours($Hours).AddMinutes(($Minutes+$grace_minutes)).ToString("hh:mm:ss tt"))"
+Write-Host "$((Get-Date).AddHours($Hours).AddMinutes($total_wait_minutes).ToString("hh:mm:ss tt")) | Forcing shutting down time ($Hours hours $Minutes minutes plus $grace_minutes minutes grace period)"
 
 Write-Host "`nSleeping for $Hours hours $Minutes minutes...`n"
 
