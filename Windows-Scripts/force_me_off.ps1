@@ -12,25 +12,31 @@ param (
 # some calcs
 $wait_minutes = (($Hours*60)+$Minutes)
 $wait_seconds = ($wait_minutes*60)
-$total_wait_minutes = ($wait_minutes+$grace_minutes)
 $grace_seconds = ($grace_minutes*60)
-$stop_time = "$((Get-Date).AddHours($Hours).AddMinutes($total_wait_minutes).ToString("hh:mm:ss tt"))"
+$stop_time = $((Get-Date).AddHours($Hours).AddMinutes(($grace_minutes+$Minutes)).ToString("hh:mm:ss tt"))
 
-Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
+# notify of time
+Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period"
+
+# webhook
+Write-Host "Sending webhook notification..."
+webhook "FORCING REBOOT AT $stop_time`n"
 
 # current time
 Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
-Write-Host " | Reboot Time"
+Write-Host "$stop_time | Reboot Time"
 
-webhook "FORCING REBOOT AT $stop_time"
+Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to the background to prevent cheating`n"
 
-Write-Host "`nSleeping for $Hours hours $Minutes minutes...`n"
+Start-Job -ScriptBlock {
+    # sleep
+    Start-Sleep -Seconds $wait_seconds
 
-# sleep
-Start-Sleep -Seconds ($wait_seconds)
+    # do an offline chkdisk to force more time away from computer lmfao
+    # chkdsk /r C:
 
-# force reboot
-Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
-Restart-Computer -Force -Wait -Timeout $grace_seconds
+    # force reboot using the cmd because powershell is cancer
+    shutdown /r /t $grace_seconds # Restarts after a 300-second delay
+}  | Out-Null # maek it queitrerr
