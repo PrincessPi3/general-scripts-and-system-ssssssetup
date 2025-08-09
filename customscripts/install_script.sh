@@ -79,6 +79,9 @@ else
     echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
 fi
 
+# set webhook shit
+bash $finalDir/configure_webhook.sh
+
 # cleanup
 sudo rm -f $finalDir/install_script.sh
 
