@@ -1,6 +1,6 @@
 out_file="/tmp/nmap.xml"
 
-nmap -vv -T4 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
+nmap -vv --reason -T4 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
 scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/nmap.xml
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions"
