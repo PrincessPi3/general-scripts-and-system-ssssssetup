@@ -42,7 +42,7 @@ function do_admin_shit {
     Start-Sleep -Seconds $total_wait_seconds
 
     # popup
-    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) ## reboot, force, delay $grace_seconds seconds
+    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) | Out-Null
 
     # set to reboot with windows defender offline scan scheduled to wastte even more time :wheeze:
     Start-Sleep -Seconds $grace_seconds && Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
