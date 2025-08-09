@@ -1,12 +1,15 @@
-out_file="/tmp/nmap.xml"
+#!/bin/zsh
+
+file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
+out_file="/tmp/$file_name"
 
 echo "this will take a while"
 nmap -vv -A --reason -Pn 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
-scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/nmap.xml
+scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions"
 
 webhook "FINISHED <@&1369280290203373670>"
 
 echo "file: $out_file"
-echo "live: https://h.acker.is/nmaprincesspi_manual_scans/nmap.xml"
+echo "live: https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
