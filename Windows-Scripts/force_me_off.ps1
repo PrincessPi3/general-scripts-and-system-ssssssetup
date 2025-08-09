@@ -15,7 +15,7 @@ $grace_seconds = ($grace_minutes*60)
 Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes"
 
 # schedule chkdsk to take up fuckin tons of time
-chkdsk /r C:
+Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
 
 Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
 
@@ -25,17 +25,20 @@ Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 # shutdown time
 Write-Host "$((Get-Date).AddHours($Hours).AddMinutes($total_wait_minutes).ToString("hh:mm:ss tt")) | Reboot Time"
 
-Write-Host "`nSleeping for $Hours hours $Minutes minutes...`n"
+Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
 
-# sleep
-Start-Sleep -Seconds $wait_seconds
+Start-Job -ScriptBlock {
+    # sleep
+    Start-Sleep -Seconds 3 # $wait_seconds
 
-# force reboot
-## terminal notice
-Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
-## popup
-$shell = New-Object -ComObject 'WScript.Shell'
-$shell.Popup("REBOOTING BY FORCE IN $grace_minutes", 0, "REBOOTING AS FUCK IN $grace_minutes", 0)
-## reboot, force, delay $grace_seconds seconds
-## cancel with shutdown /a
-shutdown /r /f /t $grace_seconds
+    # force reboot
+    ## terminal notice
+    Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
+    ## popup
+    $shell = New-Object -ComObject 'WScript.Shell'
+    # $shell.Popup(string <MESSAGE>, int <MODE>, string <WINDOW_TITLE>, int <CONTROLS>)
+    $shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0)    ## reboot, force, delay $grace_seconds seconds
+    ## must use fuckin cmd bullshit grumble grumble
+    ## cancel with shutdown /a
+    shutdown.exe -ArgumentList /f /r /t $grace_seconds
+} | Out-Null # no bizzle
