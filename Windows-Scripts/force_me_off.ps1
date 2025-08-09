@@ -37,14 +37,15 @@ $popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $rebo
 function do_admin_shit {
     # handle interactive shit right away
     ## schedule chkdsk to take up fuckin tons of time
-    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
+    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList '/C "chkdsk /r C:"'
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a
     Start-Sleep -Seconds $total_wait_seconds
 
     # popup
-    ## $popup_shell.Popup(string <MESSAGE>, int <MODE>, string <WINDOW_TITLE>, int <CONTROLS>)
-    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) # | Out-Null ## reboot, force, delay $grace_seconds seconds
+    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) ## reboot, force, delay $grace_seconds seconds
+
+    # set to reboot with windows defender offline scan scheduled to wastte even more time :wheeze:
     Start-Sleep -Seconds $grace_seconds && Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
 }
 
