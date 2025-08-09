@@ -2,9 +2,10 @@ out_file="/tmp/nmap.xml"
 
 nmap -vv -T4 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
-scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans
+scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/nmap.xml
 ssh inter "fix_permissions"
 
 webhook bootup
 
 echo "file: $out_file"
+echo "live: https://h.acker.is/nmaprincesspi_manual_scans/nmap.xml"
