@@ -2,35 +2,48 @@
 # from https://askubuntu.com/questions/3299/how-to-run-cron-job-when-network-is-up
 # usage in root cron
 ##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup" 2>> /var/log/cron.error.log
-function check_online
-{
-    netcat -z -w 5 discord.com 80 && echo 1 || echo 0
+
+# Configurable values
+## How many times we should check if we're online - this prevents infinite looping
+MAX_CHECKS=10
+## Seconds to sleep per loop
+SLEEP_SECONDS=10
+## error log
+ERROR_LOG="/var/log/cron.error.log"
+## any high availability host
+HA_HOST="www.cloudflare.com"
+
+# do da checcc
+check_online () {
+    # check if HA_HOST is reachable, echo 1 if online 0 if offline
+    netcat -z -w 5 $HA_HOST 80 2>/dev/null && echo 1 || echo 0
 }
 
-# Initial check to see if we are online
+# initial values
+## Initial starting value for checks
+CHECKS=1
+## Initial check to see if we are online
 IS_ONLINE=$(check_online)
-# How many times we should check if we're online - this prevents infinite looping
-MAX_CHECKS=10
-# Initial starting value for checks
-CHECKS=0
-
-echo "running! IS_ONLINE: $IS_ONLINE"
 
 # Loop while we're not online.
 while [[ $IS_ONLINE -eq 0 ]]; do
-    sleep 10;
-    echo "is_online: $IS_ONLINE loop $CHECKS"
-    IS_ONLINE=check_online
+    echo "$HA_HOST unreachable, loop $CHECKS/$MAX_CHECKS every $SLEEP_SECONDS seconds to run command \"$1\"" # only shows on manual run
+
+    sleep $SLEEP_SECONDS # eepies
+
+    IS_ONLINE=$(check_online) # recheck and update IS_ONLINE
 
     CHECKS=$(($CHECKS + 1))
-    if [ $CHECKS -gt $MAX_CHECKS ]; then
+    if [ $CHECKS -gt $MAX_CHECKS ]; then # if checks is over max, break loop
         break
     fi
 done
 
+# only reach this point after being checked in loop, check for 0 again for failure mode
 if [[ $IS_ONLINE -eq 0 ]]; then
     # We never were able to get online. Kill script.
-    exit 1
+    sudo bash -c "echo \"$(date) | Failed to connect to $HA_HOST after $MAX_CHECKS attempts of $SLEEP_SECONDS seconds\" | tee -a $ERROR_LOG"
+    exit
 fi
 
-sudo bash $1 2>> /var/log/cron.error.log
+sudo bash -c "$1 2>> $ERROR_LOG" # execute the bash script and log errors to the error log
