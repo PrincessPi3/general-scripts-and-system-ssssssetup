@@ -38,5 +38,5 @@ Start-Job -ScriptBlock {
     $shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0)    ## reboot, force, delay $grace_seconds seconds
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a
-    Invoke-Expression "shutdown.exe" -ArgumentList /f /r /t $grace_seconds
+    Start-Process -FilePath shutdown.exe -ArgumentList "/f /r /t $grace_seconds"
 } | Out-Null # no bizzle
