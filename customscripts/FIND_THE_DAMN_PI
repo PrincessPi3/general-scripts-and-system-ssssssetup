@@ -6,7 +6,8 @@ out_file="/tmp/$file_name"
 
 echo "Logging to $out_file and https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
 
-nmap --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
+# da nmap command with my custom xsl stylesheet
+nmap -A --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
 scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions"
