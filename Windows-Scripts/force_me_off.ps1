@@ -39,7 +39,6 @@ function do_admin_shit {
     ## schedule chkdsk to take up fuckin tons of time
     Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList '/C "chkdsk /r C:"'
     ## must use fuckin cmd bullshit grumble grumble
-    ## cancel with shutdown /a
     Start-Sleep -Seconds $total_wait_seconds
 
     # popup
