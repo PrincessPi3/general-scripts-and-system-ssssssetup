@@ -4,12 +4,13 @@
 file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
 
-nmap -vv --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
+echo "Logging to $out_file and https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
+
+nmap -v --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
 scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions"
 
-webhook "FINISHED <@&1369280290203373670>"
+webhook "FINISHED https://h.acker.is/nmaprincesspi_manual_scans/$file_name <@&1369280290203373670>"
 
-echo "file: $out_file"
 echo "live: https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
