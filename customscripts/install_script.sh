@@ -84,5 +84,6 @@ bash $finalDir/configure_webhook.sh
 
 # cleanup
 sudo rm -f $finalDir/install_script.sh
+sudo apt autoremove -y
 
 echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n\n"
