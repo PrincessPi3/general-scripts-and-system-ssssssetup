@@ -32,7 +32,7 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to backgrou
 webhook "SCHEDULED REBOOT AT $reboot_time"
 
 # popup
-$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) # | Out-Null
+$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
 
 function do_admin_shit {
     # handle interactive shit right away
