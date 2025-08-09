@@ -25,23 +25,21 @@ shutdown /a
 Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
-Write-Host "$reboot_time | Reboot Time"
+Write-Host "`n$reboot_time | Reboot Time"
 
 Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
 
 webhook "SCHEDULED REBOOT AT $reboot_time"
 
+# popup
 $popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
 
 function do_admin_shit {
     # handle interactive shit right away
     ## schedule chkdsk to take up fuckin tons of time
     Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
-    # Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/K "chkdsk /r E: && chkdsk /r D: && chkdsk /r C: && exit"'
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a
-    # shutdown /f /r /t $total_wait_seconds
-    # sleep
     Start-Sleep -Seconds $total_wait_seconds
 
     # popup
