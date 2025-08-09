@@ -1,8 +1,8 @@
 param (
-    [Int16]
+    [Single]
     $Hours = 1,
 
-    [Int16]
+    [Single]
     $Minutes = 0,
 
     [Int16]
