@@ -1,5 +1,5 @@
 #!/bin/zsh
-# runs in appx 60 MINUTES
+# runs in appx 75 MINUTES
 
 file_name="nmap-hardcore-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
