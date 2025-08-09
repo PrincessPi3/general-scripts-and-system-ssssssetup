@@ -9,4 +9,4 @@ ssh inter "fix_permissions"
 webhook bootup
 
 echo "file: $out_file"
-echo "live: https://h.acker.is/nmaprincesspi_manual_scans/nmap.xml"
+echo "live: https://h.acker.is/nmaprincesspi_manual_scans/nmap.xml?NOCACHE=$RANDOM"
