@@ -38,5 +38,5 @@ Start-Job -ScriptBlock {
     # chkdsk /r C:
 
     # force reboot using the cmd because powershell is cancer
-    shutdown /r /t $grace_seconds # Restarts after a 300-second delay
+    shutdown /r /t $grace_seconds # Restarts after a delay
 }  | Out-Null # maek it queitrerr
