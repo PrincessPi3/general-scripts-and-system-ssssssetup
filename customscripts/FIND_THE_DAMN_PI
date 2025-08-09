@@ -12,8 +12,8 @@ local_subnet="10.0.0.0/24"
 echo -e "\nSTARTING! THIS WILL TAKE ABOUT FIVE MINUTES!\n\tLogging to $out_file\n\tand $web_file\n"
 
 # da nmap command with my custom xsl stylesheet
-# nmap -T4 -sV -O $local_subnet -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl # fancy web xml/xsl
-nmap -T4 -sV -O $local_subnet -oG "$out_file" # grepable
+# nmap -T4 -sV -O --reason $local_subnet -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl # fancy web xml/xsl
+nmap -T4 -sV -O --reason $local_subnet -oG "$out_file" # grepable
 
 scp $out_file $remote_server:$remote_path/$file_name
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions" # fix perms remote
