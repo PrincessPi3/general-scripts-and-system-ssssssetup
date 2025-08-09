@@ -25,7 +25,7 @@ shutdown /a
 Write-Host "`n$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
-Write-Host "`n$reboot_time | Reboot Time"
+Write-Host "$reboot_time | Reboot Time"
 
 Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
 
