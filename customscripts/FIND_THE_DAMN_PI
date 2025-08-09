@@ -3,8 +3,9 @@
 
 file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
+web_file="https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
 
-echo "Logging to $out_file and https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
+echo "Logging to $out_file and $web_file"
 
 # da nmap command with my custom xsl stylesheet
 nmap -A --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
@@ -13,6 +14,6 @@ scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
 # ssh inter "sudo bash /usr/share/customscripts/fix_permissions" # fix perms remote
 # ssh inter "rm -f /var/www/h.acker.is/nmaprincesspi_manual_scans/*" # clear scans
 
-webhook "FINISHED https://h.acker.is/nmaprincesspi_manual_scans/$file_name <@&1369280290203373670>"
+webhook "FINISHED $web_file <@&1369280290203373670>"
 
-echo "live: https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
+echo "live: $web_file"
