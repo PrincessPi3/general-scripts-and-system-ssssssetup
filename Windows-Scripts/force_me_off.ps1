@@ -22,7 +22,7 @@ Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus 
 shutdown /a
 
 # current time
-Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
+Write-Host "`n$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
 Write-Host "`n$reboot_time | Reboot Time"
@@ -32,7 +32,7 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to backgrou
 webhook "SCHEDULED REBOOT AT $reboot_time"
 
 # popup
-$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
+$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) # | Out-Null
 
 function do_admin_shit {
     # handle interactive shit right away
@@ -48,4 +48,4 @@ function do_admin_shit {
     Start-Sleep -Seconds $grace_seconds && Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList "-C 'shutdown /r /f /t $grace_seconds'" # '-C "Start-MpWDOScan"'
 }
 
-Start-Job -ScriptBlock ${function:do_admin_shit} | Out-Null
+Start-Job -ScriptBlock ${function:do_admin_shit}
