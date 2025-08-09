@@ -32,4 +32,4 @@ sudo chown -R $username:$username $finalDir
 echo -e "\nSetting perms of $finalDir and contents to 775"
 sudo chmod -R 775 $finalDir
 
-echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n"
+echo -e "\n\nDone! Restarting shell..."
