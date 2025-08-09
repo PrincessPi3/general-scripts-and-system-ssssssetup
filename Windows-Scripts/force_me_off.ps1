@@ -43,4 +43,4 @@ function do_admin_shit {
     $shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0)    ## reboot, force, delay $grace_seconds seconds
 }
 
-Start-Job -ScriptBlock { do_admin_shit }
+Start-Job -ScriptBlock { do_admin_shit | Out-Null }
