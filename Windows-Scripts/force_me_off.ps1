@@ -8,10 +8,10 @@ param (
 
 # some calcs
 $wait_minutes = (($Hours*60)+$Minutes)
-$wait_seconds = ($wait_minutes*60)
+# $wait_seconds = ($wait_minutes*60)
 $total_wait_minutes = ($wait_minutes+$grace_minutes)
 $total_wait_seconds = ($total_wait_minutes*60)
-$grace_seconds = ($grace_minutes*60)
+# $grace_seconds = ($grace_minutes*60)
 $reboot_time = $((Get-Date).AddHours($Hours).AddMinutes($Minutes + $grace_minutes).ToString("hh:mm:ss tt"))
 # Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes reboot_time $reboot_time"
 
