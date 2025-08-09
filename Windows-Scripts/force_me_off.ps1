@@ -32,13 +32,11 @@ Start-Job -ScriptBlock {
     Start-Sleep -Seconds 3 # $wait_seconds
 
     # force reboot
-    ## terminal notice
-    Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
     ## popup
     $shell = New-Object -ComObject 'WScript.Shell'
     # $shell.Popup(string <MESSAGE>, int <MODE>, string <WINDOW_TITLE>, int <CONTROLS>)
     $shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0)    ## reboot, force, delay $grace_seconds seconds
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a
-    shutdown.exe -ArgumentList /f /r /t $grace_seconds
+    Invoke-Expression "shutdown.exe" -ArgumentList /f /r /t $grace_seconds
 } | Out-Null # no bizzle
