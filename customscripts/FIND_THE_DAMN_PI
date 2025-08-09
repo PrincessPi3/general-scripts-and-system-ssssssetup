@@ -1,19 +1,21 @@
 #!/bin/zsh
 # runs in appx 5 Minutes
-
 file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
 web_file="https://h.acker.is/nmaprincesspi_manual_scans/$file_name"
+remote_server="inter"
+remote_path="/var/www/h.acker.is/nmaprincesspi_manual_scans"
+local_subnet="10.0.0.0/24"
 
-echo "Logging to $out_file and $web_file"
+echo -e "\nLogging to $out_file and $web_file\n"
 
 # da nmap command with my custom xsl stylesheet
-nmap -A --reason 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
+nmap -A --reason $local_subnet -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
-scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
-# ssh inter "sudo bash /usr/share/customscripts/fix_permissions" # fix perms remote
-# ssh inter "rm -f /var/www/h.acker.is/nmaprincesspi_manual_scans/*" # clear scans
+scp $out_file $remote_server:$remote_path/$file_name
+# ssh $remote_server "sudo bash /usr/share/customscripts/fix_permissions" # fix perms remote
+# ssh $remote_server "rm -f $remote_path/*" # clear scans
 
-webhook "FINISHED $web_file <@&1369280290203373670>"
+webhook "FINISHED\n\t$web_file\n\t<@&1369280290203373670>"
 
-echo "live: $web_file"
+echo -e "\nlive: $web_file\n"
