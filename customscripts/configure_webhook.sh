@@ -11,11 +11,11 @@ else
 fi
 
 # get webhook url
-echo "Enter Discord Webhook URL"
+echo -e "\nEnter Discord Webhook URL"
 read webhook_url
 
 # get tag
-echo "Enter Tag to Notify"
+echo -e "\nEnter Tag to Notify"
 read webhook_tag
 
 # write da files
@@ -29,3 +29,5 @@ sudo chown -R $username:$username $finalDir
 # fix perms
 echo "Setting perms of $finalDir and contents to 775"
 sudo chmod -R 775 $finalDir
+
+echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n"

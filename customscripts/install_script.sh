@@ -7,11 +7,11 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/customscripts'
 finalDir='/usr/share/customscripts'
 
-echo "Updating software lists"
-sudo apt update
+# echo "Updating software lists"
+# sudo apt update
 
-echo "Installan my packages"
-sudo apt install gh net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx wget lynx neovim nmap -y
+# echo "Installan my packages"
+# sudo apt install gh net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx wget lynx neovim nmap -y
 
 echo "Using Shell $SHELL"
 
@@ -54,14 +54,6 @@ git clone $gitRepo $tmpDir --single-branch --depth 1
 echo "Placing in $finalDir"
 sudo mv "$tmpDir/customscripts" "$finalDir"
 
-# configure webhook
-# echo "Enter Discord Webhook URL"
-# read url
-# echo "Enter Tag to Notify"
-# read tag
-# sudo bash -c "echo '$url' > $finalDir/webhook.txt"
-# sudo bash -c "echo '$tag' > $finalDir/tag.txt"
-
 # fix ownership
 echo "Changing ownership of $finalDir to $username:$username recursively"
 sudo chown -R $username:$username "$finalDir"
@@ -83,6 +75,6 @@ fi
 
 # cleanup
 sudo rm -f $finalDir/install_script.sh
-sudo apt autoremove -y
+# sudo apt autoremove -y
 
-echo -e "\n\nDone! Restart shell:\n\texec \"\$SHELL\"\n\n"
+echo "Done with first stage"
