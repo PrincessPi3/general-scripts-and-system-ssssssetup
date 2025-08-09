@@ -2,15 +2,16 @@
 # usage:
 ##  wifi_monitor <WIFI DEVICE> <METHOD>
 ###  examples
-####  wifi_monitor # DEFAULTS wlan0 and ifconfig method
-####  wifi_monitor wlan1 # wlan1 and default ifconfig method
+####  wifi_monitor # DEFAULTS wlan1 and ip method
+####  wifi_monitor wlan1 # wlan1 and default ip method
 ####  wifi_monitor wlan0 i # wlan0 and ip method
 ####  wifi_monitor wlan0 a # wlan0 and airmon-ng method
+####  wifi_monitor wlan0 if # wlan0 and ifconfig method
 ##  wifi device
 ###   wlan0 [DEFAULT]
 ##  methods:
-###   ifconfig, iwconfig, if, or iw  ifconfig/iwconfig method [DEFAULT]
-###   ip, iw or i - ip/iw method
+###   ifconfig, iwconfig, if, or iw  ifconfig/iwconfig method
+###   ip, iw or i - ip/iw method [DEFAULT]
 ###   airo, air, airmon-ng, or a - airodump-ng/airmon-ng method
 
 # set -e # fail on error
@@ -89,8 +90,8 @@ else
 fi
 
 # default, ifconfig/iwconfig method
-if [ -z $2 ]; then # default ifconfig method
-    ifconfig_method
+if [ -z $2 ]; then # default ip method
+    ip_method
 elif [ "$2" == "ifconfig" -o "$2" == "if" ]; then
     ifconfig_method # explicit ifconfig method
 elif [ "$2" == "ip" -o "$2" == "i" -o "$2" == "iw" ]; then
@@ -98,6 +99,9 @@ elif [ "$2" == "ip" -o "$2" == "i" -o "$2" == "iw" ]; then
 elif [ "$2" == "airo" -o "$2" == "air" -o "$2" == "airmon-ng" -o "$2" == "a" ]; then
     airmon_method
 fi
+
+echo "Hold on 5 seconds..."
+sleep 5
 
 echo "Current wireless configuration"
 iwconfig
