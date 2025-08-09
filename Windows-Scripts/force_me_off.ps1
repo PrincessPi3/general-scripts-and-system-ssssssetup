@@ -28,10 +28,10 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to backgrou
 function do_admin_shit {
     # handle interactive shit right away
     ## schedule chkdsk to take up fuckin tons of time
-    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
-    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r D:"'
-    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r E:"'
-
+    # Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
+    # Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r D:"'
+    # Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r E:; chkdsk /r D:; chkdsk /r C:"'
+    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/K "chkdsk /r E: && chkdsk /r D: && chkdsk /r C: && exit"'
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a
     shutdown /f /r /t $total_wait_seconds
