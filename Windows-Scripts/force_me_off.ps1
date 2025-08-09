@@ -32,4 +32,4 @@ Start-Sleep -Seconds $wait_seconds
 
 # force reboot
 Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
-Restart-Computer -Force -Wait -For PowerShell -Timeout $grace_seconds
+Restart-Computer -Force
