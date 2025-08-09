@@ -1,10 +1,10 @@
 #!/bin/zsh
-# runs in appx 75 MINUTES
+# runs in appx 90 MINUTES
 
 file_name="nmap-hardcore-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
 
-echo "this will take a while"
+echo "this will take a while ~90 MINUTES"
 nmap -vv -A --reason -Pn 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
 
 scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/$file_name
