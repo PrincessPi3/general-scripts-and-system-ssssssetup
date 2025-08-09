@@ -12,18 +12,23 @@ $wait_seconds = ($wait_minutes*60)
 $total_wait_minutes = ($wait_minutes+$grace_minutes)
 $total_wait_seconds = ($total_wait_minutes*60)
 $grace_seconds = ($grace_minutes*60)
-
-Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes"
+$reboot_time = $((Get-Date).AddHours($Hours).AddMinutes($Minutes + $grace_minutes).ToString("hh:mm:ss tt"))
+# Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes reboot_time $reboot_time"
 
 Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
+
+# clean up any running
+shutdown /a
 
 # current time
 Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 
 # shutdown time
-Write-Host "$((Get-Date).AddHours($Hours).AddMinutes($total_wait_minutes).ToString("hh:mm:ss tt")) | Reboot Time"
+Write-Host "$reboot_time | Reboot Time"
 
 Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
+
+webhook "SCHEDULED REBOOT AT $reboot_time"
 
 function do_admin_shit {
     # handle interactive shit right away
