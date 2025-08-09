@@ -1,0 +1,7 @@
+out_file="/tmp/nmap.xml"
+
+nmap -vv -T4 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nmaprincesspi/xsl/princesspi-nmap.xsl
+
+webhook bootup
+
+echo "file: $out_file"
