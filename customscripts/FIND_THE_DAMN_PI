@@ -1,5 +1,5 @@
 #!/bin/zsh
-# runs in appx 180 SECONDS
+# runs in appx 5 Minutes
 
 file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
