@@ -1,6 +1,7 @@
 #!/bin/zsh
+# runs in appx <> seconds
 
-file_name="nmap-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
+file_name="nmap-hardcore-$(date +%Y%m%d%H%M%S)-$(echo $RANDOM | md5sum | awk '{print $1}').xml"
 out_file="/tmp/$file_name"
 
 echo "this will take a while"
