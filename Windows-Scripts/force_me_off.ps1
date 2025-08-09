@@ -29,6 +29,8 @@ function do_admin_shit {
     # handle interactive shit right away
     ## schedule chkdsk to take up fuckin tons of time
     Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r C:"'
+    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r D:"'
+    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList  '/C "chkdsk /r E:"'
 
     ## must use fuckin cmd bullshit grumble grumble
     ## cancel with shutdown /a

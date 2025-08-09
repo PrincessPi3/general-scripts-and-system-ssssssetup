@@ -4,8 +4,12 @@
 
 [ "root" != "$USER" ] && exec sudo $0 "$@"
 KEY="$2"
-mkdir /home/$1/.ssh
-echo $KEY >> /home/$1/.ssh/authorized_keys
-chmod 700 /home/$1/.ssh
-chmod 600 /home/$1/.ssh/authorized_keys
-chown -R $1:$1 /home/$1/.ssh
+if [ -d "/home/$1/.ssh" ]; then
+  echo "$KEY" >> "/home/$1/.ssh/authorized_keys"
+else
+  mkdir "/home/$1/.ssh"
+  echo "$KEY" >> "/home/$1/.ssh/authorized_keys"
+fi
+chmod 700 "/home/$1/.ssh"
+chmod 600 "/home/$1/.ssh/authorized_keys"
+chown -R $1:$1 "/home/$1/.ssh"
