@@ -1,6 +1,6 @@
 #!/bin/bash
 # install with
-## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh?nocache=$RANDOM | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
+## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
