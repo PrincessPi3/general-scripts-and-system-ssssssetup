@@ -1,3 +1,5 @@
+#!/bin/bash
+
 while true; do
     nmap -sV -Pn -T4 -p22 10.0.0.0/24 -oG - | grep -n '22/open/tcp'
     echo next
