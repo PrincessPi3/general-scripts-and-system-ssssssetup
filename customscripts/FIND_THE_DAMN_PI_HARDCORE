@@ -6,7 +6,7 @@ nmap -vv -A -Pn -T4 10.0.0.0/24 -oX $out_file --stylesheet https://h.acker.is/nm
 scp $out_file inter:/var/www/h.acker.is/nmaprincesspi_manual_scans/nmap.xml
 ssh inter "fix_permissions"
 
-webhook bootup
+webhook "FINISHED <@&1369280290203373670>"
 
 echo "file: $out_file"
 echo "live: https://h.acker.is/nmaprincesspi_manual_scans/nmap.xml?NOCACHE=$RANDOM"
