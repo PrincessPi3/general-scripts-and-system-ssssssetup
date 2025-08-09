@@ -31,5 +31,11 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes...`n"
 Start-Sleep -Seconds $wait_seconds
 
 # force reboot
+## terminal notice
 Write-Host "FORCING REBOOT IN $grace_minutes MINUTES"
-Restart-Computer -Force
+## popup
+$shell = New-Object -ComObject 'WScript.Shell'
+$shell.Popup("REBOOTING BY FORCE IN $grace_minutes", 0, "REBOOTING AS FUCK IN $grace_minutes", 0)
+## reboot, force, delay $grace_seconds seconds
+## cancel with shutdown /a
+shutdown /r /f /t $grace_seconds
