@@ -48,4 +48,4 @@ function do_admin_shit {
     Start-Sleep -Seconds $grace_seconds && Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
 }
 
-do_admin_shit | Out-Null
+do_admin_shit
