@@ -31,7 +31,7 @@ Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to backgrou
 
 webhook "SCHEDULED REBOOT AT $reboot_time"
 
-$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0)
+$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
 
 function do_admin_shit {
     # handle interactive shit right away
@@ -46,7 +46,7 @@ function do_admin_shit {
 
     # popup
     ## $popup_shell.Popup(string <MESSAGE>, int <MODE>, string <WINDOW_TITLE>, int <CONTROLS>)
-    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) ## reboot, force, delay $grace_seconds seconds
+    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) | Out-Null ## reboot, force, delay $grace_seconds seconds
     Start-Sleep -Seconds $grace_seconds
     
     Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
