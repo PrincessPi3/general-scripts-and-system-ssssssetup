@@ -15,6 +15,7 @@ nmap -A --reason $local_subnet -oX $out_file --stylesheet https://h.acker.is/nma
 scp $out_file $remote_server:$remote_path/$file_name
 # ssh $remote_server "sudo bash /usr/share/customscripts/fix_permissions" # fix perms remote
 # ssh $remote_server "rm -f $remote_path/*" # clear scans
+## ssh inter "rm -f /var/www/h.acker.is/nmaprincesspi_manual_scans/*"
 
 webhook "FINISHED\n\t$web_file\n\t<@&1369280290203373670>"
 
