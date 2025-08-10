@@ -1,11 +1,11 @@
 #!/bin/bash
 subnet="10.0.0.0/24"
 delay=60
-count=0
+count=1
 
 while true; do
     echo -e "\ndate $(date) count $count delay $delay subnet $subnet\n"
-    nmap -sV -Pn -T4 -p22 $subnet -oG - | grep -n '22/open/tcp'
+    nmap -sV -O -Pn -p22 $subnet -oG - | grep -n '22/open/tcp'
     sleep $delay
     count=$((count + 1))
 done
