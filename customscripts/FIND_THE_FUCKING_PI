@@ -2,10 +2,13 @@
 subnet="10.0.0.0/24"
 delay=60
 count=1
+start_time=$(date +%s)
 
 while true; do
-    echo -e "\ndate $(date) count $count delay $delay subnet $subnet\n"
-    nmap -sV -O -Pn -p22 $subnet -oG - | grep -n '22/open/tcp'
+    current_time=$(date +%s)
+    elapsed_time=$((current_time - start_time))
+    echo -e "\ndate $(date) elapsed $elapsed_time count $count delay $delay subnet $subnet\n"
+    nmap -sV -Pn -p22 $subnet -oG - | grep -n '22/open/tcp'
     sleep $delay
     count=$((count + 1))
 done
