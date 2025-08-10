@@ -7,7 +7,8 @@ start_time=$(date +%s)
 while true; do
     current_time=$(date +%s)
     elapsed_time=$((current_time - start_time))
-    echo -e "\ndate $(date) elapsed $elapsed_time count $count delay $delay subnet $subnet\n"
+    elapsed_minutes=$((elapsed_time / 60))
+    echo -e "\ndate $(date) elapsed_mins $elapsed_minutes count $count delay $delay subnet $subnet\n"
     nmap -sV -Pn -p22 $subnet -oG - | grep -n '22/open/tcp'
     sleep $delay
     count=$((count + 1))
