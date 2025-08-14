@@ -10,9 +10,9 @@ sudo apt update
 # sudo apt dist-upgrade -y
 
 # install dkms and rtl dkms
-sudo apt-get install dkms -y
+# sudo apt-get install dkms -y
 # sleep 10 # stupid_error
-sudo apt-get install realtek-rtl88xxau-dkms -y
+sudo apt-get install dkms realtek-rtl88xxau-dkms -y
 
 # download the code
 # catch any submodules, only clone one branch, only download with two jobs to save stress # stupid_error
