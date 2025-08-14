@@ -29,11 +29,13 @@ sudo make install
 sleep 10 # stupid_error
 
 # cleanup
-cd ~
-rm -rf $git_dir
+# cd ~
+# rm -rf $git_dir
 # sleep 10 # stupid_error
 sudo apt autoremove -y
-sudo shutdown -r +1 # reboot in 1 minute
+
+sudo reboot
+# sudo shutdown -r +1 # reboot in 1 minute
 
 # to uninstall
 # sudo apt purge realtek-rtl88xxau-dkms -y
