@@ -9,7 +9,10 @@ while true; do
     elapsed_time=$((current_time - start_time))
     elapsed_minutes=$((elapsed_time / 60))
     echo -e "\ndate $(date) elapsed_mins $elapsed_minutes count $count delay $delay subnet $subnet\n"
-    nmap -sV -O -Pn -p22 $subnet -oG - | grep -n '22/open/tcp'
+    nmap -sV -O -p22 $subnet -oG - | grep -n '22/open/tcp' # fast on port 22 only with ping sweep
+    # nmap -sV -O -Pn -p22 $subnet -oG - | grep -n '22/open/tcp' # pingless search
+    # nmap -sV -O $subnet -oG - | grep -n '22/open/tcp' # lots of ports search
+    # nmap -sV -O -Pn $subnet -oG - | grep -n '22/open/tcp' # all ports search, pingless, slow
     sleep $delay
     count=$((count + 1))
 done
