@@ -46,4 +46,4 @@ if [[ $IS_ONLINE -eq 0 ]]; then
     exit
 fi
 
-sudo bash -c "$1 2>> $ERROR_LOG" # execute the bash script and log errors to the error log
+sudo bash $1 2>> $ERROR_LOG # execute the bash script and log errors to the error log

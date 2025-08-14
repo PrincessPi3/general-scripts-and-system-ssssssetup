@@ -3,13 +3,13 @@
 ##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup" 2>> /var/log/cron.error.log
 # discord_webhook="https://discord.com/api/webhooks/yourwebhook"
 discord_webhook=$(cat /usr/share/customscripts/webhook.txt)
-ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tail -2)
+ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tr '\n' ' ')
 date=$(date "+%d/%m/%Y %H:%M:%S %Z (%s)")
 # to tag role run \@rolename and copy the code that is like <@something>
 # tag="<@tag>"
 tag=$(cat /usr/share/customscripts/tag.txt)
 hostname=$(hostname)
-bootup_string="bootrred on $date\n\tip addr: $ipaddr\n\t$tag\n\n"
+bootup_string="bootrred on $date\n\tip addrs: $ipaddr\n\t$tag\n\n"
 
 if [[ -z $1 ]]; then
     content='Default Ping!'
