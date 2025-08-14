@@ -5,6 +5,7 @@ git_dir='/tmp/rtl8812au'
 git_repo='https://github.com/aircrack-ng/rtl8812au.git'
 
 # make sure environment is up to date
+echo -e "\n\nUPDOOTAN\n\n"
 sudo apt update
 # sudo apt upgrade -y
 # sudo apt dist-upgrade -y
@@ -12,27 +13,35 @@ sudo apt update
 # install dkms and rtl dkms
 # sudo apt-get install dkms -y
 # sleep 10 # stupid_error
+echo -e "\n\nINSTALLAN PREREQS\n\n"
 sudo apt-get install dkms realtek-rtl88xxau-dkms -y
 
 # download the code
 # catch any submodules, only clone one branch, only download with two jobs to save stress # stupid_error
+echo -e "\n\nGETTAN DA CODE\n\n"
 git clone --recursive --single-branch --jobs 7 $git_repo $git_dir
 # sleep 10 # stupid_error
 
 # build it
 cd $git_dir # enter the dir
+echo -e "\n\nCOMPILAN\n\n"
 make # compile it
 # sleep 10 # stupid_error
 
 # install the module
+echo -e "\n\nINSTALLAN\n\n"
 sudo make install
-sleep 10 # stupid_error
 
+# sleep 10 # stupid_error
 # cleanup
 # cd ~
 # rm -rf $git_dir
 # sleep 10 # stupid_error
+echo -e "\n\nAUTOREMOVAN\n\n"
 sudo apt autoremove -y
+
+echo -e "rebooting in 10 seconds!"
+sleep 10
 
 sudo reboot
 # sudo shutdown -r +1 # reboot in 1 minute
