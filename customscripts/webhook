@@ -3,7 +3,7 @@
 ##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup" 2>> /var/log/cron.error.log
 # discord_webhook="https://discord.com/api/webhooks/yourwebhook"
 discord_webhook=$(cat /usr/share/customscripts/webhook.txt)
-ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tail -1)
+ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tail -2)
 date=$(date "+%d/%m/%Y %H:%M:%S %Z (%s)")
 # to tag role run \@rolename and copy the code that is like <@something>
 # tag="<@tag>"
