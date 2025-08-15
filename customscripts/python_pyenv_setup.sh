@@ -26,7 +26,7 @@ check_purge_package () {
 }
 
 # cleanup previous python installs
-check_purge_package pyenv*
+# check_purge_package pyenv*
 check_purge_package python3*
 check_purge_package python2*
 check_purge_package python*
