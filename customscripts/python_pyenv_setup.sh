@@ -42,12 +42,12 @@ sudo apt autoremove -y 2>>"$package_log" 1>>"$package_log"
 echo -e "DONE CLEARING OLD PACKAGES!\n\tRemoved packages logged to $package_log"
 
 # remove any existing pyenv install
-pyenv root 2>/dev/null 1>/dev/null # do it silently
+which pyenv # do it silently
 pyenv_root_check=$?
 
 if [ $pyenv_root_check -eq 0 ]; then
     echo "Removing existing pyenv installation"
-    rm -rf $(pyenv root)
+    rm -rf $HOME/.pyenv
 else
     echo "No existing pyenv installation found, skipping removal"
 fi
