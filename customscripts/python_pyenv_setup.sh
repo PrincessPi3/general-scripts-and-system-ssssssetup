@@ -36,14 +36,9 @@ check_purge_package () {
 
 
 # cleanup
-echo "Autoremoving packages"
-sudo apt autoremove -y 2>>"$package_log" 1>>"$package_log"
-
-echo -e "DONE CLEARING OLD PACKAGES!\n\tRemoved packages logged to $package_log"
-
-# remove any existing pyenv install
-which pyenv # do it silently
-pyenv_root_check=$?
+# echo "Autoremoving packages"
+# sudo apt autoremove -y 2>>"$package_log" 1>>"$package_log"
+# echo -e "DONE CLEARING OLD PACKAGES!\n\tRemoved packages logged to $package_log"
 
 if [ -d $HOME/.pyenv ]; then
     echo "Removing existing pyenv installation"
@@ -77,7 +72,7 @@ if [ $rc_pyalias_check -eq 0 ]; then # if aliases found
     echo "pyenv aliases already set up in $rcfile, skipping"
 else # if aliases not found, add python shit
     echo "Setting up pyenv aliases in $rcfile" 
-    echo -e "\n## python aliases" >> $rcfile
+    echo "## python aliases" >> $rcfile
     echo 'alias py=python' >> $rcfile
     echo 'alias py3=python' >> $rcfile
     echo 'alias py2=python' >> $rcfile
