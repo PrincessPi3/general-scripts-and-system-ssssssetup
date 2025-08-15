@@ -1,3 +1,4 @@
+#!/bin/bash
 # usage
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/setup_git.sh | "$SHELL"
 echo "Setting up Github"
