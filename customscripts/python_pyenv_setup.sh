@@ -13,16 +13,16 @@ package_log="/home/princesspi/python_packages_removed.txt"
 check_purge_package () {
     package_name=$1
 
-    which -s $package_name 2>/dev/null 1>/dev/null # silently test for command
-    package_check=$? # get return code. 0 for found, any other for not found
+    # which -s $package_name 2>/dev/null 1>/dev/null # silently test for command
+    # package_check=$? # get return code. 0 for found, any other for not found
 
-    if [ $package_check -eq 0 ]; then # if package is found, purge it
+    # if [ $package_check -eq 0 ]; then # if package is found, purge it
         echo "purging $package_name"
         sudo apt purge $package_name -y 2>>"$package_log" 1>>"$package_log"
         echo "finished purging $package_name"
-    else # otherwise skip
-        echo "no $package_name installation found, skipping uninstall"
-    fi
+    # else # otherwise skip
+    #    echo "no $package_name installation found, skipping uninstall"
+    #fi
 }
 
 # cleanup previous python installs
