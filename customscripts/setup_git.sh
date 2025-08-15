@@ -1,13 +1,10 @@
 #!/bin/bash
 # usage
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/setup_git.sh | "$SHELL"
-echo "Setting up Github"
-
-read -p -s "Enter Github Classic Token (https://github.com/settings/tokens): " gh_token
-
-read -p "Enter Email Address: " gh_email
-
-read -p "Enter Github Username: " gh_username
+echo 'Setting up Github'
+read -p -s 'Enter Github Classic Token (https://github.com/settings/tokens): ' gh_token
+read -p 'Enter Email Address: ' gh_email
+read -p 'Enter Github Username: ' gh_username
 
 sudo apt update
 sudo apt install git gh -y
