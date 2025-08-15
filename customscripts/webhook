@@ -1,6 +1,6 @@
 #!/bin/bash
 # usage in cron
-##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup" 2>> /var/log/cron.error.log
+##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup"
 # discord_webhook="https://discord.com/api/webhooks/yourwebhook"
 discord_webhook=$(cat /usr/share/customscripts/webhook.txt)
 ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tr '\n' ' ')
