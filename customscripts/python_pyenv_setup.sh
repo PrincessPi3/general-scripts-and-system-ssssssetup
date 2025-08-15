@@ -17,9 +17,9 @@ check_purge_package () {
     # package_check=$? # get return code. 0 for found, any other for not found
 
     # if [ $package_check -eq 0 ]; then # if package is found, purge it
-        echo "purging $package_name"
-        sudo apt purge $package_name -y 2>>"$package_log" 1>>"$package_log"
-        echo "finished purging $package_name"
+    echo "purging $package_name"
+    sudo apt purge $package_name -y 2>>"$package_log" 1>>"$package_log"
+    echo "finished purging $package_name"
     # else # otherwise skip
     #    echo "no $package_name installation found, skipping uninstall"
     #fi
@@ -27,12 +27,12 @@ check_purge_package () {
 
 # cleanup previous python installs
 # check_purge_package pyenv*
-check_purge_package python3*
-check_purge_package python2*
-check_purge_package python*
-check_purge_package pip*
-check_purge_package pip3*
-check_purge_package pip2*
+# check_purge_package python3*
+# check_purge_package python2*
+# check_purge_package python*
+# check_purge_package pip*
+# check_purge_package pip3*
+# check_purge_package pip2*
 
 
 # cleanup
