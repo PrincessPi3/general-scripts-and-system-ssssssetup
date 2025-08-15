@@ -45,7 +45,7 @@ echo -e "DONE CLEARING OLD PACKAGES!\n\tRemoved packages logged to $package_log"
 which pyenv # do it silently
 pyenv_root_check=$?
 
-if [ $pyenv_root_check -eq 0 ]; then
+if [ -d $HOME/.pyenv ]; then
     echo "Removing existing pyenv installation"
     rm -rf $HOME/.pyenv
 else
