@@ -27,6 +27,7 @@ Install customscripts on linux with
 * `wifi-monitor-airX`
 * `recursive-analysis`
 * `large_file_search_for_hash`
+* `randomtoken`
 
 #### monitoring
 * `mon-watch`
