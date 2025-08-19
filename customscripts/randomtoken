@@ -1,4 +1,31 @@
 #!/bin/bash
-# uses /dev/urandom for quality 128 random bits (16 bytes)
-# hashed with sha256 then cleaned up with awk
-dd if=/dev/urandom bs=1 count=16 status=none | sha256sum | awk '{print $1}'
+# usage: randomtoken [bytes] [mode]
+# defaults: bytes=16, mode=hex
+# modes: hex, sha256, sha512, md5, base64, raw
+
+# handle args and defaults
+if [ "$#" -ne 2 ]; then
+    bytes=16
+    mode=hex
+else
+    bytes=$1
+    mode=$2
+fi
+
+# generate token
+if [ "$mode" = "sha256" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none | sha256sum | awk '{print $1}'
+elif [ "$mode" = "sha512" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none | sha512sum | awk '{print $1}'
+elif [ "$mode" = "md5" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none | md5sum | awk '{print $1}'
+elif [ "$mode" = "base64" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none | base64 | awk '{print $1}'
+elif [ "$mode" = "raw" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none
+elif [ "$mode" = "hex" ]; then
+    dd if=/dev/urandom bs=1 count=$bytes status=none | xxd -p
+else
+    echo "Unknown mode: $mode"
+    exit 1
+fi
