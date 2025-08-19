@@ -1,0 +1,4 @@
+#!/bin/bash
+# uses /dev/urandom for quality 128 random bits (16 bytes)
+# hashed with sha256 then cleaned up with awk
+dd if=/dev/urandom bs=1 count=16 status=none | sha256sum | awk '{print $1}'
