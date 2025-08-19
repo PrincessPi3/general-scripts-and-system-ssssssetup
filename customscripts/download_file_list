@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ -z $1 -o ! -f "$2" ]; then
+  echo "Usage: $0 <output_directory> <file_list>"
+  echo "ExaMPLE: download_file_list Downloads to_download.txt"
+  exit 1
+fi
+
+if [ ! -d "$1" ]; then
+  echo "Output directory does not exist: $1 Creating"
+  mkdir "$1"
+fi
+
+cat "$2" | \
+	while read line; do
+		echo "curl -o \"$1/$(basename $line)\" \"$line\""
+	done
