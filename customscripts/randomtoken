@@ -6,7 +6,6 @@
 # handle args and defaults
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 [bytes] [mode]"
-    echo "Defaults: bytes=16, mode=hex"
     echo "Modes: hex, md5, sha1, sha256, sha512, base64, raw"
     exit 1
 else
