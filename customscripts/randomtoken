@@ -1,6 +1,6 @@
 #!/bin/bash
 # usage: randomtoken [bytes] [mode]
-# modes: hex, sha256, sha512, md5, base64, raw
+# modes: hex, md5, sha1, sha256, sha512, base64, raw
 # requires xxd
 
 # handle args and defaults
