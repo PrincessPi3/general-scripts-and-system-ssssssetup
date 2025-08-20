@@ -40,6 +40,7 @@ Install customscripts on linux with
 * `pyenv_setup`
 * `xrdp-start`
 * `add_apache2_site`
+* `download_file_list`
 
 ### Windowwz
 #### git helpers
