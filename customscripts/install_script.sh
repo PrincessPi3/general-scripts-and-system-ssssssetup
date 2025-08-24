@@ -8,10 +8,10 @@ tmpDir='/tmp/customscripts'
 finalDir='/usr/share/customscripts'
 
 # echo "Updating software lists"
-sudo apt update
+# sudo apt update
 
 # echo "Installan my packages"
-sudo apt install gh unattended-upgrades net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes secure-delete scrypt ugrep xxd -y
+# sudo apt install gh unattended-upgrades net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes secure-delete scrypt ugrep xxd -y
 echo "Using Shell $SHELL"
 
 # ta get da right usermayhaps

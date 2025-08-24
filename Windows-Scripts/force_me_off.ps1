@@ -29,23 +29,25 @@ Write-Host "$reboot_time | Reboot Time"
 
 Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
 
-webhook "SCHEDULED REBOOT AT $reboot_time"
+webhook "SCHEDULED REBOOT AT $reboot_time" true
 
 # popup
 $popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
 
-function do_admin_shit {
-    # handle interactive shit right away
-    ## schedule chkdsk to take up fuckin tons of time
-    Start-Process -Verb RunAs -FilePath cmd.exe -ArgumentList '/C "chkdsk /r C:"'
-    ## must use fuckin cmd bullshit grumble grumble
-    Start-Sleep -Seconds $total_wait_seconds
+# schedule chkdsk to take up fuckin tons of time
+Start-Process -FilePath cmd.exe -ArgumentList '/C "chkdsk /r C:"'
 
-    # popup
-    $popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) | Out-Null
+# set to reboot with windows defender offline scan scheduled to wastte even more time :wheeze:
+Start-Process -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
 
-    # set to reboot with windows defender offline scan scheduled to wastte even more time :wheeze:
-    Start-Sleep -Seconds $grace_seconds && Start-Process -Verb RunAs -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
-}
+# must use fuckin cmd bullshit grumble grumble
+Start-Sleep -Seconds $total_wait_seconds
 
-do_admin_shit
+# popup
+$popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) | Out-Null
+
+# grace sleep
+Start-Sleep -Seconds $grace_seconds
+
+# reboot in 120 seconds
+shutdown /r /t 120
