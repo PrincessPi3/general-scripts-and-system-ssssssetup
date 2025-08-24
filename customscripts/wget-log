@@ -1,11 +1,0 @@
---2025-08-19 00:10:40--  https://pbs.twimg.com/media/GynkbILasAANl3A?format=jpg
-Resolving pbs.twimg.com (pbs.twimg.com)... 104.18.37.127, 172.64.150.129
-Connecting to pbs.twimg.com (pbs.twimg.com)|104.18.37.127|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 135613 (132K) [image/jpeg]
-Saving to: ‘outdir/GynkbILasAANl3A?format=jpg’
-
-GynkbILasAANl3A?format=j   0%[                                  ]       0  --.-KB/s               GynkbILasAANl3A?format=j 100%[=================================>] 132.43K  --.-KB/s    in 0.03s   
-
-2025-08-19 00:10:40 (4.45 MB/s) - ‘outdir/GynkbILasAANl3A?format=jpg’ saved [135613/135613]
-
