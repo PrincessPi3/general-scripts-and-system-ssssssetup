@@ -22,17 +22,17 @@ fi
 
 echo -e "\nConfigure Discord Webhook Settings"
 
-if [ -f /tmp/tag.txt ] && [ -f /tmp/webhook.txt ] && [ $webhook -eq 0 ]; then
-    echo -e "\nExisting Webhook and Tag found. Using those values unless you enter new ones.\n"
+if [ -f /tmp/tag.txt ] && [ -f /tmp/webhook.txt ]; then
     existing_webhook=$(cat /tmp/webhook.txt)
     existing_tag=$(cat /tmp/tag.txt)
+
+    echo -e "\nExisting Webhook and Tag found. Using those values unless you enter new ones.\n"
+    echo -e "Existing Webhook URL: $existing_webhook"
+    echo -e "Existing Tag: $existing_tag\n"
 
     # move em into place
     sudo mv /tmp/tag.txt $finalDir/tag.txt
     sudo mv /tmp/webhook.txt $finalDir/webhook.txt
-
-    echo -e "Existing Webhook URL: $existing_webhook"
-    echo -e "Existing Tag: $existing_tag\n"
 
     # update permissions
     fix_perms

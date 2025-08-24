@@ -34,7 +34,6 @@ else
 fi
 
 # get the existing tag and webhooks if any
-webhook=1
 if [ -f $finalDir/tag.txt ]; then
     echo "Found existing tag.txt, backing up"
     cp $finalDir/tag.txt /tmp/tag.txt
