@@ -8,12 +8,11 @@
 
 discord_webhook=$(cat /usr/share/customscripts/webhook.txt)
 ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tr '\n' ' ')
+hostname=$(hostname)
 date=$(date "+%d/%m/%Y %H:%M:%S %Z (%s)")
 # to tag role run \@rolename and copy the code that is like <@something>
-# tag="<@tag>"
 tag=$(cat /usr/share/customscripts/tag.txt)
-hostname=$(hostname)
-bootup_string="bootrred on $date\n\tip addrs: $ipaddr\n\t$tag\n\n"
+bootup_string="bootrred $hostname on $date\n\tip addrs: $ipaddr\n\t$tag\n\n"
 
 if [[ -z $1 ]]; then
     content='Default Ping!'
@@ -37,4 +36,5 @@ cat <<EOF
 EOF
 }
 
-curl -H "Content-Type: application/json" -X POST -d "$(post_data)" "$discord_webhook"
+echo -e "$content" # local echo
+curl -H "Content-Type: application/json" -X POST -d "$(post_data)" "$discord_webhook" # send the webhook
