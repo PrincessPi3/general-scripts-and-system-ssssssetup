@@ -1,0 +1,14 @@
+#!/bin/bash 
+# tmp links file
+tmpfile="/tmp/links.tmp"
+
+# get links
+nano "$tmpfile"
+
+# download to .
+cat "$tmpfile" | while read line; do
+    wget "$line"
+done
+
+# cleanup
+rm -f "$tmpfile" 1>/dev/null 2>&1 # suppress errors or output
