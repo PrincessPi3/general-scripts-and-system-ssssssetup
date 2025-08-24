@@ -23,10 +23,11 @@ fi
 echo -e "\nConfigure Discord Webhook Settings"
 
 if [ -f /tmp/tag.txt ] && [ -f /tmp/webhook.txt ]; then
+    echo -e "\nExisting Webhook and Tag found. Using those values unless you enter new ones.\n"
+
     existing_webhook=$(cat /tmp/webhook.txt)
     existing_tag=$(cat /tmp/tag.txt)
-
-    echo -e "\nExisting Webhook and Tag found. Using those values unless you enter new ones.\n"
+    
     echo -e "Existing Webhook URL: $existing_webhook"
     echo -e "Existing Tag: $existing_tag\n"
 

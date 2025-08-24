@@ -1,7 +1,11 @@
 #!/bin/bash
+# usage: webhook [message/mode] [notify]
+##  webhook bootup # for bootup mode
+##   webhook "silly soemething" # for normal webhook message
+##   webhook "silly osmething" true # to ping with normal message
 # usage in cron
 ##  @reboot bash /usr/share/customscripts/ifnet "/usr/share/customscripts/webhook bootup"
-# discord_webhook="https://discord.com/api/webhooks/yourwebhook"
+
 discord_webhook=$(cat /usr/share/customscripts/webhook.txt)
 ipaddr=$(hostname -I | grep -E -o "10.0.0.[0-9]{1,3}" | tr '\n' ' ')
 date=$(date "+%d/%m/%Y %H:%M:%S %Z (%s)")
@@ -17,6 +21,11 @@ elif [[ "$1" == "bootup" ]]; then
         content="$bootup_string"
 else
     content="$1"
+fi
+
+# any value in $2 will do ping mode
+if [ ! -z $2 ]; then
+    content+="\n$tag"
 fi
 
 post_data() {
