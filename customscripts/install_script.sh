@@ -33,13 +33,25 @@ else
     exit
 fi
 
-# clean up any existing install
+# get the existing tag and webhooks if any
+webhook=1
+if [ -f $finalDir/tag.txt ]; then
+    echo "Found existing tag.txt, backing up"
+    cp $finalDir/tag.txt /tmp/tag.txt
+fi
+
+if [ -f $finalDir/webhook.txt ]; then
+echo "Found existing webhook.txt, backing up"
+    cp $finalDir/webhook.txt /tmp/webhook.txt
+fi
+
+# clean up any exisiting repo dir
 if [[ -d "$tmpDir" ]]; then
     echo "Cleaning Up Existing $tmpDir"
     rm -rf "$tmpDir"
 fi
 
-# clean up any exisiting repo dir
+# clean up any existing install
 if [[ -d "$finalDir" ]]; then
     echo "Cleaning Up Existing $finalDir"
     rm -rf "$finalDir"

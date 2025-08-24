@@ -1,6 +1,16 @@
 #!/bin/bash
 finalDir='/usr/share/customscripts'
 
+fix_perms() {
+    # fix ownership
+    echo -e "\nChanging ownership of $finalDir to $username:$username recursively"
+    sudo chown -R $username:$username $finalDir
+
+    # fix perms
+    echo -e "\nSetting perms of $finalDir and contents to 775"
+    sudo chmod -R 775 $finalDir
+}
+
 # ta get da right usermayhaps
 if [[ -z $SUDO_USER ]]; then
     echo "Using User $USER"
@@ -11,6 +21,24 @@ else
 fi
 
 echo -e "\nConfigure Discord Webhook Settings"
+
+if [ -f /tmp/tag.txt ] && [ -f /tmp/webhook.txt ] && [ $webhook -eq 0 ]; then
+    echo -e "\nExisting Webhook and Tag found. Using those values unless you enter new ones.\n"
+    existing_webhook=$(cat /tmp/webhook.txt)
+    existing_tag=$(cat /tmp/tag.txt)
+
+    # move em into place
+    sudo mv /tmp/tag.txt $finalDir/tag.txt
+    sudo mv /tmp/webhook.txt $finalDir/webhook.txt
+
+    echo -e "Existing Webhook URL: $existing_webhook"
+    echo -e "Existing Tag: $existing_tag\n"
+
+    # update permissions
+    fix_perms
+
+    exit 0 # exit ok
+fi
 
 # get webhook url
 echo -e "\nEnter Discord Webhook URL"
@@ -24,12 +52,6 @@ read webhook_tag
 sudo bash -c "echo '$webhook_url' > $finalDir/webhook.txt"
 sudo bash -c "echo '$webhook_tag' > $finalDir/tag.txt"
 
-# fix ownership
-echo -e "\nChanging ownership of $finalDir to $username:$username recursively"
-sudo chown -R $username:$username $finalDir
-
-# fix perms
-echo -e "\nSetting perms of $finalDir and contents to 775"
-sudo chmod -R 775 $finalDir
+fix_perms
 
 echo -e "\n\nDone! Restarting shell..."
