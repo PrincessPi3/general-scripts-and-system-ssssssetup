@@ -41,7 +41,7 @@ cat "$tmp_links_file" | \
         if [[ "$item" == "$type" ]]; then
           # rename the downloaded file
           new_name="$outdir/$namehash.$(echo ${exts_arr[$count]})"
-          # echo -e "\tRenaming $file_basename to $new_name\n"
+          echo -e "\tRenaming $file_basename to $new_name"
           mv "$tmp_file_download" "$new_name"
           if [ $? -ne 0 ]; then
             echo -e "\nFailed to rename $tmp_file_download to $new_name\n\turl\n\t$line\n\ttype $type\n\tbase name: $file_basename\n"
