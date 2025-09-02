@@ -22,7 +22,7 @@ cat "$tmp_links_file" | \
     # get default basename of downloaded file
     file_basename=$(basename "$line")
 
-    echo "Downloading $line to $outdir/$file_basename"
+    # echo "Downloading $line to $outdir/$file_basename"
 
     # download the file to a tmp
 		curl -s -o "$tmp_file_download" "$line"
