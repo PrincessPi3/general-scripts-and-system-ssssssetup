@@ -56,24 +56,21 @@ Write-Host "$reboot_time | Reboot Time"
 ## send da webhookd thingggg
 webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 
-# fork dis one to backgruond
-Start-Process -Verb RunAs -ScriptBlock {
-    # time wasters
-    ## checks C drive after reboot to waste time and fix errors
-    ## chkdsk /r C: # as admin
-    chkdsk /r C:
-    pause # pause for clarity
+# time wasters
+## checks C drive after reboot to waste time and fix errors
+## chkdsk /r C: # as admin
+chkdsk /r C:
+pause # pause for clarity
 
-    # Do the sleep
-    Start-Sleep -Seconds $total_wait_seconds
+# Do the sleep
+Start-Sleep -Seconds $total_wait_seconds
 
-    # do rebot
-    ## schedule shutdown
-    ## redundant but also for warnings
-    ### reboot (-r) forced (-t) in seconds (-t)
-    shutdown -r -f -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
-    ## Start Windows Defender Offline Scan
-    ## wastes time
-    ## does the actual reboot
-    Start-MpWDOScan
-}
+# do rebot
+## schedule shutdown
+## redundant but also for warnings
+### reboot (-r) forced (-t) in seconds (-t)
+shutdown -r -f -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
+## Start Windows Defender Offline Scan
+## wastes time
+## does the actual reboot
+Start-MpWDOScan
