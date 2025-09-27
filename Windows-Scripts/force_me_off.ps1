@@ -28,10 +28,10 @@ shutdown /a
 ## checks C drive after reboot to waste time and fix errors
 ## chkdsk /r C: # as admin
 chkdsk /r C:
-pause # pause for clarity
+# pause # pause for clarity
 ## starts Windows Defender Offline Scan after reboot
 Start-MpWDOScan;
-pause # pause for clarity
+# pause # pause for clarity
 
 # notify user
 ## Warning
@@ -43,7 +43,7 @@ Write-Host "$reboot_time | Reboot Time"
 ## send da webhookd thingggg
 webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 
-# schedule (/t) forced (/f) reboot (/r)
-Write-Host shutdown /r /f /t $total_wait_seconds
+# forced (/f) reboot (/r) in seconds (/t) # must be in this order~
+Write-Host shutdown /f /r /t $total_wait_seconds
 Write-Host "`nSCHEDULED REBOOT IN $total_wait_seconds seconds`n"
 pause # pause for clarity in the new window
