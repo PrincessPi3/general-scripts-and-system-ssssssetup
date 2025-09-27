@@ -40,7 +40,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 $args_string = "-Hours $Hours -Minutes $Minutes -GraceMinutes $GraceMinutes"
 
 Write-Host "args: $args_string, wait_minutes: $wait_minutes, total_wait_minutes: $total_wait_minutes, total_wait_seconds: $total_wait_seconds"
-Write-Host "-File `"$($MyInvocation.MyCommand.Path)`" $args_string"
+# Write-Host "-File `"$($MyInvocation.MyCommand.Path)`" $args_string"
 
 # pause
 # exit
@@ -70,9 +70,17 @@ $background_scriptblock = {
     Start-MpWDOScan
 }
 
-$command_string = "-NoExit", "-WindowStyle", "Hidden", "-Command", "{ $background_scriptblock }"
+# $test_background_scriptblock = {
+#     Write-Host $total_wait_seconds
+#     Start-Sleep -Seconds 5
+#     Start-Process "pwsh.exe" -Verb RunAs
+# }
 
-Write-Host $command_string
+$command_string = "-NoExit", "-WindowStyle", "Hidden", "-Command", "& { $background_scriptblock }"
+# $test_command_string = "-Command ", "& { $test_background_scriptblock }"
+
+Write-Host $test_command_string
 
 # send it to background!
 Start-Process -FilePath "pwsh.exe" -ArgumentList $command_string -Verb RunAs
+# Start-Process -FilePath "pwsh.exe" -ArgumentList $test_command_string -Verb RunAs
