@@ -60,9 +60,8 @@ webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 ## checks C drive after reboot to waste time and fix errors
 ## chkdsk /r C: # as admin
 chkdsk /r C:
-pause # pause for clarity
 
-Start-Process -ScriptBlock {
+Start-Job -ScriptBlock {
     # schedule shutdown
     ## redundant but also for warnings
     ### reboot (-r) forced (-t) in seconds (-t)
