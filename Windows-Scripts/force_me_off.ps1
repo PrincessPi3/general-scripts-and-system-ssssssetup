@@ -26,21 +26,24 @@ shutdown /a
 
 # time wasters
 ## checks C drive after reboot to waste time and fix errors
-# chkdsk /r C:
+## chkdsk /r C: # as admin
+chkdsk /r C:
+pause # pause for clarity
 ## starts Windows Defender Offline Scan after reboot
-# Start-MpWDOScan
+Start-MpWDOScan;
+pause # pause for clarity
 
 # notify user
 ## Warning
 Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $GraceMinutes minutes grace period`n"
 ## current time
-Write-Host "`n$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
+Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
 ## shutdown time
 Write-Host "$reboot_time | Reboot Time"
 ## send da webhookd thingggg
-webhook "SCHEDULED REBOOT AT $reboot_time" true
+webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 
 # schedule (/t) forced (/f) reboot (/r)
-shutdown /r /f /t $total_wait_seconds
-Write-Host "SCHEDULED REBOOT IN $total_wait_seconds seconds"
+Write-Host shutdown /r /f /t $total_wait_seconds
+Write-Host "`nSCHEDULED REBOOT IN $total_wait_seconds seconds`n"
 pause # pause for clarity in the new window

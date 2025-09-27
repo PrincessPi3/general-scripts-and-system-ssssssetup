@@ -6,7 +6,7 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit
 }
 
-Write-Host "FIXING WINDOWS FULL STYLE"
+Write-Host "`nFIXING WINDOWS FULL STYLE`n"
 
 Write-Host "ABORTING ANY SCHEDULED SHUTDOWN"
 shutdown /a # cmd abort scheduled shutdowns
@@ -26,5 +26,5 @@ chkdsk /r C: # cmd checks C drive after reboot to waste time and fix errors
 Write-Host "SCHEDULING WINDOWS DEFENDER OFFLINE SCAN"
 Start-MpWDOScan # powershell starts Windows Defender Offline Scan after reboot
 
-Write-Host "REBOOTING IN 5 MINUTES"
+Write-Host "`nREBOOTING IN 5 MINUTES`n"
 shutdown /r /t 300
