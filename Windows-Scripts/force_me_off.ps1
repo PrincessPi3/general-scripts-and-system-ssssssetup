@@ -33,7 +33,8 @@ if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit
 }
 
-Write-Host "args_string: $args_string, wait_minutes: $wait_minutes, total_wait_minutes: $total_wait_minutes, total_wait_seconds: $total_wait_seconds"
+# debug
+# Write-Host "args_string: $args_string, wait_minutes: $wait_minutes, total_wait_minutes: $total_wait_minutes, total_wait_seconds: $total_wait_seconds"
 
 # cleanup
 ## clean up any sched backups
@@ -61,7 +62,10 @@ echo y | chkdsk /r C:
 ## schedule normal shutdown as backup and for warnings
 shutdown -f -r -t ($total_wait_seconds+60) # add a bonus 60 seconds to favor the Start-MpWDOScan 
 ## do the actual reboot by triggerinmg Start-MpWDOScan
-# Start-Sleep -Seconds ($Seconds+60) && Write-Host "Start-MpWDOScan" && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremlin
-Start-Sleep -Seconds ($total_wait_seconds) && Start-Process powershell -WindowStyle Hidden && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremlin
+# Start-Sleep -Seconds ($Seconds+60) && Write-Host "Start-MpWDOScan" && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremli
+# Start-Sleep -Seconds ($total_wait_seconds) && Start-Process powershell -WindowStyle Hidden && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremlin
+Start-Sleep -Seconds 10
+webhook "REBOOTAN" true # also fork it to the background to be a gremlin
+Start-MpWDOScan
 # optional pause
-pause
+# pause
