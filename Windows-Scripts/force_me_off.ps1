@@ -62,13 +62,15 @@ webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 # time wasters
 ## checks C drive after reboot to waste time and fix errors
 ## chkdsk /r C: # as admin
-chkdsk /r C:
+## make it do it noninteractively with echo y
+## echo specifically seems needeed
+echo y | chkdsk /r C:
 
-$background_scriptblock = {
-    shutdown.exe -r -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
-    Start-Sleep -Seconds $total_wait_seconds
-    Start-MpWDOScan
-}
+# shutdown tasks
+## schedule normal shutdown as backup and for warnings
+shutdown -f -r -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
+## do the actual reboot by triggerinmg Start-MpWDOScan
+Start-Sleep -Seconds ($Seconds+60) && Write-Host "Start-MpWDOScan" && webhook "REBOOTAN <@&1369280290203373670>"
 
 # $test_background_scriptblock = {
 #     Write-Host $total_wait_seconds
@@ -76,11 +78,13 @@ $background_scriptblock = {
 #     Start-Process "pwsh.exe" -Verb RunAs
 # }
 
-$command_string = "-NoExit", "-WindowStyle", "Hidden", "-Command", "& { $background_scriptblock }"
+# $command_string = "-NoExit", "-WindowStyle", "Hidden", "-Command", "& { $background_scriptblock }"
 # $test_command_string = "-Command ", "& { $test_background_scriptblock }"
 
-Write-Host $test_command_string
+# Write-Host $test_command_string
 
 # send it to background!
-Start-Process -FilePath "pwsh.exe" -ArgumentList $command_string -Verb RunAs
+
+
+# Start-Process pwsh -ArgumentList $command_string -Verb RunAs
 # Start-Process -FilePath "pwsh.exe" -ArgumentList $test_command_string -Verb RunAs
