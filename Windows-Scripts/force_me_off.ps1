@@ -46,7 +46,6 @@ Write-Host "args: $args_string, wait_minutes: $wait_minutes, total_wait_minutes:
 # exit
 ## clean up any sched backups
 shutdown -a
-pause
 
 # post to terminal and send webhook
 # notify user
