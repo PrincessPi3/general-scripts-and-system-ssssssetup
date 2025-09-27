@@ -62,15 +62,17 @@ webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 chkdsk /r C:
 pause # pause for clarity
 
-# Do the sleep
-Start-Sleep -Seconds $total_wait_seconds
+Start-Process -ScriptBlock {
+    # Do the sleep
+    Start-Sleep -Seconds $total_wait_seconds
 
-# do rebot
-## schedule shutdown
-## redundant but also for warnings
-### reboot (-r) forced (-t) in seconds (-t)
-shutdown -r -f -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
-## Start Windows Defender Offline Scan
-## wastes time
-## does the actual reboot
-Start-MpWDOScan
+    # do rebot
+    ## schedule shutdown
+    ## redundant but also for warnings
+    ### reboot (-r) forced (-t) in seconds (-t)
+    shutdown -r -f -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
+    ## Start Windows Defender Offline Scan
+    ## wastes time
+    ## does the actual reboot
+    Start-MpWDOScan
+}
