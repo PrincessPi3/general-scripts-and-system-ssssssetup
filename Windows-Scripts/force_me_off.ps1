@@ -57,7 +57,7 @@ Write-Host "$reboot_time | Reboot Time"
 webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 
 # fork dis one to backgruond
-Start-Process -ScriptBlock {
+Start-Process -Verb RunAs -ScriptBlock {
     # time wasters
     ## checks C drive after reboot to waste time and fix errors
     ## chkdsk /r C: # as admin
