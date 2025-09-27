@@ -30,7 +30,7 @@ shutdown /a
 chkdsk /r C:
 # pause # pause for clarity
 ## starts Windows Defender Offline Scan after reboot
-Start-MpWDOScan;
+# Start-MpWDOScan # fuckin autorestarts
 # pause # pause for clarity
 
 # notify user
@@ -43,7 +43,14 @@ Write-Host "$reboot_time | Reboot Time"
 ## send da webhookd thingggg
 webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 
-# forced (/f) reboot (/r) in seconds (/t) # must be in this order~
-Write-Host shutdown /f /r /t $total_wait_seconds
-Write-Host "`nSCHEDULED REBOOT IN $total_wait_seconds seconds`n"
-pause # pause for clarity in the new window
+Start-Sleep -Seconds $total_wait_seconds
+
+# do reboot
+## schedule shutdown
+## redundant but also for warnings
+### reboot (-r) forced (-t) in seconds (-t)
+shutdown -r -f -t ($total_wait_seconds+10)
+## Start Windows Defender Offline Scan
+## wastes time
+## does the actual reboot
+Start-MpWDOScan
