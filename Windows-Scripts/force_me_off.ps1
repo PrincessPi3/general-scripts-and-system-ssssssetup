@@ -64,7 +64,6 @@ shutdown -f -r -t ($total_wait_seconds+60) # add a bonus 60 seconds to favor the
 ## do the actual reboot by triggerinmg Start-MpWDOScan
 # Start-Sleep -Seconds ($Seconds+60) && Write-Host "Start-MpWDOScan" && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremli
 # Start-Sleep -Seconds ($total_wait_seconds) && Start-Process powershell -WindowStyle Hidden && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremlin
-Start-Sleep -Seconds 
 Start-Sleep -Seconds $total_wait_seconds
 webhook "runnan MPWDOSCAN and REBOOTAN" true # also fork it to the background to be a gremlin
 Start-MpWDOScan
