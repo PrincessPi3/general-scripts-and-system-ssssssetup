@@ -1,53 +1,46 @@
+# usage force_me_off -Hours <int> -Minutes <int> -GraceMinutes <int>
+# default one hour, zero minutes, zero grace minutes
 param (
     [Single]$Hours = 1,
 
     [Single]$Minutes = 0,
 
-    [Single]$grace_minutes = 2
+    [Single]$GraceMinutes = 0
 )
 
 # some calcs
 $wait_minutes = (($Hours*60)+$Minutes)
-# $wait_seconds = ($wait_minutes*60)
-$total_wait_minutes = ($wait_minutes+$grace_minutes)
+$total_wait_minutes = ($wait_minutes+$GraceMinutes)
 $total_wait_seconds = ($total_wait_minutes*60)
-$grace_seconds = ($grace_minutes*60)
-$reboot_time = $((Get-Date).AddHours($Hours).AddMinutes($Minutes + $grace_minutes).ToString("hh:mm:ss tt"))
-# Write-Host "wait_seconds $wait_seconds wait_minutes $wait_minutes hours $Hours minutes $Minutes grace_seconds $grace_seconds grace_minutes $grace_minutes total_wait_minutes $total_wait_minutes reboot_time $reboot_time"
-$popup_shell = New-Object -ComObject 'WScript.Shell'
+$reboot_time = $((Get-Date).AddHours($Hours).AddMinutes($Minutes + $GraceMinutes).ToString("hh:mm:ss tt"))
 
-Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $grace_minutes minutes grace period`n"
-
-# clean up any running
+# environment
+## Check for administrator privileges
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    # Restart with elevated privileges
+    Start-Process powershell.exe -Verb RunAs -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`""
+    exit
+}
+## clean up any sched backups
 shutdown /a
 
-# current time
+# time wasters
+## checks C drive after reboot to waste time and fix errors
+# chkdsk /r C:
+## starts Windows Defender Offline Scan after reboot
+# Start-MpWDOScan
+
+# notify user
+## Warning
+Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $GraceMinutes minutes grace period`n"
+## current time
 Write-Host "`n$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
-
-# shutdown time
+## shutdown time
 Write-Host "$reboot_time | Reboot Time"
-
-Write-Host "`nSleeping for $Hours hours $Minutes minutes and forking to background to prevent cheating...`n"
-
+## send da webhookd thingggg
 webhook "SCHEDULED REBOOT AT $reboot_time" true
 
-# popup
-$popup_shell.Popup("REBOOTING BY FORCE IN $Hours HOURS $Minutes MINUTES AT $reboot_time", 2, "REBOOTING AS FUCK IN $total_wait_minutes MINUTES", 0) | Out-Null
-
-# schedule chkdsk to take up fuckin tons of time
-Start-Process -FilePath cmd.exe -ArgumentList '/C "chkdsk /r C:"'
-
-# set to reboot with windows defender offline scan scheduled to wastte even more time :wheeze:
-Start-Process -FilePath powershell.exe -ArgumentList '-C "Start-MpWDOScan"'
-
-# must use fuckin cmd bullshit grumble grumble
-Start-Sleep -Seconds $total_wait_seconds
-
-# popup
-$popup_shell.Popup("REBOOTING BY FORCE IN $grace_minutes MINUTES", 2, "REBOOTING AS FUCK IN $grace_minutes MINUTES", 0) | Out-Null
-
-# grace sleep
-Start-Sleep -Seconds $grace_seconds
-
-# reboot in 120 seconds
-shutdown /r /t 120
+# schedule (/t) forced (/f) reboot (/r)
+shutdown /r /f /t $total_wait_seconds
+Write-Host "SCHEDULED REBOOT IN $total_wait_seconds seconds"
+pause # pause for clarity in the new window
