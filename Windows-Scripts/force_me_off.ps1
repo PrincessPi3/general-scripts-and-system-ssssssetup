@@ -1,12 +1,6 @@
 # usage force_me_off -Hours <int> -Minutes <int> -GraceMinutes <int>
 # default one hour, zero minutes, zero grace minutes
-param (
-    [Single]$Hours = 1,
-
-    [Single]$Minutes = 0,
-
-    [Single]$GraceMinutes = 0
-)
+param ( $Hours=1, $Minutes=0, $GraceMinutes=0 )
 
 # some calcs
 $wait_minutes = (($Hours*60)+$Minutes)
@@ -39,11 +33,20 @@ function ForceOff {
 ## Check for administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     # Restart with elevated privileges
-    Start-Process powershell.exe -Verb RunAs -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`""
+    Start-Process pwsh.exe -Verb RunAs -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`" $($args -join(' '))"
     exit
 }
+
+$args_string = "-Hours $Hours -Minutes $Minutes -GraceMinutes $GraceMinutes"
+
+Write-Host "args: $args_string, wait_minutes: $wait_minutes, total_wait_minutes: $total_wait_minutes, total_wait_seconds: $total_wait_seconds"
+Write-Host "-File `"$($MyInvocation.MyCommand.Path)`" $args_string"
+
+# pause
+# exit
 ## clean up any sched backups
 shutdown -a
+pause
 
 # post to terminal and send webhook
 # notify user
@@ -61,17 +64,15 @@ webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
 ## chkdsk /r C: # as admin
 chkdsk /r C:
 
-Start-Job -ScriptBlock {
-    # schedule shutdown
-    ## redundant but also for warnings
-    ### reboot (-r) forced (-t) in seconds (-t)
-    shutdown -r -f -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
-
-    # Do the sleep
+$background_scriptblock = {
+    shutdown.exe -r -t ($total_wait_seconds+10) # 10 second bonus to defer to Start-MpWDOScan
     Start-Sleep -Seconds $total_wait_seconds
-
-    # Start Windows Defender Offline Scan
-    ## wastes time
-    ## does the actual reboot
     Start-MpWDOScan
 }
+
+$command_string = "-NoExit", "-WindowStyle", "Hidden", "-Command", "{ $background_scriptblock }"
+
+Write-Host $command_string
+
+# send it to background!
+Start-Process -FilePath "pwsh.exe" -ArgumentList $command_string -Verb RunAs
