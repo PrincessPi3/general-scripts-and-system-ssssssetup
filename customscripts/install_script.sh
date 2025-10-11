@@ -65,8 +65,8 @@ echo "Cloning Repo $gitRepo"
 git clone $gitRepo $tmpDir --single-branch --depth 1
 
 echo "Compiling donut"
-gcc -o $tmpDir/customscripts/donut $tmpDir/$gitRepo/customscripts/donut.c -lm
-rm -f $tmpDir/customscripts/donut.c
+gcc -o "$tmpDir/customscripts/donut" "$tmpDir/customscripts/donut.c" -lm
+rm -f "$tmpDir/customscripts/donut.c"
 
 # put the customscripts dir into place
 echo "Placing in $finalDir"
