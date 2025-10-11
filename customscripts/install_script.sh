@@ -6,7 +6,8 @@
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
-tmpDir='/tmp/customscripts'
+tmpDir='/tmp/generalssss'
+tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
 
 echo "Using Shell $SHELL"
@@ -65,12 +66,11 @@ echo "Cloning Repo $gitRepo"
 git clone $gitRepo $tmpDir --single-branch --depth 1
 
 echo "Compiling donut"
-gcc -o "$tmpDir/customscripts/donut" "$tmpDir/customscripts/donut.c" -lm
-rm -f "$tmpDir/customscripts/donut.c"
+gcc -o "$tmp_customscripts_dir/donut" "$tmp_customscripts_dir/donut.c" -lm
 
 # put the customscripts dir into place
 echo "Placing in $finalDir"
-sudo mv "$tmpDir/customscripts" "$finalDir"
+sudo mv "$tmp_customscripts_dir" "$finalDir"
 
 # fix ownership
 echo "Changing ownership of $finalDir to $username:$username recursively"
@@ -92,7 +92,14 @@ else
 fi
 
 # cleanup
-sudo rm -f $finalDir/install_script.sh
+## installer
+sudo rm -f "$finalDir/install_script.sh"
+
+## git repo
+sudo rm -rf "$tmpDir"
+
+## donut c file
+rm -f "$tmp_customscripts_dir/donut.c"
 # sudo apt autoremove -y
 
 echo "Done with first stage"

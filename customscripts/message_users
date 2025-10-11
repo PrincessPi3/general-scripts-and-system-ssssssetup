@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ ! -z $1 ]]; then
+    message="$1"
+else
+    message="Something happening! Maybe a shutdown!"
+fi
+
+for pts in $(ls -q /dev/pts); do
+    if [[ "$pts" =~ ^[0-9]+$ ]] && [[ "/dev/pts/$pts" != "$(tty)" ]]; then
+        sudo echo -e "$message" > /dev/pts/$pts
+    fi
+done
