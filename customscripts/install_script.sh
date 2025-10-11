@@ -1,18 +1,22 @@
 #!/bin/bash
 # install with
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
+# install with package install
+## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
 tmpDir='/tmp/customscripts'
 finalDir='/usr/share/customscripts'
 
-# echo "Updating software lists"
-# sudo apt update
-
-# echo "Installan my packages"
-# sudo apt install gh unattended-upgrades net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes secure-delete scrypt ripgrep ugrep xxd -y
 echo "Using Shell $SHELL"
+
+if [ "$1" == "full" ]; then
+    echo "Updating software lists"
+    sudo apt update
+    echo "Installan my packages"
+    sudo apt install gh unattended-upgrades net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes ripgrep ugrep xxd libimage-exiftool-perl -y
+fi
 
 # ta get da right usermayhaps
 if [[ -z $SUDO_USER ]]; then
@@ -59,6 +63,10 @@ fi
 # ddownload repo
 echo "Cloning Repo $gitRepo"
 git clone $gitRepo $tmpDir --single-branch --depth 1
+
+echo "Compiling donut"
+gcc -o $tmpDir/$gitRepo/customscripts/donut $tmpDir/$gitRepo/customscripts/donut.c -lm
+rm -f $tmpDir/$gitRepo/customscripts/donut.c
 
 # put the customscripts dir into place
 echo "Placing in $finalDir"

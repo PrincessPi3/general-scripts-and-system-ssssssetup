@@ -20,7 +20,7 @@ while [ 1 -eq 1 ]; do
     
     # check if the process exists via retcode of the ps -q $pid
     if [ $ret -ne 0 ]; then
-        webhook "Process $pid Ended at $(date)!" true true
+        webhook "Process $pid Ended at $(date)!" true
         echo "Process $pid Ended at $(date)!"
         exit
     fi
