@@ -4,7 +4,7 @@
 * General Windows 10 and mobile security guide
 
 Install customscripts on linux with  
-`curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"`
+`curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh?nocache=$RANDOM | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"`
 
 ## Usage
 ### Linux
@@ -41,6 +41,8 @@ Install customscripts on linux with
 * `xrdp-start`
 * `add_apache2_site`
 * `download_file_list`
+* `message_users`
+* `UNFUCK_HOMEDIR_PERMS.sh`
 
 ### Windowwz
 #### git helpers
