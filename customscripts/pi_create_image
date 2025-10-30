@@ -3,14 +3,16 @@ timestamp=`date +"%Y-%m-%d-%H%M-%S"`
 
 # handle filename
 if [ -z "$1" ]; then
-    imgname=$PWD/$timestamp-pi.img
+    tag=$timestamp-pi
 else
-    imgname=$PWD/$timestamp-$1.img
+    tag=$timestamp-$1
 fi
 
+# fiel paths
+imgname=$PWD/$tag.img
 xzname=$imgname.xz
-sizes=sizes-$imgname-$xzame.txt
-checksums=sha256sum-$imgname-$xzname.sha256
+sizes=sizes-$tag.txt
+checksums=sha256sum-$tag.sha256
 
 # get real username (not root) if run with sudo
 if [ ! -z $SUDO_USER ]; then
@@ -25,7 +27,7 @@ echo "Enter disk name (including /dev/) ex /dev/sdb"
 read dadisk
 
 # start
-webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))" true
+webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))\nsizes: $sizes\nsha256 checksums: $checksums" true
 
 # copy disk
 sudo dd if=$dadisk of=$imgname bs=4M status=progress
