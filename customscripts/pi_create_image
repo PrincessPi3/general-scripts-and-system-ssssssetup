@@ -10,9 +10,9 @@ fi
 
 # fiel paths
 imgname=$PWD/$tag.img
-xzname=$imgname.xz
-sizes=sizes-$tag.txt
-checksums=sha256sum-$tag.sha256
+xzname=$imgname.xz # already has da pwd from imgname
+sizes=$PWD/sizes-$tag.txt
+checksums=$PWD/sha256sum-$tag.sha256
 
 # get real username (not root) if run with sudo
 if [ ! -z $SUDO_USER ]; then
