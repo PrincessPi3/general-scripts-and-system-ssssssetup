@@ -3,9 +3,9 @@ timestamp=`date +"%Y-%m-%d-%H%M-%S"`
 
 # handle filename
 if [ -z "$1" ]; then
-    imgname=$timestamp-pi.img
+    imgname=$PWD/$timestamp-pi.img
 else
-    imgname=$timestamp-$1.img
+    imgname=$PWD/$timestamp-$1.img
 fi
 
 xzname=$imgname.xz
