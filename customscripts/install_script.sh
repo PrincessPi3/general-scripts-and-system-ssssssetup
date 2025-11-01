@@ -2,28 +2,28 @@
 # install with
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
 # install with package install
-## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
+## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > /tmp/install_script.sh && sudo "$SHELL /tmp/install_script.sh full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
+packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip gunzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba"
 
 echo "Using Shell $SHELL"
 
-if [ "$1" == "full" ]; then
+if [ ! -z "$1" ]; then
     echo "Updating software lists"
     sudo apt update
     echo "Doin full-upgrade"
     sudo apt full-upgrade -y
     echo "Installan my packages"
-    sudo apt install nginx apache2 gh unattended-upgrades net-tools btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip xz-utils net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes ripgrep ugrep xxd libimage-exiftool-perl -y
+    sudo bash -c "apt install $packages -y"
     echo "cleanan upps"
     sudo apt autoremove -y
-    echo "rebootan before run againnn (in 10 secobds)"
-    sleep 10
-    sudo shutdown -r now
+    echo "rebootan before run againnn (in 1 minute)"
+    sudo shutdown -r +1
 fi
 
 # ta get da right usermayhaps
@@ -35,14 +35,17 @@ else
     username="$SUDO_USER"
 fi
 
+# home dir
+userhome=/home/$username
+
 # figure oot da sehell
 if [[ "$SHELL" =~ bash$ ]]; then
-    rcfile="/home/$username/.bashrc"
+    rcfile="$userhome/.bashrc"
 elif [[ "$SHELL" =~ zsh$ ]]; then
-    rcfile="/home/$username/.zshrc"
+    rcfile="$userhome/.zshrc"
 else
     echo -e "Die: Unsupported Shell";
-    exit
+    exit 1
 fi
 
 # get the existing tag and webhooks if any
@@ -97,6 +100,33 @@ else
     echo "Adding $finalDir to $username's \$PATH by Appending to $rcfile"
     echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
 fi
+
+# install pishrink if not there
+if [ ! -f /usr/local/bin/pishrink ]; then
+    wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+    mv pishrink.sh pishrink
+    chmod +x pishrink
+    sudo mv pishrink /usr/local/bin
+fi
+
+# install ble.sh if not there
+if [ ! -d $userhome/.local/share/blesh ]; then
+    # install ble.sh
+    git clone --recursive --depth 1 --shallow-submodules https://github.com/akinomyoga/ble.sh.git
+    make -C ble.sh install PREFIX=$userhome/.local
+    echo '# ble.sh' >> $rcfile
+    echo "source -- $userhome/.local/share/blesh/ble.sh" >> $rcfile
+    source $rcfile
+    exec "$SHELL"
+fi
+
+# appeend thefuck to rcfile if not present
+if [ $(rg -q thefuck $rcfile) -ne 0 ]; then 
+    echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
+fi
+
+# copy rice
+mv $tmpDir/rice /home/$username/
 
 # cleanup
 ## installer
