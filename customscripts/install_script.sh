@@ -2,7 +2,7 @@
 # install with
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
 # install with package install
-## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > /tmp/install_script.sh && sudo "$SHELL /tmp/install_script.sh full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
+## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > /tmp/install_script.sh && sudo $SHELL -c "/tmp/install_script.sh full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
