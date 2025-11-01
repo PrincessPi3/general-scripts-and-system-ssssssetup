@@ -15,8 +15,15 @@ echo "Using Shell $SHELL"
 if [ "$1" == "full" ]; then
     echo "Updating software lists"
     sudo apt update
+    echo "Doin full-upgrade"
+    sudo apt full-upgrade -y
     echo "Installan my packages"
-    sudo apt install gh unattended-upgrades net-tools htop btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes ripgrep ugrep xxd libimage-exiftool-perl -y
+    sudo apt install nginx apache2 gh unattended-upgrades net-tools btop iptraf iotop screen byobu wget python3 python3-pip python3-virtualenv python3-setuptools thefuck nginx apache2 wget lynx neovim nmap docker.io zip unzip 7zip xz-utils net-tools chkrootkit clamav php restic cifs-utils psmisc detox fdupes ripgrep ugrep xxd libimage-exiftool-perl -y
+    echo "cleanan upps"
+    sudo apt autoremove -y
+    echo "rebootan before run againnn (in 10 secobds)"
+    sleep 10
+    sudo shutdown -r now
 fi
 
 # ta get da right usermayhaps
