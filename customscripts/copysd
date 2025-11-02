@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 # date strings
 start=`date +%s`
