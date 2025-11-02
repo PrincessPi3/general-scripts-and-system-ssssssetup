@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba"
+packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps"
 
 echo "Using Shell $SHELL"
 
@@ -24,8 +24,14 @@ if [ ! -z "$1" ]; then
     sudo bash -c "apt install $packages -y"
     echo "cleanan upps"
     sudo apt autoremove -y
-    # echo "rebootan before run againnn (in 1 minute)"
-    # sudo shutdown -r +1
+    test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+    test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    ## add to rcfile
+    echo "# linuxbrew (homebrew/brew)" >> $rcfile
+    echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+    ## install ponysay
+    brew install ponysay
+    echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
 else
     echo "skipping package install"
 fi
