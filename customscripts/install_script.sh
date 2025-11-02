@@ -38,27 +38,50 @@ else
 fi
 
 if [ ! -z "$1" ]; then
+    # update and upgrade
     echo "Updating software lists"
     sudo apt update
     echo "Doin full-upgrade"
     sudo apt full-upgrade -y
     # dotnet
-    wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-    sudo dpkg -i /tmp/packages-microsoft-prod.deb
-    rm -f /tmp/packages-microsoft-prod.deb
+    if [ ! $(which dotnet) ]; then
+        ## install da repo
+        wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
+        sudo dpkg -i /tmp/packages-microsoft-prod.deb
+        rm -f /tmp/packages-microsoft-prod.deb
+        ## re-update
+        sudo apt update
+    else
+        echo "dotnet installed, skipping install of repo"
+    fi
     # install packages
     echo "Installan my packages"
-    sudo dotnet tool install --global haveibeenpwned-downloader
-    sudo bash -c "apt install $packages -y"
-    # instsall homebrew
+    ## dotnet
+    ### haveibeenpwned-downloader
+    if [ ! $(which haveibeenpwned-downloader) ]; then
+        sudo dotnet tool install --global haveibeenpwned-downloader
+        sudo bash -c "apt install $packages -y"
+    else
+        echo "haveibeenpwned-downloader installed, skipping install"
+    fi
+    # homebrew
+    if [ ! $(which brew) ]; then
+    ## install homebrew
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    ## add to rcfile
+    ### add to rcfile
     echo "# linuxbrew (homebrew/brew)" >> $rcfile
     echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-    ## install ponysay
-    brew install ponysay
-    echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+    else
+        echo "linuxbrew installed, skipping install"
+    fi
+    ### install ponysay
+    if [ ! $(which ponysay) ]; then
+        brew install ponysay
+        echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+    else
+        echo "ponysay already installed, skipping"
+    fi
     # cleanup
     echo "cleanan upps"
     sudo apt autoremove -y
@@ -74,6 +97,7 @@ else
     echo "no existing tag.txt, skipping backup of it"
 fi
 
+# backup webhook if present
 if [ -f $finalDir/webhook.txt ]; then
     echo "Found existing webhook.txt, backing up"
     cp $finalDir/webhook.txt /tmp/webhook.txt
@@ -109,8 +133,9 @@ echo "Placing in $finalDir"
 sudo mv "$tmp_customscripts_dir" "$finalDir"
 
 # fix ownership
-echo "Changing ownership of $finalDir to $username:$username recursively"
+echo "Changing ownership of $finalDir and $userhome/Rice to $username:$username recursively"
 sudo chown -R $username:$username "$finalDir"
+sudo chown -R $username:$username $userhome/Rice
 
 # fix perms
 echo "Setting perms of $finalDir and contents to 775"
