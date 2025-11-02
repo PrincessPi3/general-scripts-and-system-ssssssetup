@@ -226,8 +226,8 @@ rm -f "$tmp_customscripts_dir/donut.c"
 if [ ! -z "$1" ]; then
     echo -e "cleaning up apt"
     sudo apt autoremove -y
-    echo -e "\nrebooting in 3 minutes\n"
-    sudo shutdown -r +3
+    # echo -e "\nrebooting in 3 minutes\n"
+    # sudo shutdown -r +3
 fi
 
 echo -e "\nDone with first stage\n"
