@@ -90,6 +90,7 @@ if [ ! -z "$1" ]; then
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
+    source $rcfile
     ### install ponysay
     if [ ! $(which ponysay) ]; then
         echo -e "\nponysay not fonud, installiing\n"
@@ -230,4 +231,4 @@ if [ ! -z "$1" ]; then
     sudo shutdown -r +3
 fi
 
-echo -e "\nDone with first stage \n"
+echo -e "\nDone with first stage\n"
