@@ -24,6 +24,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `setup_git.sh`
   
 #### security helpers
+* `add_user_ssh`
 * `backup.sh`
 * `binwalk-tool`
 * `configuree_webhook.sh`
