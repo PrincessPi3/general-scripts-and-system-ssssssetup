@@ -93,6 +93,7 @@ if [ ! -z "$1" ]; then
     fi
     # cargo
     ## oniux
+    echo -e "\nINSTALLIN TOR ONIUX\n"
     cargo install --git https://gitlab.torproject.org/tpo/core/oniux --tag v0.6.1 oniux
     # cleanup
     echo -e "\ncleanan upps\n"
