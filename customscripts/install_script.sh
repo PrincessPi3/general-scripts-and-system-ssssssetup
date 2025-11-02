@@ -39,6 +39,7 @@ fi
 userhome=/home/$username
 
 # figure oot da sehell
+
 if [[ "$SHELL" =~ bash$ ]]; then
     rcfile="$userhome/.bashrc"
 elif [[ "$SHELL" =~ zsh$ ]]; then
@@ -107,6 +108,8 @@ if [ ! -f /usr/local/bin/pishrink ]; then
     mv pishrink.sh pishrink
     chmod +x pishrink
     sudo mv pishrink /usr/local/bin
+else
+    echo "Pishrink already installed, skipping"
 fi
 
 # install ble.sh if not there
@@ -118,6 +121,8 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     echo "source -- $userhome/.local/share/blesh/ble.sh" >> $rcfile
     source $rcfile
     exec "$SHELL"
+else
+    echo "ble.sh already installed, skippping"
 fi
 
 # appeend thefuck to rcfile if not present
@@ -125,10 +130,16 @@ grep -q thefuck $rcfile
 thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
     echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
+else
+    echo "thefuck is already in $rcfile, skipping"
 fi
 
-# copy rice
-mv $tmpDir/rice /home/$username/
+# copy rice if not present
+if [ ! -d $userhome/rice ]; then
+    mv $tmpDir/rice $userhome
+else
+    echo "Rice found not copying again"
+fi
 
 # cleanup
 ## installer
@@ -141,6 +152,8 @@ rm -f "$tmp_customscripts_dir/donut.c"
 
 if [ ! -z "$1" ]; then
     sudo apt autoremove -y
+    echo "rebooting in 3 minutes"
+    sudo shutdown -r +3
 fi
 
 echo "Done with first stage"
