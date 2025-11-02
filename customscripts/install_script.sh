@@ -94,9 +94,18 @@ if [ ! -z "$1" ]; then
     # cargo
     ## oniux
     echo -e "\nINSTALLIN TOR ONIUX\n"
+    if [ -f /usr/local/bin/oniux ]; then
+        echo -e "\nexisting oniux found, deleting and rebuilding\n"
+        sudo rm -f /usr/local/bin/oniux
+    else
+        echo -e "\nexisting oniux not found, skipping delete\n"
+    fi
+    ### from main branch
     git clone --recursive https://gitlab.torproject.org/tpo/core/oniux -b main /tmp/oniux
     cd /tmp/oniux
+    ### build it
     cargo build
+    ### move it somewhere in PATH
     sudo mv ./target/debug/oniux /usr/local/bin/
     # cleanup
     echo -e "\ncleanan upps\n"
