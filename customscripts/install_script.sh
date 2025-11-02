@@ -64,6 +64,7 @@ if [ ! -z "$1" ]; then
     # install packages
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
+    source $rcfile
     ## dotnet
     ### haveibeenpwned-downloader
     if [ ! $(which haveibeenpwned-downloader) ]; then
