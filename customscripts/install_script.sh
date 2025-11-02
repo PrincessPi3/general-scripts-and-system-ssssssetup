@@ -2,7 +2,7 @@
 # install with
 ## curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh | sudo "$SHELL" && bash /usr/share/customscripts/configure_webhook.sh && exec "$SHELL"
 # install with package install
-## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec "$SHELL"
+## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 # set -e # make sure da silly thing dont continue when there be errorZ
 
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
@@ -24,6 +24,8 @@ if [ ! -z "$1" ]; then
     sudo apt autoremove -y
     # echo "rebootan before run againnn (in 1 minute)"
     # sudo shutdown -r +1
+else
+    echo "skipping package install"
 fi
 
 # ta get da right usermayhaps
@@ -53,23 +55,31 @@ fi
 if [ -f $finalDir/tag.txt ]; then
     echo "Found existing tag.txt, backing up"
     cp $finalDir/tag.txt /tmp/tag.txt
+else
+    echo "no existing tag.txt, skipping backup of it"
 fi
 
 if [ -f $finalDir/webhook.txt ]; then
-echo "Found existing webhook.txt, backing up"
+    echo "Found existing webhook.txt, backing up"
     cp $finalDir/webhook.txt /tmp/webhook.txt
+else
+    echo "no existing webhook.txt, skipping backup of it"
 fi
 
 # clean up any exisiting repo dir
 if [[ -d "$tmpDir" ]]; then
     echo "Cleaning Up Existing $tmpDir"
     rm -rf "$tmpDir"
+else
+    echo "$tmpDir not found, skipping deleting it"
 fi
 
 # clean up any existing install
 if [[ -d "$finalDir" ]]; then
     echo "Cleaning Up Existing $finalDir"
     rm -rf "$finalDir"
+else
+    echo "$finalDir not found, will create"
 fi
 
 # ddownload repo
