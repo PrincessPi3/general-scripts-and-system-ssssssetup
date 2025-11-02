@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd dotnet-sdk-9.0"
+packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
 
@@ -47,42 +47,44 @@ if [ ! -z "$1" ]; then
     echo -e "\nDoin full-upgrade\n"
     sudo apt full-upgrade -y
     # dotnet
-    if [ ! $(which dotnet) ]; then
-        echo -e "\ndotnet not found, installing\n"
-        ## install da repo
-        echo -e "\ninstallan dotnet repo\n"
-        wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-        sudo dpkg -i /tmp/packages-microsoft-prod.deb
-        rm -f /tmp/packages-microsoft-prod.deb
-        source $rcfile
-        ## re-update
-        echo -e "\nUpdating software lists\n"
-        sudo apt update
-    else
-        echo -e "\ndotnet installed, skipping install of repo\n"
-    fi
+    # if [ ! $(which dotnet) ]; then
+    #     echo -e "\ndotnet not found, installing\n"
+    #     ## install da repo
+    #     echo -e "\ninstallan dotnet repo\n"
+    #     wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
+    #     sudo dpkg -i /tmp/packages-microsoft-prod.deb
+    #     rm -f /tmp/packages-microsoft-prod.deb
+    #     source $rcfile
+    #     ## re-update
+    #     echo -e "\nUpdating software lists\n"
+    #     sudo apt update
+    #     sudo apt install -y dotnet-sdk-9.0
+    # else
+    #     echo -e "\ndotnet installed, skipping install of repo\n"
+    # fi
     # install packages
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
     source $rcfile
     ## dotnet
     ### haveibeenpwned-downloader
-    if [ ! $(which haveibeenpwned-downloader) ]; then
-        echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
-        sudo dotnet tool install --global haveibeenpwned-downloader
-    else
-        echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
-    fi
+    # if [ ! $(which haveibeenpwned-downloader) ]; then
+    #     echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
+    #     sudo dotnet tool install --global haveibeenpwned-downloader
+    # else
+    #     echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
+    # fi
     # homebrew
     if [ ! $(which brew) ]; then
         ## install homebrew
         echo -e "\nlinuxbrew not found, installing\n"
-        test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-        test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+        # test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         ### add to rcfile
-        echo "# linuxbrew (homebrew/brew)" >> $rcfile
-        echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        source $rcfile
+        # echo "# linuxbrew (homebrew/brew)" >> $rcfile
+        # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+        # source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -139,7 +141,7 @@ git clone $gitRepo $tmpDir --single-branch --depth 1
 
 # donut
 echo -e "\nCompiling donut\n"
-gcc -o "$tmp_customscripts_dir/donut" "$tmp_customscripts_dir/donut.c" -lm
+gcc -o "$tmp_customscripts_dir/donut" "$tmp_customscripts_dir/donut.c" -lm 2>/dev/null
 
 # put the customscripts dir into place
 echo -e "\nPlacing in $finalDir\n"
