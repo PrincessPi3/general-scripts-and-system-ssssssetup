@@ -102,7 +102,8 @@ if [ ! -z "$1" ]; then
     fi
     ### from main 
     echo -e "\ndownloadin oniux code from main branch\n"
-    git clone --recursive https://gitlab.torproject.org/tpo/core/oniux -b main /tmp/oniux
+    ##### niec fast downdoot
+    git clone --recursive --single-branch --depth 1 -b main https://gitlab.torproject.org/tpo/core/oniux /tmp/oniux
     cd /tmp/oniux
     ### build it
     echo -e "\nbuildin and installin oniux\n"
