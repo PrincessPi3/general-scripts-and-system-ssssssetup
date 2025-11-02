@@ -94,7 +94,10 @@ if [ ! -z "$1" ]; then
     # cargo
     ## oniux
     echo -e "\nINSTALLIN TOR ONIUX\n"
-    cargo install --git https://gitlab.torproject.org/tpo/core/oniux --tag v0.6.1 oniux
+    git clone --recursive https://gitlab.torproject.org/tpo/core/oniux -b main /tmp/oniux
+    cd /tmp/oniux
+    cargo build
+    sudo mv ./target/debug/oniux /usr/local/bin/
     # cleanup
     echo -e "\ncleanan upps\n"
     sudo apt autoremove -y
