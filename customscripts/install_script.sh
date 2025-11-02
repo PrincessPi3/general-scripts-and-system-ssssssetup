@@ -46,6 +46,7 @@ if [ ! -z "$1" ]; then
     sudo apt update
     echo -e "\nDoin full-upgrade\n"
     sudo apt full-upgrade -y
+    # not available on arm
     # dotnet
     # if [ ! $(which dotnet) ]; then
     #     echo -e "\ndotnet not found, installing\n"
@@ -66,6 +67,7 @@ if [ ! -z "$1" ]; then
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
     source $rcfile
+    # not useful on arm
     ## dotnet
     ### haveibeenpwned-downloader
     # if [ ! $(which haveibeenpwned-downloader) ]; then
