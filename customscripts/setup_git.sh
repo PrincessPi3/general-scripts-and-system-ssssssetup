@@ -6,8 +6,8 @@ read -s -p 'Enter Github Classic Token (https://github.com/settings/tokens): ' g
 read -p 'Enter Email Address: ' gh_email
 read -p 'Enter Github Username: ' gh_username
 
-sudo apt update
-sudo apt install git gh -y
+# sudo apt update
+# sudo apt install git gh -y
 
 echo "Saving Token to ~/.gh_token"
 echo $gh_token > ~/.gh_token
@@ -22,3 +22,5 @@ git config --global user.email "$gh_email"
 git config --global user.name "$gh_username"
 
 echo "DONE WOOO :3~"
+
+exit 0
