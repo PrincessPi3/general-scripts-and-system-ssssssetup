@@ -1,6 +1,6 @@
 #!/bin/bash
 # install without upfate and package install
-## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c $script && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c "$script" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 # install with package install
 ## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 
@@ -48,7 +48,7 @@ if [ ! -z "$1" ]; then
     rm -f /tmp/packages-microsoft-prod.deb
     # install packages
     echo "Installan my packages"
-    dotnet tool install --global haveibeenpwned-downloader
+    sudo dotnet tool install --global haveibeenpwned-downloader
     sudo bash -c "apt install $packages -y"
     # instsall homebrew
     test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
