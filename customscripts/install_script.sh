@@ -48,20 +48,11 @@ if [ ! -z "$1" ]; then
     sudo apt full-upgrade -y
     # dotnet
     if [ ! $(which dotnet) ]; then
-          echo -e "\ndotnet not found, installing\n"
-          wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
-          chmod +x /tmp/dotnet-install.sh
-          bash /tmp/dotnet-install.sh
-    #     ## install da repo
-    #     echo -e "\ninstallan dotnet repo\n"
-    #     wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-    #     sudo dpkg -i /tmp/packages-microsoft-prod.deb
-    #     rm -f /tmp/packages-microsoft-prod.deb
-    #     source $rcfile
-    #     ## re-update
-    #     echo -e "\nUpdating software lists\n"
-    #     sudo apt update
-    #     sudo apt install -y dotnet-sdk-9.0
+        echo -e "\ndotnet not found, installing\n"
+        wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
+        chmod +x /tmp/dotnet-install.sh
+        /tmp/dotnet-install.sh
+        source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
     fi
