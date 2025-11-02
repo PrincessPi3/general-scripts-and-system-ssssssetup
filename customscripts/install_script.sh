@@ -46,13 +46,13 @@ if [ ! -z "$1" ]; then
     sudo apt update
     echo -e "\nDoin full-upgrade\n"
     sudo apt full-upgrade -y
-    # dotnet
+    # dotnet conditional install
     if [ ! $(which dotnet) ]; then
         echo -e "\ndotnet not found, installing\n"
         wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
         chmod +x /tmp/dotnet-install.sh
         /tmp/dotnet-install.sh
-        echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet" >> $rcfile
+        echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
         source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
@@ -65,7 +65,7 @@ if [ ! -z "$1" ]; then
     ### haveibeenpwned-downloader
     if [ ! $(which haveibeenpwned-downloader) ]; then
         echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
-        sudo $userhome/.dotnet/dotnet dotnet tool install --global haveibeenpwned-downloader
+        dotnet tool install --create-manifest-if-needed --global haveibeenpwned-downloader
     else
         echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
     fi
