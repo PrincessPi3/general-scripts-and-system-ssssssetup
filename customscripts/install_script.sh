@@ -52,6 +52,7 @@ if [ ! -z "$1" ]; then
         wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
         chmod +x /tmp/dotnet-install.sh
         /tmp/dotnet-install.sh
+        echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet" >> $rcfile
         source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
@@ -60,15 +61,14 @@ if [ ! -z "$1" ]; then
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
     source $rcfile
-    # not useful on arm
     ## dotnet
     ### haveibeenpwned-downloader
-    # if [ ! $(which haveibeenpwned-downloader) ]; then
-    #     echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
-    #     sudo dotnet tool install --global haveibeenpwned-downloader
-    # else
-    #     echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
-    # fi
+    if [ ! $(which haveibeenpwned-downloader) ]; then
+        echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
+        sudo $userhome/.dotnet/dotnet dotnet tool install --global haveibeenpwned-downloader
+    else
+        echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
+    fi
     # homebrew
     if [ ! $(which brew) ]; then
         ## install homebrew
