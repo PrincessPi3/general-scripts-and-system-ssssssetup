@@ -1,10 +1,12 @@
 #!/bin/bash
 # install without upfate and package install
-## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c "$script" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c $script && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 # install with package install
 ## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+
 # set -e # make sure da silly thing dont continue when there be errorZ
 
+# configs
 gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.git'
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
@@ -41,7 +43,6 @@ fi
 userhome=/home/$username
 
 # figure oot da sehell
-
 if [[ "$SHELL" =~ bash$ ]]; then
     rcfile="$userhome/.bashrc"
 elif [[ "$SHELL" =~ zsh$ ]]; then
@@ -77,7 +78,7 @@ fi
 # clean up any existing install
 if [[ -d "$finalDir" ]]; then
     echo "Cleaning Up Existing $finalDir"
-    rm -rf "$finalDir"
+    sudo rm -rf "$finalDir"
 else
     echo "$finalDir not found, will create"
 fi
@@ -104,7 +105,6 @@ sudo chmod -R 775 "$finalDir"
 # check if $finalDir is in $rcfile
 grep -q $finalDir $rcfile
 pathgrep=$?
-
 if [ $pathgrep -eq 0 ]; then
     echo "$finalDir Already in \$PATH Skipping"
 else
@@ -145,8 +145,8 @@ else
 fi
 
 # copy rice if not present
-if [ ! -d $userhome/rice ]; then
-    mv $tmpDir/rice $userhome
+if [ ! -d $userhome/Rice ]; then
+    mv $tmpDir/Rice $userhome
 else
     echo "Rice found not copying again"
 fi
