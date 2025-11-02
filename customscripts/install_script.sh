@@ -54,6 +54,7 @@ if [ ! -z "$1" ]; then
         wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
         sudo dpkg -i /tmp/packages-microsoft-prod.deb
         rm -f /tmp/packages-microsoft-prod.deb
+        source $rcfile
         ## re-update
         echo -e "\nUpdating software lists\n"
         sudo apt update
@@ -80,6 +81,7 @@ if [ ! -z "$1" ]; then
         ### add to rcfile
         echo "# linuxbrew (homebrew/brew)" >> $rcfile
         echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+        source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -192,6 +194,7 @@ thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
     echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
     echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
+    source $rcfile
 else
     echo -e "\nthefuck is already in $rcfile, skipping\n"
 fi
