@@ -100,10 +100,12 @@ if [ ! -z "$1" ]; then
     else
         echo -e "\nexisting oniux not found, skipping delete\n"
     fi
-    ### from main branch
+    ### from main 
+    echo -e "\ndownloadin oniux code from main branch\n"
     git clone --recursive https://gitlab.torproject.org/tpo/core/oniux -b main /tmp/oniux
     cd /tmp/oniux
     ### build it
+    echo -e "\nbuildin and installin oniux\n"
     cargo build
     ### move it somewhere in PATH
     sudo mv ./target/debug/oniux /usr/local/bin/
