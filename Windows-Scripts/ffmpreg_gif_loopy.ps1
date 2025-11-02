@@ -3,9 +3,5 @@ param(
     [Parameter(Mandatory=$True, Position=0)]
     [string]$Filename
 )
-# clean up any older pallasz
-rm palette.png
-# first pass
-ffmpeg -y -i "$Filename" -vf "palettegen=stats_mode=full" palette.png
-# second pass
-ffmpeg -i "$Filename" -i palette.png -lavfi "paletteuse=dither=none" -f gif -loop 0 "$Filename.gif"
+# apng is far hjigher quality and also preserves transparancy :activated:
+ffmpeg -i "$Filename" -plays 0 -f apng -lavfi split[v],palettegen,[v]paletteuse "$Filename.apng"
