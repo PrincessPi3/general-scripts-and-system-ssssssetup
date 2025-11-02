@@ -34,7 +34,7 @@ sudo dd if=$dadisk of=$imgname bs=4M status=progress
 imgsize=$(du -h $imgname)
 
 # img sha256
-sha256sum $imgname | tee $checksums
+# sha256sum $imgname | tee $checksums
 
 # shrink and compress the image
 webhook "Copied the disk to $imgname ($imgsize), compressing to $xzname"
