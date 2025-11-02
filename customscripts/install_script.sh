@@ -1,8 +1,8 @@
 #!/bin/bash
 # install without upfate and package install
-## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c $script && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c $script && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 # install with package install
-## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && sudo $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+## script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c "$script full" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
 
 # set -e # make sure da silly thing dont continue when there be errorZ
 
@@ -14,6 +14,28 @@ finalDir='/usr/share/customscripts'
 packages="apache2 nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd dotnet-sdk-9.0"
 
 echo "Using Shell $SHELL"
+
+# ta get da right usermayhaps
+if [[ -z $SUDO_USER ]]; then
+    echo "Using User $USER"
+    username="$USER"
+else
+    echo "Using User $SUDO_USER" 
+    username="$SUDO_USER"
+fi
+
+# home dir
+userhome=/home/$username
+
+# figure oot da sehell
+if [[ "$SHELL" =~ bash$ ]]; then
+    rcfile="$userhome/.bashrc"
+elif [[ "$SHELL" =~ zsh$ ]]; then
+    rcfile="$userhome/.zshrc"
+else
+    echo -e "Die: Unsupported Shell";
+    exit 1
+fi
 
 if [ ! -z "$1" ]; then
     echo "Updating software lists"
@@ -42,28 +64,6 @@ if [ ! -z "$1" ]; then
     sudo apt autoremove -y
 else
     echo "skipping package install"
-fi
-
-# ta get da right usermayhaps
-if [[ -z $SUDO_USER ]]; then
-    echo "Using User $USER"
-    username="$USER"
-else
-    echo "Using User $SUDO_USER" 
-    username="$SUDO_USER"
-fi
-
-# home dir
-userhome=/home/$username
-
-# figure oot da sehell
-if [[ "$SHELL" =~ bash$ ]]; then
-    rcfile="$userhome/.bashrc"
-elif [[ "$SHELL" =~ zsh$ ]]; then
-    rcfile="$userhome/.zshrc"
-else
-    echo -e "Die: Unsupported Shell";
-    exit 1
 fi
 
 # get the existing tag and webhooks if any
