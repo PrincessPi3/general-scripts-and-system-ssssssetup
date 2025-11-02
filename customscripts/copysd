@@ -1,0 +1,55 @@
+#!/bin/bash
+set -e
+
+# date strings
+start=`date +%s`
+isodate=`date -I`
+
+echo -e "\nStarting at `date`!\n"
+
+lsblk
+echo -e "\ninput disk full path (like /dev/sdX)"
+read disk
+
+echo -e "\ninput tag for image (no spaces or special chars)"
+read file_tag
+
+file_string=$isodate-$file_tag
+out_dir=$PWD
+out_img=$out_dir/$file_string.img
+out_xz=$out_dir/$file_string.img.xz
+info_log=$out_dir/$file_string.txt
+
+echo -e "\nCOPYAN $disk to $out_img\n"
+sudo dd if=$disk of=$out_img bs=4M status=progress
+ret=$?
+
+ddd=$(($end - `date +%s`))
+echo -e "\nDONE COPYING IN $ddd SECONDS ($ret)!\n\nGetting size of $out_img!\n"
+sudo du -h $out_img | tee -a $info_log
+sudo du -b $out_img | tee -a $info_log
+ret=$?
+
+# ddd=$(($end - `date +%s`))
+# echo -e "\nDONE	GETTING SIZE IN $ddd SECONDS ($ret)!\n\n! MAKIN SHA256 CHECKSUM OF $out_img"
+# sudo sha256sum $out_img | tee -a $info_log
+# ret=$?
+
+ddd=$(($end - `date +%s`))
+echo -e "\nDONE	GETTING SIZE IN $ddd SECONDS LOGGED TO $info_log ($ret)!\n\nRUNNOIG PISHRINK from $out_img to $out_xz\n"
+sudo pishrink -Z -a -v $out_img
+ret=$?
+
+ddd=$(($end - `date +%s`))
+echo -e "\nDONE RUNNING PISHRINK IN $ddd SECONDS ($ret)!\n\nGETTIN SIZE OF $out_xz\n"
+sudo du -h $out_xz | tee -a $info_log
+sudo du -b $out_xz | tee -a $info_log
+ret=$?
+
+ddd=$(($end - `date +%s`))
+echo -e "\nDONE GETTING FILE SIZE IN $ddd SECONDS ($ret)!\n\aMAKIN SHA256 CHECKSUM OF $out_xz\n"
+sha256sum $out_xz | tee -a $info_log
+
+ddd=$(($end - `date +%s`))
+echo -e "ALL DONE IN $ddd SECONDS!"
+echo "Duration $duration seconds" >> $info_log
