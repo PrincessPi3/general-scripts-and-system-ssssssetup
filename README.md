@@ -21,7 +21,8 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `gitsync`
 * `syncstatus`
 * `waypoint`
-* 
+* `setup_git.sh`
+  
 #### security helpers
 * `backup.sh`
 * `binwalk-tool`
@@ -31,25 +32,41 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `find_bytes`
 * `fix-wifi`
 * `add_user_ssh`
+* `wifi_monitor`
 * `wifi-monitor-airX`
 * `recursive-analysis`
 * `large_file_search_for_hash`
 * `randomtoken`
+* `alfa_install_kali.sh`
 
 #### monitoring
 * `mon-watch`
 * `monitor_pid`
+* `ifnet`
 * `webhook`
+* `FIND_THE_FUCKING_PI`
+
+#### hosting
+* `add_apache2_site`
 
 #### setup and general scripts
 * `ifnet`
 * `install_script.sh`
 * `pyenv_setup`
+* `python_pyenv_setup.sh`
 * `xrdp-start`
 * `add_apache2_site`
 * `download_file_list`
 * `message_users`
 * `UNFUCK_HOMEDIR_PERMS.sh`
+* `pi_create_image`
+
+#### for fun
+* `donut`
+
+#### media
+* `easylistdownload`
+* `download_file_list`
 
 ### Windowwz
 #### git helpers
@@ -69,7 +86,8 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `testtime.ps1`
 #### Windows system 
 * `redundant-backup.ps1`
-* `windows-repair.bat`
+#### anti-productivity
+* `IM_SO_TIRED_BOSS.ps1`
 
 todo:
 1. windwows gitinitshit
