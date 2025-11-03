@@ -64,6 +64,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 
 #### for fun
 * `donut`
+* `friendlyfriend`
 
 #### media
 * `easylistdownload`
