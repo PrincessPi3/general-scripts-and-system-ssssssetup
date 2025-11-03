@@ -1,4 +1,14 @@
 #!/bin/bash
+# usage:
+## friendlyfriend [int seconds delay]
+## friendlyfriend 30
+
+if [ -z "$1" ]; then
+    sleep_seconds=5
+else
+    sleep_seconds=$1
+fi
+
 while (true); do
     clear
     ponysay $(polygen /usr/share/polygen/eng/pornsite.grm | awk '{print $3}')
