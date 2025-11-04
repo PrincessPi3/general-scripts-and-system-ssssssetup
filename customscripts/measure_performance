@@ -5,6 +5,8 @@
 ##  measure_performance "my_command -with -args"
 
 # todo: calculate human readable sizes for mem, r and w
+# todo: loop through list of commands supplied by a file
+## output da actual log for dis one ig lmao idk
 
 cmd="$@" # da command as a string or as args
 start_date=$(date)
@@ -31,10 +33,10 @@ end_unixmicroseconds=$(date +"%s%6N") # get dis fast for accuracy
 duration_microseconds=$(($end_unixmicroseconds - $start_unixmicroseconds))
 ## seconds
 duration_seconds=$(($duration_microseconds / 1000000)) # seconds = microseconds / 1,000,000
-
-# remove lines starting with # (comments), empty lines, and those starting with Linux so its a pure csv
-# then squash spaces and replace with commas
-# them awk by delimiter comma to output
+# parse da fiel
+## remove lines starting with # (comments), empty lines, and those starting with Linux so its a pure csv
+## then squash spaces and replace with commas
+## them awk by delimiter comma to output
 cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{ cpup += $8; memk += $13; memp += $14; rkbs += $15; wkbs += $15 } END { print "\nCPU:",cpup/NR,"\nMemory Usage (KiB):",memk/NR,"\nMemory Usage %:",memp/NR,"\nKiB Read Per Second:",rkbs/NR,"\nKiB Written Per Second:",wkbs/NR }' #$1,$3,$8,$13,$14,$15,$16,$17 }'
 # add footer
 echo -e "Duration Seconds: $duration_seconds\nDuration Microseconds: $duration_microseconds\nReturn Code: $ret"
