@@ -48,7 +48,7 @@ measure_performance () {
     start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
 
     # run the command with pidstart (-e)
-    eval "pidstat -h -H -d -r -u -I $poll_seconds -e $test_cmd >> $logfile"
+    eval "pidstat -h -H -d -r -u -I $poll_seconds -e bash -c \"($test_cmd >/dev/null 2>&1)\" >> \"$logfile\""
     ret=$? # get da return code
     
     # calculate durations
@@ -66,7 +66,7 @@ measure_performance () {
     else
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
-        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$ret\",\"$elapsed_seconds\"}" | tr ' ' ',' | tee -a "$csv_file"
+        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$elapsed_seconds\",\"$test_cmd\",\"$ret\"}" | tr ' ' ',' >> "$csv_file" # | tee -a "$csv_file"
         # cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
     fi
 }
@@ -87,7 +87,7 @@ else
     test_cmd="$(echo \"$input\" | sed 's/\ /_/g')"
     
     # add da csv headers to the results fiel
-    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" > "$csv_file"
+    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code" > "$csv_file"
 
     cat "$input" | \
         while read line; do
