@@ -66,7 +66,7 @@ measure_performance () {
     else
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
-        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",\",\",cpup/NR,\",\",memk/NR\",\",memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\",$elapsed_seconds\",\",\",\"$friendly_test_cmd\",\",\",\"$ret\"}" >> "$csv_file" # | tee -a "$csv_file"
+        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",\",\",cpup/NR,\",\",memk/NR\",\",memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\",$elapsed_seconds\",\",\",\"$friendly_test_cmd\",\",\",\"$ret\"}" | tee -a "$csv_file"
     fi
 }
 
