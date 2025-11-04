@@ -67,7 +67,6 @@ measure_performance () {
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
         cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$ret\",\"$elapsed_seconds\"}" | tr ' ' ',' | tee -a "$csv_file"
-        printf "%s" $test_cmd
         # cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
     fi
 }
@@ -77,7 +76,7 @@ measure_performance () {
 ## cat /tmp/sillylog.tmp | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{print "Time:",$1,"UID:",$2,"PID:",$3,"%usr:",$4,"%system:",$5,"%guest:",$6,"%wait:",$7,"%CPU:",$8,"CPU:",$9,"minflt/s:",$10,"majflt/s:",$11,"VSZ:",$12,"RSS:",$13,"%MEM:",$14,"kB_rd/s:",$15,"kB_wr/s:",$16,"kB_ccwr/s:",$17,"iodelay:",$18,"Command:",$19}'
 ## if oneshot mode
 if [ ! -f "$input" ]; then
-    test_cmd="$(echo \"$@\" | sed 's/\ /_/g')"
+    test_cmd="$(echo \"$input\" | sed 's/\ /_/g')"
     echo $test_cmd
     measure_performance
 ## if batch mode
@@ -85,6 +84,7 @@ else
     # settans
     len=$(wc -l "$input" | awk '{print $1}') # num of lines in da fiel
     count=1
+    test_cmd="$(echo \"$input\" | sed 's/\ /_/g')"
     
     # add da csv headers to the results fiel
     echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" > "$csv_file"
