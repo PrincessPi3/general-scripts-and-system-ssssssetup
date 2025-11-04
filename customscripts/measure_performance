@@ -90,7 +90,7 @@ else
 
     cat "$input" | \
         while read line; do
-            test_cmd="$(echo \"$line\" | tr ' ' '_')"
+            test_cmd=$(echo $line | tr -s ' ' '_')
             position="$count/$len"
             measure_performance
             count=$(($count + 1))
