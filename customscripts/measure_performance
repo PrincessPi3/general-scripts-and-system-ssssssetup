@@ -84,14 +84,13 @@ else
     # settans
     len=$(wc -l "$input" | awk '{print $1}') # num of lines in da fiel
     count=1
-    test_cmd="$(echo \"$input\" | sed 's/\ /_/g')"
     
     # add da csv headers to the results fiel
     echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code" > "$csv_file"
 
     cat "$input" | \
         while read line; do
-            test_cmd="$line"
+            test_cmd="$(echo \"$line\" | tr ' ' '_')"
             position="$count/$len"
             measure_performance
             count=$(($count + 1))
