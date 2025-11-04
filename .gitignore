@@ -1,4 +1,4 @@
 webhook.txt
 tag.txt
 *.tmp
-*.csv
+*/.csv
