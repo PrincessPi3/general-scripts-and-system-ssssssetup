@@ -1,0 +1,54 @@
+#!/bin/bash
+# usage:
+## both quoted and unquoted commands work~
+##  measure_performance my_command -with -args
+##  measure_performance "my_command -with -args"
+
+cmd="$@" # da command as a string or as args
+start_date=$(date)
+start_unixseconds=$(date +%s)
+poll_seconds=2
+logfile=sillylog.csv
+
+# throw a fit if no args supplied
+if [ -z "$1" ]; then
+    echo 'USAGE: measure_performance "string_command-with -args"'
+    exit 1
+fi
+
+echo "testing your gay little command $cmd at $(date +\"%h:%M:%S %Z\")" | tr [a-z] [A-Z]
+
+# kill loeg for suretain
+if [ -f "$logfile" ]; then
+    echo "$logfile found, deleting it"
+    rm -f "$logfile"
+fi
+
+# csv headers
+echo "TIMESTAMP,PID,CPU USAGE %,MEMORY USAGE (KIBIBYTES),MEMORY USAGE %,READ VOLUME PER SECOND (KIBIBYTES),WRITE SIZE PER SECOND (KIBIBYTES)" > "$logfile"
+# start times
+start_unixseconds=$(date +%s) # for duration seconds
+start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
+# run the command with pidstat monitoring it, using eval to handle strings and args methods
+eval "pidstat -h -H -d -r -u -I $poll_seconds -e $cmd >> \"$logfile\""
+# get exit code
+ret=$?
+# end times
+## microseconds
+end_unixmicroseconds=$(date +"%s%6N") # get dis fast for accuracy
+duration_microseconds=$(($end_unixmicroseconds - $start_unixmicroseconds))
+## seconds
+end_unixseconds=$(date +%s)
+duration_seconds=$(($end_unixseconds - $start_unixseconds))
+
+# add footer
+echo "START_UNIX_SECONDS,END_UNIX_SECONDS,DURATION_SECONDS,DURATION_MICROSECONDS,RETURN_CODE"
+echo "$start_unixseconds,$end_unixseconds,$duration_seconds,$duration_microseconds,$ret"
+
+cat "$logfile"
+
+# remove lines starting with # (comments), empty lines, and those starting with Linux so its a pure csv
+# then squash spaces and replace with commas
+# them awk by delimiter comma to output
+# and replace da original file with tha fixed one
+# cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{ cpup += $3 } END { print "sunn:",cpup / NR,$1,$3,$8,$13,$14,$15,$16,$17 }' 
