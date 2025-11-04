@@ -36,7 +36,7 @@ measure_performance () {
     start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
 
     # run the command with pidstart (-e)
-    eval "pidstat -h -H -d -r -u -I $poll_seconds -e $test_cmd >> \"$logfile\""
+    eval "pidstat -h -H -d -r -u -I $poll_seconds -e bash -c \"$test_cmd\" >> \"$logfile\""
     ret=$? # get da return code
     
     # calculate durations
@@ -52,13 +52,20 @@ measure_performance () {
         # nao add da rest
         echo -e "Duration Seconds: $duration_seconds\nDuration Microseconds: $duration_microseconds\nReturn Code: $ret"
     else
+        if [ -f "$csv_file" ]; then
+            rm -f "$csv_file"
+        fi
+
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
-        cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
+        cat "$logfile" | sed '/^MARK*/!d' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"MARK$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$test_cmd\",\"$ret\",\"$elapsed_seconds\"}" | tr ' ' ',' | tee -a "$csv_file"
+        # cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
     fi
 }
 
 # main
+## awk testarrrr
+## cat /tmp/sillylog.tmp | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{print "Time:",$1,"UID:",$2,"PID:",$3,"%usr:",$4,"%system:",$5,"%guest:",$6,"%wait:",$7,"%CPU:",$8,"CPU:",$9,"minflt/s:",$10,"majflt/s:",$11,"VSZ:",$12,"RSS:",$13,"%MEM:",$14,"kB_rd/s:",$15,"kB_wr/s:",$16,"kB_ccwr/s:",$17,"iodelay:",$18,"Command:",$19}'
 ## if oneshot mode
 if [ ! -f "$input" ]; then
     test_cmd="$@"
