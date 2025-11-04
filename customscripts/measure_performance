@@ -12,11 +12,6 @@
 ####        unzip file.zip
 
 # todo: calculate human readable sizes for mem, r and w
-# todo: batch mode
-##  loop through list of commands supplied by a file
-##  output da actual log for dis one ig lmao idk
-###     log results to a file named after the input file
-###     log format csv with titles
 
 # glooboos
 poll_seconds=2
@@ -45,8 +40,8 @@ if [ -f "$csv_file" ]; then
 fi
 
 measure_performance () {
-    if [ -f "$csv_file" ]; then
-        rm -f "$csv_file"
+    if [ -f "$logfile" ]; then
+        rm -f "$logfile"
     fi
 
     # use microseconds for timing for ONE MILLION DOLLARS more times resolution

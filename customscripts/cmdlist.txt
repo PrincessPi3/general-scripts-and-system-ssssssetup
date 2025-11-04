@@ -5,4 +5,4 @@ oniux curl -s https://canhazip.com
 oniux curl -s https://canhazip.com
 oniux curl -s https://canhazip.com
 oniux curl -s https://canhazip.com
-rm -f /tmp/file.tmp
+rm -f /tmp/*.tmp
