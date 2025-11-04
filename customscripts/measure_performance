@@ -48,7 +48,7 @@ measure_performance () {
     start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
 
     # run the command with pidstart (-e)
-    eval "pidstat -h -H -d -r -u -I $poll_seconds -e bash -c \"($test_cmd >/dev/null 2>&1)\" >> \"$logfile\""
+    eval "pidstat -h -T ALL -H -d -r -u $poll_seconds -e bash -c \"($test_cmd >/dev/null 2>&1)\" >> \"$logfile\""
     ret=$? # get da return code
     
     # calculate durations
@@ -66,8 +66,7 @@ measure_performance () {
     else
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
-        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$elapsed_seconds\",\"$test_cmd\",\"$ret\"}" | tr ' ' ',' >> "$csv_file" # | tee -a "$csv_file"
-        # cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
+        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$elapsed_seconds\",\"$friendly_test_cmd\",\"$ret\"}" | tr ' ' ',' >> "$csv_file" # | tee -a "$csv_file"
     fi
 }
 
@@ -90,7 +89,8 @@ else
 
     cat "$input" | \
         while read line; do
-            test_cmd=$(echo $line | tr -s ' ' '_')
+            test_cmd="$line"
+            friendly_test_cmd=$(echo "$line" | tr -s ' ' '_')
             position="$count/$len"
             measure_performance
             count=$(($count + 1))
