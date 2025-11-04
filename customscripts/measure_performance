@@ -12,7 +12,7 @@
 ###     log format csv with titles
 
 # glooboos
-poll_seconds=5
+poll_seconds=2
 logfile=/tmp/sillylog.tmp # can beee a temp fiel
 input="$@" # da command as a string or as args
 duration_microseconds=0
