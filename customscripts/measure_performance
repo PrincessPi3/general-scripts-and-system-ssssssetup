@@ -4,6 +4,8 @@
 ##  measure_performance my_command -with -args
 ##  measure_performance "my_command -with -args"
 
+# todo: calculate human readable sizes for mem, r and w
+
 cmd="$@" # da command as a string or as args
 start_date=$(date)
 start_unixseconds=$(date +%s)
