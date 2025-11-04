@@ -1,8 +1,8 @@
 sleep 10
 wget https://github.com/espressif/esp-idf/releases/download/v5.5.1/esp-idf-v5.5.1.zip -P /tmp/file.tmp
-oniux curl -s https://canhazip.com >/dev/null
-oniux curl -s https://canhazip.com >/dev/null
-oniux curl -s https://canhazip.com >/dev/null
-oniux curl -s https://canhazip.com >/dev/null
-oniux curl -s https://canhazip.com >/dev/null
-rm -f /tmp/file.tmp >/dev/null
+oniux curl -s https://canhazip.com
+oniux curl -s https://canhazip.com
+oniux curl -s https://canhazip.com
+oniux curl -s https://canhazip.com
+oniux curl -s https://canhazip.com
+rm -f /tmp/file.tmp

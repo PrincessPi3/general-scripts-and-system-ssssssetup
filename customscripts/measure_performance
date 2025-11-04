@@ -42,7 +42,7 @@ measure_performance () {
     start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
 
     # run the command with pidstart (-e)
-    eval "pidstat -h -H -d -r -u -I $poll_seconds -e bash -c \"$test_cmd\" >> \"$logfile\""
+    eval "pidstat -h -H -d -r -u -I $poll_seconds -e $test_cmd >> $logfile"
     ret=$? # get da return code
     
     # calculate durations
@@ -58,13 +58,9 @@ measure_performance () {
         # nao add da rest
         echo -e "Duration Seconds: $duration_seconds\nDuration Microseconds: $duration_microseconds\nReturn Code: $ret"
     else
-        if [ -f "$csv_file" ]; then
-            rm -f "$csv_file"
-        fi
-
         elapsed_seconds=$((`date +%s` - $start_seconds))
         # parse and appand dem 2 da csv
-        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$test_cmd\",\"$ret\",\"$elapsed_seconds\"}" >> "$csv_file"
+        cat "$logfile" | sed -n '/^[0-9]/p' | tr -s ' ' ',' | awk -F, "{cpup+=\$8;memk+=\$13;memp=\$14;rkbs+=\$15;wkbs+=\$15}{print \"$position\",cpup/NR,memk/NR,memp/NR,rkbs/NR,wkbs/NR,\"$duration_microseconds\",\"$test_cmd\",\"$ret\",\"$elapsed_seconds\"}" | tee -a "$csv_file"
         # cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
     fi
 }
@@ -79,7 +75,6 @@ if [ ! -f "$input" ]; then
 ## if batch mode
 else
     # settans
-    results_log=$1.csv # todo: do file ext trickery
     len=$(wc -l "$input" | awk '{print $1}') # num of lines in da fiel
     count=1
 
@@ -88,7 +83,7 @@ else
     # fi
     
     # add da csv headers to the results fiel
-    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" >> "$csv_file"
+    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" > "$csv_file"
 
     cat "$input" | \
         while read line; do
