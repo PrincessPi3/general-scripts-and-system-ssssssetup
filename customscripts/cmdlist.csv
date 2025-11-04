@@ -1,0 +1,6 @@
+Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed
+1/5,0,1728,0.01,0,0,10008736,sleep10,0,10
+2/5,1.07857,8173.71,0.0528571,0,36700,25850195,wgethttps://github.com/espressif/esp-idf/releases/download/v5.5.1/esp-idf-v5.5.1.zip-P/tmp/file.tmp,0,36
+3/5,2.38769,33324,0.204615,0.0615385,19762.5,26261108,oniuxcurl-shttps://canhazip.com,0,62
+4/5,2.87053,37945.1,0.232105,-0.0105263,13522.1,25054283,oniuxcurl-shttps://canhazip.com,0,88
+5/5,3.1292,43786.4,0.268,-0.008,10277.3,25753552,oniuxcurl-shttps://canhazip.com,0,113

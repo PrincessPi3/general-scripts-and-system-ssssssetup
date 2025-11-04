@@ -5,14 +5,20 @@
 ##  measure_performance "my_command -with -args"
 
 # todo: calculate human readable sizes for mem, r and w
-# todo: loop through list of commands supplied by a file
-## output da actual log for dis one ig lmao idk
+# todo: batch mode
+##  loop through list of commands supplied by a file
+##  output da actual log for dis one ig lmao idk
+###     log results to a file named after the input file
+###     log format csv with titles
 
-cmd="$@" # da command as a string or as args
-start_date=$(date)
-start_unixseconds=$(date +%s)
-poll_seconds=2
-logfile=/tmp/sillylog.csv
+# glooboos
+poll_seconds=5
+logfile=/tmp/sillylog.tmp # can beee a temp fiel
+input="$@" # da command as a string or as args
+duration_microseconds=0
+duration_seconds=0
+test_cmd=""
+start_seconds=$(date +%s)
 
 # throw a fit if no args supplied
 if [ -z "$1" ]; then
@@ -20,23 +26,62 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-echo "testing your gay little command $cmd"
-# start times
-start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
-# run the command with pidstat monitoring it, using eval to handle strings and args methods
-eval "pidstat -h -H -d -r -u -I $poll_seconds -e $cmd >> \"$logfile\""
-# get exit code
-ret=$?
-# end times
-## microseconds
-end_unixmicroseconds=$(date +"%s%6N") # get dis fast for accuracy
-duration_microseconds=$(($end_unixmicroseconds - $start_unixmicroseconds))
-## seconds
-duration_seconds=$(($duration_microseconds / 1000000)) # seconds = microseconds / 1,000,000
-# parse da fiel
-## remove lines starting with # (comments), empty lines, and those starting with Linux so its a pure csv
-## then squash spaces and replace with commas
-## them awk by delimiter comma to output
-cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{ cpup += $8; memk += $13; memp += $14; rkbs += $15; wkbs += $15 } END { print "\nCPU:",cpup/NR,"\nMemory Usage (KiB):",memk/NR,"\nMemory Usage %:",memp/NR,"\nKiB Read Per Second:",rkbs/NR,"\nKiB Written Per Second:",wkbs/NR }' #$1,$3,$8,$13,$14,$15,$16,$17 }'
-# add footer
-echo -e "Duration Seconds: $duration_seconds\nDuration Microseconds: $duration_microseconds\nReturn Code: $ret"
+# maek sure da log fileee DIESASDRGVWERT
+if [ -f "$logfile" ]; then
+    rm  -f "$logfile"
+fi
+
+measure_performance () {
+    # use microseconds for timing for ONE MILLION DOLLARS more times resolution
+    start_unixmicroseconds=$(date +"%s%6N") # get start microseconds fast as possible before run
+
+    # run the command with pidstart (-e)
+    eval "pidstat -h -H -d -r -u -I $poll_seconds -e $test_cmd >> \"$logfile\""
+    ret=$? # get da return code
+    
+    # calculate durations
+    end_unixmicroseconds=$(date +"%s%6N") # get dis fast for accuracy
+    duration_microseconds=$(($end_unixmicroseconds - $start_unixmicroseconds))
+    duration_seconds=$(($duration_microseconds / 1000000)) # seconds = microseconds / 1,000,000
+
+    if [ -z "$1" ]; then
+        echo "testing your gay littel command: $test_cmd"
+        # parse and show infos
+        cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{ cpup += $8; memk += $13; memp += $14; rkbs += $15; wkbs += $15 } END { print "\nCPU:",cpup/NR,"\nMemory Usage (KiB):",memk/NR,"\nMemory Usage %:",memp/NR,"\nKiB Read Per Second:",rkbs/NR,"\nKiB Written Per Second:",wkbs/NR }'
+        
+        # nao add da rest
+        echo -e "Duration Seconds: $duration_seconds\nDuration Microseconds: $duration_microseconds\nReturn Code: $ret"
+    else
+        elapsed_seconds=$((`date +%s` - $start_seconds))
+        # parse and appand dem 2 da csv
+        cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, "{cpup+= \$8;memk+=\$13;memp +=\$14;rkbs+=\$15;wkbs+=\$16 } END {print \"$position\",\",\",cpup/NR,\",\",memk/NR,\",\",memp/NR,\",\",rkbs/NR,\",\",wkbs/NR,\",\",\"$duration_microseconds\",\",\",\"$test_cmd\",\",\",\"$ret\",\",\",\"$elapsed_seconds\"}" | tr -d ' ' | tee -a "$csv_file"
+    fi
+}
+
+# main
+## if oneshot mode
+if [ ! -f "$input" ]; then
+    test_cmd="$@"
+    measure_performance
+## if batch mode
+else
+    # settans
+    results_log=$1.csv # todo: do file ext trickery
+    len=$(wc -l "$input" | awk '{print $1}') # num of lines in da fiel
+    count=1
+    csv_file="${input%.*}.csv"
+
+    if [ -f "$csv_file" ]; then
+        rm -f "$csv_file"
+    fi
+    
+    # add da csv headers to the results fiel
+    echo "Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" | tee "$csv_file"
+    cat "$input" | \
+        while read line; do
+            test_cmd="$line"
+            position="$count/$len"
+            measure_performance batch
+            count=$(($count + 1))
+        done
+fi
