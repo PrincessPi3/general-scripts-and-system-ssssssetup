@@ -17,6 +17,7 @@ logfile=/tmp/sillylog.tmp # can beee a temp fiel
 input="$@" # da command as a string or as args
 duration_microseconds=0
 duration_seconds=0
+csv_file="${input%.*}.csv"
 test_cmd=""
 start_seconds=$(date +%s)
 
@@ -29,6 +30,11 @@ fi
 # maek sure da log fileee DIESASDRGVWERT
 if [ -f "$logfile" ]; then
     rm  -f "$logfile"
+fi
+
+# maek sure da log fileee DIESASDRGVWERT
+if [ -f "$csv_file" ]; then
+    rm  -f "$csv_file"
 fi
 
 measure_performance () {
@@ -44,7 +50,7 @@ measure_performance () {
     duration_microseconds=$(($end_unixmicroseconds - $start_unixmicroseconds))
     duration_seconds=$(($duration_microseconds / 1000000)) # seconds = microseconds / 1,000,000
 
-    if [ -z "$1" ]; then
+    if [ ! -f "$input" ]; then
         echo "testing your gay littel command: $test_cmd"
         # parse and show infos
         cat "$logfile" | sed '/^#\|^$\|^Linux/d' | tr -s ' ' ',' | awk -F, '{ cpup += $8; memk += $13; memp += $14; rkbs += $15; wkbs += $15 } END { print "\nCPU:",cpup/NR,"\nMemory Usage (KiB):",memk/NR,"\nMemory Usage %:",memp/NR,"\nKiB Read Per Second:",rkbs/NR,"\nKiB Written Per Second:",wkbs/NR }'
@@ -76,20 +82,19 @@ else
     results_log=$1.csv # todo: do file ext trickery
     len=$(wc -l "$input" | awk '{print $1}') # num of lines in da fiel
     count=1
-    csv_file="${input%.*}.csv"
 
     # if [ -f "$csv_file" ]; then
     #     rm -f "$csv_file"
     # fi
     
     # add da csv headers to the results fiel
-    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" > "$csv_file"
+    echo "0Position,CPU %,Memory (KiB),Memory %,KiB Read/Second,KiB Written/Second,Duration Microseconds,Command,Return Code,Seconds Elapsed" >> "$csv_file"
 
     cat "$input" | \
         while read line; do
             test_cmd="$line"
             position="$count/$len"
-            measure_performance batch
+            measure_performance
             count=$(($count + 1))
         done
 fi
