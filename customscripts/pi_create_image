@@ -17,7 +17,6 @@ fi
 imgname=$PWD/$tag.img
 xzname=$imgname.xz # already has da pwd from imgname
 info=$PWD/$xzname.info
-sizes=$PWD/sizes-$tag.txt
 checksums=$PWD/sha256sum-$tag.sha256
 
 # get real username (not root) if run with sudo
@@ -41,7 +40,7 @@ imgsize=$(du -h $imgname)
 
 if [ ! -z "$2" ]; then
     # img sha256
-    sha256sum $imgname | tee $checksums
+    sha256sum $imgname | tee -a $info
 fi
 
 # shrink and compress the image
