@@ -1,4 +1,9 @@
 #/bin/bash
+# usage:
+##  create image name format YYYY-MM-DD-HHMM-S.<TAG>.img/.xz/.info
+###  pi_create_image <image name tag no spaces>
+##  generate sha256 of uncompressed image
+###  pi_create_image <image name tag no spaces> true
 timestamp=`date +"%Y-%m-%d-%H%M-%S"`
 
 # handle filename
@@ -11,6 +16,7 @@ fi
 # fiel paths
 imgname=$PWD/$tag.img
 xzname=$imgname.xz # already has da pwd from imgname
+info=$PWD/$xzname.info
 sizes=$PWD/sizes-$tag.txt
 checksums=$PWD/sha256sum-$tag.sha256
 
@@ -27,27 +33,29 @@ echo "Enter disk name (including /dev/) ex /dev/sdb"
 read dadisk
 
 # start
-webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))\nsizes: $sizes\nsha256 checksums: $checksums" true
+webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))\ninfo: $info" true
 
 # copy disk
 sudo dd if=$dadisk of=$imgname bs=4M status=progress
 imgsize=$(du -h $imgname)
 
-# img sha256
-# sha256sum $imgname | tee $checksums
+if [ ! -z "$2" ]; then
+    # img sha256
+    sha256sum $imgname | tee $checksums
+fi
 
 # shrink and compress the image
 webhook "Copied the disk to $imgname ($imgsize), compressing to $xzname"
-sudo pishrink.sh -Z -v -a $imgname
+sudo pishrink -Z -v -a $imgname
 xzsize=$(du -h $xzname)
 
 # xz sha256
 webhook "$imgname ($imgsize) shrunk to $xzname ($xzsize), calculating sha256 checksums..."
-sha256sum $xzname | tee -a $checksums
+sha256sum $xzname | tee -a $info
 
 # log filesizes
 webhook "saving sizes"
-echo -e "imgsize: $imgsize\nxzsize: $xzsize" | tee $sizes
+echo -e "imgsize: $imgsize\nxzsize: $xzsize" | tee -a $info
 
 # change archive to be friendly perms
 webhook "changing perms"
@@ -65,6 +73,8 @@ if [ $ret -gt 0 ]; then
 else
     webhook "Archive Test SUCCESS"
 fi
+
+sha256sum $xzname | tee -a $info
 
 # finish and notify
 webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname ($imgsize)\n\txzname: $xzname ($xzsize)" true
