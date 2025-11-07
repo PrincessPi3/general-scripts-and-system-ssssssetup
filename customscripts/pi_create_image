@@ -83,7 +83,7 @@ fi
 sha256sum $xzname | tee -a $info
 
 # finish and notify
-webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname ($imgsize)\n\txzname: $xzname ($xzsize)" true
+webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname size $imgsize\n\txzname: $xzname ($xzsize)" true
 
 # schedule reboot in 1 minute
 sudo shutdown -r +1
