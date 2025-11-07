@@ -47,12 +47,12 @@ if [ ! -z "$2" ]; then
 fi
 
 # shrink and compress the image
-webhook "Copied the disk to $imgname ($imgsize), compressing to $xzname"
+webhook "Copied the disk to $imgname size $imgsize, compressing to $xzname"
 sudo pishrink -Z -v -a $imgname
 xzsize=$(du -h $xzname)
 
 # xz sha256
-webhook "$imgname ($imgsize) shrunk to $xzname ($xzsize), calculating sha256 checksums..."
+webhook "$imgname size $imgsize shrunk to $xzname size $xzsize, calculating sha256 checksums..."
 sha256sum $xzname | tee -a $info
 
 # log filesizes
@@ -67,6 +67,7 @@ sudo chown $username:$username $xzname
 webhook "testing archive $xzname"
 xz -t $xzname
 ret=$?
+
 # if test fails
 if [ $ret -gt 0 ]; then
     webhook "FAIL! ARCHIVE DES NOT CHECK return code: $ret EXITING"
@@ -76,6 +77,7 @@ else
     webhook "Archive Test SUCCESS"
 fi
 
+# always generate last checksum
 sha256sum $xzname | tee -a $info
 
 # finish and notify
