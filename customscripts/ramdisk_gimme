@@ -21,7 +21,7 @@ fi
 sudo mount -t tmpfs -o rw,nodev,size=$ramdisk_size,mode=$mode tmpfs $mount_point
 ret=$?
 
-if [ $ret -ne 0 ];
+if [ $ret -ne 0 ]; then
     echo "Error mounting ramdisk $mount_point ($ramdisk_size) return code $ret"
 else
     echo "Mounted ramdisk $mount_point ($ramdisk_size)"
