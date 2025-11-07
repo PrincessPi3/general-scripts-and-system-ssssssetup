@@ -44,6 +44,7 @@ imgsize=$(du -h $imgname)
 
 if [ ! -z "$2" ]; then
     # img sha256
+    echo "creating sha256 checksum of $imgname"
     sha256sum $imgname | tee -a $info
 fi
 
