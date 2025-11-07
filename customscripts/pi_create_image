@@ -14,12 +14,13 @@ else
 fi
 
 # fiel paths
-imgname=$PWD/$tag.img
+imgname=$tag.img
 xzname=$imgname.xz # already has da pwd from imgname
-info=$PWD/$xzname.info
-checksums=$PWD/sha256sum-$tag.sha256
+info=$xzname.info
+checksums=sha256sum-$tag.sha256
 
-sudo touch $info
+# create info file
+touch $info
 
 # get real username (not root) if run with sudo
 if [ ! -z $SUDO_USER ]; then
