@@ -14,7 +14,15 @@ if [ -z "$1" ]; then
     echo "Using default ramdisk size of $default_size"
     ramdisk_size=$default_size
 else
+    echo "Using size $1"
     ramdisk_size=$1
 fi
 
-sudo mount -t tmpfs -o rw,nodev,size=$ramdisk_size,mode=$mode tmpfs /ramdisk
+sudo mount -t tmpfs -o rw,nodev,size=$ramdisk_size,mode=$mode tmpfs $mount_point
+ret=$?
+
+if [ $ret -ne 0 ];
+    echo "Error mounting ramdisk $mount_point ($ramdisk_size) return code $ret"
+else
+    echo "Mounted ramdisk $mount_point ($ramdisk_size)"
+fi
