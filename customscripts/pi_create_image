@@ -19,6 +19,8 @@ xzname=$imgname.xz # already has da pwd from imgname
 info=$PWD/$xzname.info
 checksums=$PWD/sha256sum-$tag.sha256
 
+touch $info
+
 # get real username (not root) if run with sudo
 if [ ! -z $SUDO_USER ]; then
     username=$SUDO_USER
@@ -37,6 +39,7 @@ webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))\ni
 # copy disk
 sudo dd if=$dadisk of=$imgname bs=4M status=progress
 imgsize=$(du -h $imgname)
+
 
 if [ ! -z "$2" ]; then
     # img sha256
