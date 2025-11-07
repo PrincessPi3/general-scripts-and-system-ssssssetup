@@ -19,7 +19,7 @@ xzname=$imgname.xz # already has da pwd from imgname
 info=$PWD/$xzname.info
 checksums=$PWD/sha256sum-$tag.sha256
 
-touch $info
+sudo touch $info
 
 # get real username (not root) if run with sudo
 if [ ! -z $SUDO_USER ]; then
