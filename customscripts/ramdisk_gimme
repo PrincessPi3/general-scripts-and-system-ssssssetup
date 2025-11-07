@@ -1,0 +1,20 @@
+#!/bin/bash
+# usage:
+#   ramdisk_gimme <Size like 2G 5G 512M>
+mount_point=/ramdisk
+default_size=2G
+mode=1777
+
+if [ ! -d $mount_point ]; then
+    echo "$mount_point doensnt exist, creating..."
+    sudo mkdir -p $mount_point
+fi
+
+if [ -z "$1" ]; then
+    echo "Using default ramdisk size of $default_size"
+    ramdisk_size=$default_size
+else
+    ramdisk_size=$1
+fi
+
+sudo mount -t tmpfs -o rw,nodev,size=$ramdisk_size,mode=$mode tmpfs /ramdisk
