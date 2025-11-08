@@ -46,6 +46,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `ifnet`
 * `webhook`
 * `FIND_THE_FUCKING_PI`
+* `dirstatt`
 
 #### hosting
 * `add_apache2_site`
