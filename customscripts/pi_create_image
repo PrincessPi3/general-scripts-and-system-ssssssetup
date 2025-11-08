@@ -67,7 +67,7 @@ echo -e "imgsize: $imgsize\nxzsize: $xzsize" | tee -a $info
 webhook "changing perms"
 sudo chown $username:$username $xzname
 
-# test archive
+# test archive with xztools 
 webhook "testing archive $xzname"
 xz -t $xzname
 ret=$?
