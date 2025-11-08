@@ -40,7 +40,9 @@ webhook "starting copy $dadisk to $imgname to $xzname at $(date)($(date +%s))\ni
 # copy disk
 sudo dd if=$dadisk of=$imgname bs=4M status=progress
 imgsize=$(du -h $imgname)
+imgbytes=$(du - $imgname)
 
+webhook "Copied the disk to $imgname size $imgsize ($imgbytes)"
 
 if [ ! -z "$2" ]; then
     # img sha256
@@ -51,17 +53,18 @@ if [ ! -z "$2" ]; then
 fi
 
 # shrink and compress the image
-webhook "Copied the disk to $imgname size $imgsize, compressing to $xzname"
 # -Z xz image after shrinking
 # -a use multiple cores for xz
 # -v verbose
 # -r use advanced filesystem repair if normal one fails
+webhook "shrinking and compressing the image"
 sudo pishrink -Z -r -v -a $imgname
 xzsize=$(du -h $xzname)
+xzbytes=$(du -b $xzname)
 
 # log filesizes
-webhook "saving sizes imgsize: $imgsize xzsize: $xzsize to $info"
-echo -e "imgsize: $imgsize\nxzsize: $xzsize" | tee -a $info
+webhook "saving sizes imgsize: $imgsize / $imgbytes xzsize: $xzsize / $xzbytes to $info"
+echo -e "imgsize: $imgsize ($imgbytes)\nxzsize: $xzsize ($xzbytes)" | tee -a $info
 
 # change archive to be friendly perms
 webhook "changing perms"
@@ -88,7 +91,7 @@ echo "$xz_checksum" | tee -a $info
 webhook "xz checksum $xz_checksum"
 
 # finish and notify
-webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname size $imgsize\n\txzname: $xzname ($xzsize)" true
+webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname size $imgsize / $imgbytes\n\txzname: $xzname size $xzsize / $xzbytes\n\tsha256 of $xzname: $xz_checksum\n\tinfo file: $info" true
 
 # schedule reboot in 1 minute
 sudo shutdown -r +1
