@@ -44,21 +44,23 @@ imgsize=$(du -h $imgname)
 
 if [ ! -z "$2" ]; then
     # img sha256
-    echo "creating sha256 checksum of $imgname"
-    sha256sum $imgname | tee -a $info
+    webhook "creating sha256 checksum of $imgname"
+    img_checksum=$(sha256sum $imgname)
+    echo "$img_checksum" | tee -a $info
+    webhook "sha256 of $imgname is $img_checksum, saved to $info"
 fi
 
 # shrink and compress the image
 webhook "Copied the disk to $imgname size $imgsize, compressing to $xzname"
-sudo pishrink -Z -v -a $imgname
+# -Z xz image after shrinking
+# -a use multiple cores for xz
+# -v verbose
+# -r use advanced filesystem repair if normal one fails
+sudo pishrink -Z -r -v -a $imgname
 xzsize=$(du -h $xzname)
 
-# xz sha256
-webhook "$imgname size $imgsize shrunk to $xzname size $xzsize, calculating sha256 checksums..."
-sha256sum $xzname | tee -a $info
-
 # log filesizes
-webhook "saving sizes"
+webhook "saving sizes imgsize: $imgsize xzsize: $xzsize to $info"
 echo -e "imgsize: $imgsize\nxzsize: $xzsize" | tee -a $info
 
 # change archive to be friendly perms
@@ -80,7 +82,10 @@ else
 fi
 
 # always generate last checksum
-sha256sum $xzname | tee -a $info
+webhook "calculating xz checksum"
+xz_checksum=$(sha256sum $xzname)
+echo "$xz_checksum" | tee -a $info
+webhook "xz checksum $xz_checksum"
 
 # finish and notify
 webhook "DONE\n\tdisk: $dadisk\n\timgname: $imgname size $imgsize\n\txzname: $xzname ($xzsize)" true
