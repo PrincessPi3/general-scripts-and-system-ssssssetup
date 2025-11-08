@@ -12,3 +12,4 @@ echo -e "\nPath: $path"
 echo "Space used: $(du -h -d 0 $path | awk '{print $1}')"
 echo "Files: $(find $path -type f -print | wc -l)"
 echo "Directories: $(find $path -type d -print | wc -l)"
+uptime
