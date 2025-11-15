@@ -197,9 +197,9 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     echo -e "\nble.sh not found, installing\n"
     cd /tmp
     git clone --recursive --depth 1 --shallow-submodules --single-branch -b master https://github.com/akinomyoga/ble.sh.git
-    make -C ble.sh install PREFIX=$userhome/.local
+    make -C ble.sh install PREFIX=~/.local
     echo '# ble.sh' >> $rcfile
-    echo "source -- $userhome/.local/share/blesh/ble.sh" >> $rcfile
+    echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
     source $rcfile
     exec "$SHELL"
 else
