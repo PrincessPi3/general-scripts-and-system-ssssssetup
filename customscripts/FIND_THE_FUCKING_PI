@@ -13,6 +13,6 @@ while true; do
     # nmap -sV -O -Pn -p22 $subnet -oG - | grep -n '22/open/tcp' # pingless search
     # nmap -sV -O $subnet -oG - | grep -n '22/open/tcp' # lots of ports search
     # nmap -sV -O -Pn $subnet -oG - | grep -n '22/open/tcp' # all ports search, pingless, slow
-    sleep $delay
+    # sleep $delay
     count=$((count + 1))
 done
