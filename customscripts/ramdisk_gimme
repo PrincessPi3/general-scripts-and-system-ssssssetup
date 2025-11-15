@@ -7,7 +7,7 @@ mode=1777
 ramdisk_file="$mount_point/.ramdisk"
 
 # make the mount point if not exist
-if [ ! -d "$mount_point:" ]; then
+if [ ! -d "$mount_point" ]; then
     echo "$mount_point doensnt exist, creating..."
     sudo mkdir -p "$mount_point"
 fi
