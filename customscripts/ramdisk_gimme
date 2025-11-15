@@ -4,12 +4,22 @@
 mount_point=/ramdisk
 default_size=2G
 mode=1777
+ramdisk_file="$mount_point/.ramdisk"
 
-if [ ! -d $mount_point ]; then
+# make the mount point if not exist
+if [ ! -d "$mount_point:" ]; then
     echo "$mount_point doensnt exist, creating..."
-    sudo mkdir -p $mount_point
+    sudo mkdir -p "$mount_point"
 fi
 
+# if the ramdisk is active (ramdisk_file exists)
+if [ -f "$ramdisk_file" ]; then
+    echo "ramdisk is operating, umounting"
+    sudo umount "$mount_point"
+    exit 0
+fi
+
+# handle ramdisk size and default
 if [ -z "$1" ]; then
     echo "Using default ramdisk size of $default_size"
     ramdisk_size=$default_size
@@ -18,11 +28,16 @@ else
     ramdisk_size=$1
 fi
 
+# mount the ramdisk
 sudo mount -t tmpfs -o rw,nodev,size=$ramdisk_size,mode=$mode tmpfs $mount_point
 ret=$?
 
+# check
 if [ $ret -ne 0 ]; then
     echo "Error mounting ramdisk $mount_point ($ramdisk_size) return code $ret"
 else
     echo "Mounted ramdisk $mount_point ($ramdisk_size)"
+
+    # create the ramdisk_file
+    echo 1 > "$ramdisk_file" 
 fi
