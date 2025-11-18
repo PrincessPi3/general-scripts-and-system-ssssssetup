@@ -1,22 +1,35 @@
 #!/bin/bash
-set -e # die on any errpr because nmama didnt raise no bitch
+# set -e # die on any errpr because nmama didnt raise no bitch
 # even includes error handling and sanity checks plus has help and even did tha retcodes :3
 
 # happy naesms
 provided_credential="$1"
 openbadge_file="$2"
 
-
+# halp string
+halp_str="checkbadge!\nFor verifying Openbadges Files\n\nUsage:\n\tcheckbadge <string credential> <path to openbadge file>\n\nRequires: coreutils, jq, and exiftool"
 
 # maek sure da args are in place or print help and fail
 if [ -z "$provided_credential" -o -z "$openbadge_file" ]; then
-    echo -e "Usage:\n\tcheckbadge <string credential> <path to openbadge file>\n\nRequires: coreutils, jq, and exiftool"
+    echo "ERROR: must provide the credential and the file path"
+    echo -e "$halp_str"
     exit 1
 fi
 
 # does fiel exist dipshit?
 if [ ! -f "$openbadge_file" ]; then
-    echo "$openbadge_file not found"
+    echo "ERROR: $openbadge_file not found"
+    echo -e "$halp_str"
+    exit 1
+fi
+
+# maek sure its an openbadges fiel
+exiftool "$openbadge_file" | grep -q Openbadges
+ret=$?
+
+if [ $ret -ne 0 ]; then
+    echo "File $openbadgefile does not seem to be an Openbadge file or it has had its metadata stripped"
+    echo -e "$halp_str"
     exit 1
 fi
 
