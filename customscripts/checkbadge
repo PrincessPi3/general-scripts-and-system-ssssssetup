@@ -1,0 +1,50 @@
+#!/bin/bash
+set -e # die on any errpr because nmama didnt raise no bitch
+# even includes error handling and sanity checks plus has help and even did tha retcodes :3
+
+# happy naesms
+provided_credential="$1"
+openbadge_file="$2"
+
+# maek sure da args are in place or print help and fail
+if [ -z "$provided_credential" -o -z "$openbadge_file" ]; then
+    echo -e "Usage:\n\tcheckbadge <string credential> <path to openbadge file>\n\nRequires: coreutils, jq, and exiftool"
+    exit 1
+fi
+
+# does fiel exist dipshit?
+if [ ! -f "$openbadge_file" ]; then
+    echo "$openbadge_file not found"
+    exit 1
+fi
+
+# gert da json out of da metadata fo da badger
+openbadge_json=$(exiftool "$openbadge_file" | grep Openbadges | awk -F ': ' '{print $2}') 
+
+# get da values out of dat json
+openbadge_url=$(echo $openbadge_json | jq -r '.badge')
+openbadge_sha256=$(echo $openbadge_json | jq -r '.recipient.identity' | awk -F '$' '{print $2}')
+openbadge_salt=$(echo $openbadge_json | jq -r '.recipient.salt')
+openbadge_narrative=$(echo $openbadge_json | jq -r '.narrative')
+
+# generate da checksum from the provided credential and extracted salt
+# sha256(<string provided credential><string extracted salt>)
+generated_sha256=$(printf "$provided_credential$openbadge_salt" | sha256sum | awk '{print $1}')
+
+# do dey maaaatch??
+if [ "$openbadge_sha256" = "$generated_sha256" ]; then
+    check="VERIFIED MATCH"
+else
+    check="FAIL! NO MATCH"
+fi
+
+# outputter
+echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tExtracted Badge URL: $openbadge_url\n\tExtracted Salt: $openbadge_salt\n\tExtracted Narrative: $openbadge_narrative\n\tExtracted SHA256 Checksum: $openbadge_sha256\n\tGenerated SHA256 Checksum: $generated_sha256\n\t\tFrom: sha256(<string credential><string salt>)\n\nTESTING \"$provided_credential\" AGAINST OPENBADGE FILE \"$openbadge_file\"\n\n$check"
+
+# do dey maaaatch again>???
+# but this time set retcode show succ or failure
+if [ "$openbadge_sha256" = "$generated_sha256" ]; then
+    exit 0
+else
+    exit 1
+fi
