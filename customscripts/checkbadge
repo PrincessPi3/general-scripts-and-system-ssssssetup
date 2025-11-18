@@ -36,7 +36,7 @@ exiftool "$openbadge_file" | grep -q Openbadges
 ret=$?
 
 if [ $ret -ne 0 ]; then
-    echo "ERROR: File $openbadgefile does not seem to be an Openbadge file or it has had its metadata stripped"
+    echo -e "\nERROR: File $openbadgefile does not seem to be an Openbadge file or it has had its metadata stripped"
     echo -e "$halp_str"
     exit 1
 fi
@@ -54,13 +54,6 @@ openbadge_name=$(echo $openbadge_json | jq -r '.extensions.recipientProfile.name
 # generate da checksum from the provided credential and extracted salt
 # sha256(<string provided credential><string extracted salt>)
 generated_sha256=$(printf "$provided_credential$openbadge_salt" | sha256sum | awk '{print $1}')
-
-# do dey maaaatch??
-if [ "$openbadge_sha256" = "$generated_sha256" ]; then
-    
-else
-    check="FAIL! NO MATCH"
-fi
 
 # outputter
 echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\tFrom: sha256(<string credential><string salt>)\n\nTESTING '$provided_credential' AGAINST OPENBADGE FILE '$openbadge_file'"
