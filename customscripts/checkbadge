@@ -6,6 +6,8 @@ set -e # die on any errpr because nmama didnt raise no bitch
 provided_credential="$1"
 openbadge_file="$2"
 
+
+
 # maek sure da args are in place or print help and fail
 if [ -z "$provided_credential" -o -z "$openbadge_file" ]; then
     echo -e "Usage:\n\tcheckbadge <string credential> <path to openbadge file>\n\nRequires: coreutils, jq, and exiftool"
@@ -26,6 +28,7 @@ openbadge_url=$(echo $openbadge_json | jq -r '.badge')
 openbadge_sha256=$(echo $openbadge_json | jq -r '.recipient.identity' | awk -F '$' '{print $2}')
 openbadge_salt=$(echo $openbadge_json | jq -r '.recipient.salt')
 openbadge_narrative=$(echo $openbadge_json | jq -r '.narrative')
+openbadge_name=$(echo $openbadge_json | jq -r '.extensions.recipientProfile.name')
 
 # generate da checksum from the provided credential and extracted salt
 # sha256(<string provided credential><string extracted salt>)
@@ -39,7 +42,7 @@ else
 fi
 
 # outputter
-echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tExtracted Badge URL: $openbadge_url\n\tExtracted Salt: $openbadge_salt\n\tExtracted Narrative: $openbadge_narrative\n\tExtracted SHA256 Checksum: $openbadge_sha256\n\tGenerated SHA256 Checksum: $generated_sha256\n\t\tFrom: sha256(<string credential><string salt>)\n\nTESTING \"$provided_credential\" AGAINST OPENBADGE FILE \"$openbadge_file\"\n\n$check"
+echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\n\tGenerated SHA256 Checksum: $generated_sha256\n\t\tFrom: sha256(<string credential><string salt>)\n\nTESTING \"$provided_credential\" AGAINST OPENBADGE FILE \"$openbadge_file\"\n\n$check"
 
 # do dey maaaatch again>???
 # but this time set retcode show succ or failure
