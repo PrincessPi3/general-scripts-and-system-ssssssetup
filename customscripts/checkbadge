@@ -7,18 +7,18 @@ provided_credential="$1"
 openbadge_file="$2"
 
 # halp string
-halp_str="checkbadge!\nFor verifying Openbadges Files\n\nUsage:\n\tcheckbadge <string credential> <path to openbadge file>\n\nRequires: coreutils, jq, and exiftool"
+halp_str="\nHelp:\n\tAbout:\n\t\tCheckBadge for verifying Openbadges\n\t\tPart of https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup Files\n\tUsage:\n\t\tcheckbadge <string credential> <path to openbadge file>\n\tRequires:\n\t\t* coreutils (sha256sum)\n\t\t* jq\n\t\t* exiftool"
 
 # maek sure da args are in place or print help and fail
 if [ -z "$provided_credential" -o -z "$openbadge_file" ]; then
-    echo "ERROR: must provide the credential and the file path"
+    echo -e "\nERROR: must provide the credential and the file path"
     echo -e "$halp_str"
     exit 1
 fi
 
 # does fiel exist dipshit?
 if [ ! -f "$openbadge_file" ]; then
-    echo "ERROR: $openbadge_file not found"
+    echo -e "\nERROR: $openbadge_file not found"
     echo -e "$halp_str"
     exit 1
 fi
@@ -28,7 +28,7 @@ exiftool "$openbadge_file" | grep -q Openbadges
 ret=$?
 
 if [ $ret -ne 0 ]; then
-    echo "File $openbadgefile does not seem to be an Openbadge file or it has had its metadata stripped"
+    echo "ERROR: File $openbadgefile does not seem to be an Openbadge file or it has had its metadata stripped"
     echo -e "$halp_str"
     exit 1
 fi
