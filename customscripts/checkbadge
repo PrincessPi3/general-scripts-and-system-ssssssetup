@@ -7,7 +7,7 @@ provided_credential="$1"
 openbadge_file="$2"
 
 # halp string
-halp_str="\nHelp:\n\tAbout:\n\t\tCheckBadge for verifying Openbadges\n\t\tPart of https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup Files\n\tUsage:\n\t\tcheckbadge <string credential (email or phone number)> <string path to openbadge file>\n\tRequires:\n\t\t* coreutils (sha256sum)\n\t\t* jq\n\t\t* exiftool"
+halp_str="\nHelp:\n\tAbout:\n\t\tCheckBadge for verifying Openbadges\n\t\tPart of https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup Files\n\tUsage:\n\t\tcheckbadge <string credential (email or phone number)> <string path to openbadge file>\n\t\tExample:\n\t\t\tcheckbadge 'my@email.com' mybadgefile.png\n\t Requires:\n\t\t* coreutils (sha256sum)\n\t\t* jq\n\t\t* exiftool"
 
 # maek sure da args are in place or print help and fail
 if [ -z "$provided_credential" -o -z "$openbadge_file" ]; then
