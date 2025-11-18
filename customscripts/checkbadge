@@ -9,9 +9,12 @@ openbadge_file="$2"
 # halp string
 halp_str="\nHelp:\n\tAbout:\n\t\tCheckBadge for verifying Openbadges\n\t\tPart of https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup Files\n\tUsage:\n\t\tcheckbadge <string credential (email or phone number)> <string path to openbadge file>\n\t\tExample:\n\t\t\tcheckbadge 'my@email.com' mybadgefile.png\n\t Requires:\n\t\t* coreutils (sha256sum)\n\t\t* jq\n\t\t* exiftool"
 
+# sum silliness so  you can get help with retcode 0 with -h, -help, --help, --h, help, h, etc so lnog as the first arg starts with -?-?h (case insensitive) and arg two is empty
 if [[ "$1" =~ ^[-]{0,2}[hH] ]]; then
-    echo -e "$halp_str"
-    exit 0
+    if [ -z "$2" ]; then
+        echo -e "$halp_str"
+        exit 0
+    fi
 fi
 
 # maek sure da args are in place or print help and fail
@@ -60,7 +63,7 @@ else
 fi
 
 # outputter
-echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\n\tGenerated SHA256 Checksum: $generated_sha256\n\t\tFrom: sha256(<string credential><string salt>)\n\nTESTING \"$provided_credential\" AGAINST OPENBADGE FILE \"$openbadge_file\"\n\n$check"
+echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\t\tFrom: sha256(<string credential><string salt>)\n\nTESTING \"$provided_credential\" AGAINST OPENBADGE FILE \"$openbadge_file\"\n\n$check"
 
 # do dey maaaatch again>???
 # but this time set retcode show succ or failure
