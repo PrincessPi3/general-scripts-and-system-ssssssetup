@@ -57,18 +57,20 @@ generated_sha256=$(printf "$provided_credential$openbadge_salt" | sha256sum | aw
 
 # do dey maaaatch??
 if [ "$openbadge_sha256" = "$generated_sha256" ]; then
-    check="VERIFIED MATCH"
+    
 else
     check="FAIL! NO MATCH"
 fi
 
 # outputter
-echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\tFrom: sha256(<string credential><string salt>)\n\nTESTING '$provided_credential' AGAINST OPENBADGE FILE '$openbadge_file'\n\n$check"
+echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\tFrom: sha256(<string credential><string salt>)\n\nTESTING '$provided_credential' AGAINST OPENBADGE FILE '$openbadge_file'"
 
 # do dey maaaatch again>???
 # but this time set retcode show succ or failure
 if [ "$openbadge_sha256" = "$generated_sha256" ]; then
+    echo -e "\nSUCCESS: VERIFIED MATCH!"
     exit 0
 else
+    echo -e "\nFAIL: NO MATCH!"
     exit 1
 fi
