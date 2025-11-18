@@ -56,7 +56,7 @@ openbadge_name=$(echo $openbadge_json | jq -r '.extensions.recipientProfile.name
 generated_sha256=$(printf "$provided_credential$openbadge_salt" | sha256sum | awk '{print $1}')
 
 # outputter
-echo -e "\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\tFrom: sha256(<string credential><string salt>)\n\nTESTING '$provided_credential' AGAINST OPENBADGE FILE '$openbadge_file'"
+echo -e "\nTESTING '$provided_credential' AGAINST OPENBADGE FILE '$openbadge_file'\n\nProvided Credential: $provided_credential\nBadge File: $openbadge_file\n\tBadge URL: $openbadge_url\n\tSalt: $openbadge_salt\n\tNarrative: $openbadge_narrative\n\tSHA256 Checksum: $openbadge_sha256\nGenerated SHA256 Checksum: $generated_sha256\n\tFrom: sha256(<string credential><string salt>)"
 
 # do dey maaaatch again>???
 # but this time set retcode show succ or failure
