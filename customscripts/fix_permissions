@@ -1,5 +1,11 @@
 #!/bin/bash
 [ "root" != "$USER" ] && exec sudo $0 "$@"
-chown -R princesspi:www-data /var/www/*
-find /var/www/* -type d -exec chmod g=rwx "{}" \;
-find /var/www/* -type f -exec chmod g=rw "{}" \;
+
+webdir=/var/www
+www_group=www-data
+userfriend=princesspi
+
+find "$webdir" -type d -exec chmod 775 {} \;
+find "$webdir" -type f -exec chmod 664 {} \;
+find "$webdir" -type f -iname "*.sh" -exec chmod 775 {} \;
+chown -R $userfriend:$www_group "$web_dir"
