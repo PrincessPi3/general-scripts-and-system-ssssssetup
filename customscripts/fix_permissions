@@ -8,4 +8,4 @@ userfriend=princesspi
 find "$webdir" -type d -exec chmod 775 {} \;
 find "$webdir" -type f -exec chmod 664 {} \;
 find "$webdir" -type f -iname "*.sh" -exec chmod 775 {} \;
-chown -R $userfriend:$www_group "$web_dir"
+chown -R $userfriend:$www_group "$webdir"
