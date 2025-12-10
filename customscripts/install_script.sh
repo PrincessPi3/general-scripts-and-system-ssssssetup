@@ -53,14 +53,14 @@ if [ ! -z "$1" ]; then
         chmod +x /tmp/dotnet-install.sh
         /tmp/dotnet-install.sh --channel LTS
         echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
-        # source $rcfile
+        source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
     fi
     install packages
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
-    # source $rcfile
+    source $rcfile
     ## dotnet
     ### haveibeenpwned-downloader
     if [ ! $(which haveibeenpwned-downloader) ]; then
@@ -79,7 +79,7 @@ if [ ! -z "$1" ]; then
         ### add to rcfile
         echo "# linuxbrew (homebrew/brew)" >> $rcfile
         echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        # source $rcfile
+        source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -212,7 +212,7 @@ thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
     echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
     echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
-    # source $rcfile
+    source $rcfile
 else
     echo -e "\nthefuck is already in $rcfile, skipping\n"
 fi
