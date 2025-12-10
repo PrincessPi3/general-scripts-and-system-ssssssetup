@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
+packages="openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
 
@@ -53,14 +53,14 @@ if [ ! -z "$1" ]; then
         chmod +x /tmp/dotnet-install.sh
         /tmp/dotnet-install.sh --channel LTS
         echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
-        source $rcfile
+        # source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
     fi
     install packages
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
-    source $rcfile
+    # source $rcfile
     ## dotnet
     ### haveibeenpwned-downloader
     if [ ! $(which haveibeenpwned-downloader) ]; then
@@ -79,7 +79,7 @@ if [ ! -z "$1" ]; then
         ### add to rcfile
         echo "# linuxbrew (homebrew/brew)" >> $rcfile
         echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        source $rcfile
+        # source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -200,8 +200,8 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     make -C ble.sh install PREFIX=~/.local
     echo '# ble.sh' >> $rcfile
     echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
-    source $rcfile
-    exec "$SHELL"
+    # source $rcfile
+    # exec "$SHELL"
 else
     echo -e "\nble.sh already installed, skippping\n"
 fi
@@ -212,7 +212,7 @@ thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
     echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
     echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
-    source $rcfile
+    # source $rcfile
 else
     echo -e "\nthefuck is already in $rcfile, skipping\n"
 fi
