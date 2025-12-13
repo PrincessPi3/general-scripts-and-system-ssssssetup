@@ -19,6 +19,7 @@ Write-Host "`nREBOOTING AT $RebootTime`n"
 
 # Start-Job to fork the script block to background so it can proceed with the timer/shutdown even if no interaction with alert box
 Start-Job -ScriptBlock {
+    # the $using: method lets me adjusst the scope of $RebootTime and get it in this script block
     $RebootTime = $using:RebootTime
 
     # add the presentation framework in
