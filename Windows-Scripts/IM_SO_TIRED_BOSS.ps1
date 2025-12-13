@@ -19,6 +19,8 @@ Write-Host "`nREBOOTING AT $RebootTime`n"
 
 # Start-Job to fork the script block to background so it can proceed with the timer/shutdown even if no interaction with alert box
 Start-Job -ScriptBlock {
+    $RebootTime = $using:RebootTime
+
     # add the presentation framework in
     Add-Type -AssemblyName PresentationFramework
 
@@ -30,4 +32,4 @@ Start-Job -ScriptBlock {
 Start-Sleep -Seconds $WaitSeconds
 
 # Force reboot with no warning
-# Restart-Computer -Force
+Restart-Computer -Force
