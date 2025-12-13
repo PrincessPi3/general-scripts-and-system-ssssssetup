@@ -1,71 +1,33 @@
-# usage force_me_off -Hours <int> -Minutes <int> -GraceMinutes <int>
-# default one hour, zero minutes, one grace minute
-param ( 
-    [int]$Hours,
-    [int]$Minutes,
-    [int]$GraceMinutes
+Param(
+    [int]$Seconds = 0,
+    [int]$Minutes = 0,
+    [int]$Hours = 0
 )
 
-# handle defaULTS, not using normal param() method because wasnt workan right
-## !skillissue
-if($Hours -eq $null) {
-    $Hours = 1
-} elseif($Minutes -eq $null) {
-    $Minutes = 0
-} elseif ($GraceMinutes) {
-    $GraceMinutes = 1
+# Current date object
+$CurrentTime = Get-Date
+
+# the .AddX() are in sequence to get the date object plus seconds, minutes, and hours
+$RebootTime = $CurrentTime.AddSeconds($Seconds).AddMinutes($Minutes).AddHours($Hours).ToString("dddd hh:mm:ss tt")
+
+# Calculate the number of seconds in total selected time
+$WaitDuration = New-TimeSpan -Seconds $Seconds -Minutes $Minutes -Hours $Hours
+$WaitSeconds = $WaitDuration.TotalSeconds
+
+# Print to terminal too for nicess
+Write-Host "`nREBOOTING AT $RebootTime`n"
+
+# Start-Job to fork the script block to background so it can proceed with the timer/shutdown even if no interaction with alert box
+Start-Job -ScriptBlock {
+    # add the presentation framework in
+    Add-Type -AssemblyName PresentationFramework
+
+    # Show an Error/Stop alert box with just an OK button and the message
+    [System.Windows.MessageBox]::Show("REBOOTING AT $RebootTime", "FORCE REBOOTING MINUTES AT $RebootTime", 'OK', 'Error')
 }
 
-# some calcs
-$wait_minutes = (($Hours*60)+$Minutes)
-$total_wait_minutes = ($wait_minutes+$GraceMinutes)
-$total_wait_seconds = ($total_wait_minutes*60)
-$reboot_time = $((Get-Date).AddHours($Hours).AddMinutes($Minutes + $GraceMinutes).ToString("hh:mm:ss tt"))
-$args_string = "-Hours $Hours -Minutes $Minutes -GraceMinutes $GraceMinutes"
+# do the wait
+Start-Sleep -Seconds $WaitSeconds
 
-# force admin and disable previously scheduled shutdown
-# environment
-## Check for administrator privileges
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    # Restart with elevated privileges
-    ## added the args string
-    Start-Process pwsh.exe -Verb RunAs -ArgumentList "-File `"$($MyInvocation.MyCommand.Path)`" $args_string"
-    exit
-}
-
-# debug
-# Write-Host "args_string: $args_string, wait_minutes: $wait_minutes, total_wait_minutes: $total_wait_minutes, total_wait_seconds: $total_wait_seconds"
-
-# cleanup
-## clean up any sched backups
-shutdown -a
-
-# post to terminal and send webhook
-# notify user
-## Warning
-Write-Host "`nFORCING YOUR STUPID ASS OFF IN $Hours hours $Minutes minutes plus $GraceMinutes minutes grace period`n"
-## current time
-Write-Host "$(Get-Date -Format 'hh:mm:ss tt') | Start Time"
-## shutdown time
-Write-Host "$reboot_time | Reboot Time"
-## send da webhookd thingggg
-webhook "FORCING OFF FROM WINDOWS AT $reboot_time" true
-
-# time wasters
-## checks C drive after reboot to waste time and fix errors
-## chkdsk /r C: # as admin
-## make it do it noninteractively with echo y
-## echo specifically seems needeed
-echo y | chkdsk /r C:
-
-# shutdown tasks
-## schedule normal shutdown as backup and for warnings
-shutdown -f -r -t ($total_wait_seconds+60) # add a bonus 60 seconds to favor the Start-MpWDOScan 
-## do the actual reboot by triggerinmg Start-MpWDOScan
-# Start-Sleep -Seconds ($Seconds+60) && Write-Host "Start-MpWDOScan" && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremli
-# Start-Sleep -Seconds ($total_wait_seconds) && Start-Process powershell -WindowStyle Hidden && webhook "REBOOTAN <@&1369280290203373670>" & # also fork it to the background to be a gremlin
-Start-Sleep -Seconds $total_wait_seconds
-webhook "runnan MPWDOSCAN and REBOOTAN" true # also fork it to the background to be a gremlin
-Start-MpWDOScan
-# optional pause
-# pause
+# Force reboot with no warning
+# Restart-Computer -Force
