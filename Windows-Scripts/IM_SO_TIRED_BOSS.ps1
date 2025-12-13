@@ -5,7 +5,9 @@ Param(
 )
 
 # Force off for longer by doing offline modern chkdsk to tie up your computer to be unusable for a while
-# Repair-Volume -DriveLetter C -OfflineScanAndFix
+# pipes y to it so its noninteractive
+# Requires admin terminal
+# Write-Host 'y' | chkdsk C: /f /r
 
 # Current date object
 $CurrentTime = Get-Date
