@@ -56,7 +56,7 @@ sudo kpartx -dv "$imgpath"
 
 sleepfive
 
-echo "shrinking $imgpath to $imgpath.xz"
+echo "shrinking $imgpath to $xzpath"
 sudo pishrink -Z -r -v -a "$imgpath"
 
 sleepfive
