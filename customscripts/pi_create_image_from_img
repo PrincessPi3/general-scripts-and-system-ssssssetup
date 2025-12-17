@@ -64,12 +64,12 @@ sudo pishrink -Z -r -v -a "$imgpath"
 sleepfive
 
 echo "testing image $xzpath"
-xz -t "$xzpath"
+sudo xz -t "$xzpath"
 
 sleepfive
 
 echo "renaming $xzpath to $renamepath"
-mv "$xzpath" "$renamepath"
+sudo mv "$xzpath" "$renamepath"
 
 echo "Delete $imgpath? y/n"
 read delimg
