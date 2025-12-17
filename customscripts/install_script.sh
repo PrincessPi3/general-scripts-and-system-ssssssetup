@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng gh btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
+packages="grc openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng git-hub btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
 
@@ -46,6 +46,11 @@ if [ ! -z "$1" ]; then
     sudo apt update
     echo -e "\nDoin full-upgrade\n"
     sudo apt full-upgrade -y
+
+    echo "installan packages"
+    echo -e "\nInstallan my packages\n"
+    sudo bash -c "apt install $packages -y"
+    source $rcfile
     # dotnet conditional install
     if [ ! $(which dotnet) ]; then
         echo -e "\ndotnet not found, installing\n"
@@ -57,10 +62,6 @@ if [ ! -z "$1" ]; then
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
     fi
-    install packages
-    echo -e "\nInstallan my packages\n"
-    sudo bash -c "apt install $packages -y"
-    source $rcfile
     ## dotnet
     ### haveibeenpwned-downloader
     if [ ! $(which haveibeenpwned-downloader) ]; then
