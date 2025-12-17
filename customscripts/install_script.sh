@@ -57,7 +57,7 @@ if [ ! -z "$1" ]; then
         echo -e "\ndotnet not found, installing\n"
         wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
         chmod +x /tmp/dotnet-install.sh
-        /tmp/dotnet-install.sh --channel LTS
+        /tmp/dotnet-install.sh --channel STS # latest stable, optinoally LTS
         echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
         source $rcfile
     else
@@ -66,9 +66,9 @@ if [ ! -z "$1" ]; then
     fi
     ## dotnet
     ### haveibeenpwned-downloader
-    if [ ! $(which haveibeenpwned-downloader) ]; then
+    if ! which haveibeenpwned-downloader; then
         echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
-        dotnet tool install --global haveibeenpwned-downloader
+        dotnet tool install --create-manifest-if-needed haveibeenpwned-downloader
     else
         echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
     fi
