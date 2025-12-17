@@ -62,6 +62,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `message_users`
 * `UNFUCK_HOMEDIR_PERMS.sh`
 * `pi_create_image`
+* `pi_create_image_from_img`
 * `ramdisk_gimme`
 
 #### for fun
