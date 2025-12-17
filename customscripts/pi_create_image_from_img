@@ -64,7 +64,7 @@ sudo pishrink -Z -r -v -a "$imgpath"
 sleepfive
 
 echo "testing image $xzpath"
-sudo xz -t "$xzpath"
+sudo xz -t -v "$xzpath"
 
 sleepfive
 
