@@ -108,7 +108,6 @@ if [ ! -z "$1" ]; then
     else
         echo -e "\nponysay already installed, skipping\n"
     fi
-
     # cargo
     ## oniux
     echo -e "\nINSTALLIN TOR ONIUX\n"
@@ -224,6 +223,7 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     # exec "$SHELL"
 else
     echo -e "\nble.sh already installed, skippping\n"
+    source $rcfile
 fi
 
 # appeend thefuck to rcfile if not present
