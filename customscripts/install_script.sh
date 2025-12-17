@@ -175,7 +175,7 @@ git clone $gitRepo $tmpDir --single-branch --depth 1
 
 # donut
 echo -e "\nCompiling donut\n"
-gcc -o "$tmp_customscripts_dir/donut" "$tmp_customscripts_dir/donut.c" -lm 2>/dev/null
+gcc -o "$tmp_customscripts_dir/donut" "$tmp_customscripts_dir/donut.c" -lm # 2>/dev/null
 
 # put the customscripts dir into place
 echo -e "\nPlacing in $finalDir\n"
