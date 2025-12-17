@@ -30,11 +30,11 @@ userhome=/home/$username
 # figure oot da sehell
 if [[ "$SHELL" =~ bash$ ]]; then
     rcfile="$userhome/.bashrc"
-elif [[ "$SHELL" =~ zsh$ ]]; then
-    rcfile="$userhome/.zshrc"
-else
-    echo -e "Die: Unsupported Shell";
-    exit 1
+# elif [[ "$SHELL" =~ zsh$ ]]; then
+#     rcfile="$userhome/.zshrc"
+# else
+#     echo -e "Die: Unsupported Shell";
+#     exit 1
 fi
 
 echo -e "\nusing rcfile $rcfile\n"
