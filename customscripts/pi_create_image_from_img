@@ -21,6 +21,12 @@ imgpath="$(realpath $1)"
 imgdir="$(dirname $imgpath)"
 xzpath="$imgpath.xz"
 renamepath="${imgpath:0:-4}_$(date -I).img.xz"
+device="/dev/mapper/loop0p2"
+
+sleepfive () {
+    echo "Sleeping 5 seconds"
+    sleep 5
+}
 
 echo -e "\nsettings:\n\tmountpoint: $mountpoint\n\timgpath: $imgpath\n\timgdir: $imgdir\n\txzpath: $xzpath\n\trenamepath: $renamepath\n"
 cd "$imgdir"
@@ -29,22 +35,41 @@ echo "mapping $imgpath"
 sudo kpartx -av "$imgpath"
 
 echo "mounting $imgpath"
-sudo mount /dev/mapper/loop0p2 "$mountpoint"
+sudo mount "$device" "$mountpoint"
 
-cd "$mountpoint"
-echo "now edit the image pwd: $PWD"
+echo -e "now edit the image in another tab: $mountpoint\nENTER when done"
 read teeeemp
+
+sleepfive
 
 echo "unmounting $mountpoint"
 sudo umount "$mountpoint"
 
+sleepfive
+
 echo "unmapping $imgpath"
 sudo kpartx -dv "$imgpath"
+
+sleepfive
 
 echo "shrinking $imgpath to $imgpath.xz"
 sudo pishrink -Z -r -v -a "$imgpath"
 
+sleepfive
+
+echo "testing image $xzpath"
+xz -t "$xzpath"
+
+sleepfive
+
 echo "renaming $xzpath to $renamepath"
 mv "$xzpath" "$renamepath"
 
-# rm "$imgpath"
+echo "Delete $imgpath? y/n"
+read delimg
+if [[ "$delimg" =~ ^[yY] ]]; then
+    echo "Deleting $imgpath"
+    sudo rm -f "$imgpath"
+fi
+
+echo "DONEEE $renamepath"
