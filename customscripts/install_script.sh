@@ -76,11 +76,11 @@ if [ ! -z "$1" ]; then
         echo -e "\nlinuxbrew not found, installing\n"
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-        test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        test -d $HOME/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         ### add to rcfile
-        echo "# linuxbrew (homebrew/brew)" >> $rcfile
-        echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        source $rcfile
+        # echo "# linuxbrew (homebrew/brew)" >> $rcfile
+        # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+        # source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -88,7 +88,7 @@ if [ ! -z "$1" ]; then
     if [ ! $(which ponysay) ]; then
         echo -e "\nponysay not fonud, installiing\n"
         brew install ponysay
-        echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+        # echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
     else
         echo -e "\nponysay already installed, skipping\n"
     fi
