@@ -29,10 +29,14 @@ sleepfive () {
 }
 
 echo -e "\nsettings:\n\tmountpoint: $mountpoint\n\timgpath: $imgpath\n\timgdir: $imgdir\n\txzpath: $xzpath\n\trenamepath: $renamepath\n"
+
+echo "changing directory to $imgdir"
 cd "$imgdir"
 
 echo "mapping $imgpath"
 sudo kpartx -av "$imgpath"
+
+sleepfive
 
 echo "mounting $imgpath"
 sudo mount "$device" "$mountpoint"
