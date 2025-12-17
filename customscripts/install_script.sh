@@ -75,8 +75,8 @@ if [ ! -z "$1" ]; then
         ## install homebrew
         echo -e "\nlinuxbrew not found, installing\n"
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-        test -d $HOME/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        test -d $HOME/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+        test -d $HOME/.linuxbrew && eval "$($HOME/.linuxbrew/bin/brew shellenv)"
         ### add to rcfile
         # echo "# linuxbrew (homebrew/brew)" >> $rcfile
         # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
