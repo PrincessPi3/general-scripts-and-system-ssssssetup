@@ -115,21 +115,7 @@ if [ ! -z "$1" ]; then
         echo -e "\nexisting oniux found, skipping\n"
     else
         echo -e "\nexisting oniux not found, installing\n"
-        cargo install oniux
-        # echo -e "\nexisting oniux not found, installing\n"
-        # ### from main 
-        # echo -e "\ndownloadin oniux code from main branch\n"
-        # ##### niec fast downdoot
-        # git clone --recursive --single-branch --depth 1 -b main https://gitlab.torproject.org/tpo/core/oniux /tmp/oniux
-        # cd /tmp/oniux
-        # ### build it
-        # echo -e "\nbuildin and installin oniux\n"
-        # cargo build
-        # ### move it somewhere in PATH
-        # sudo mv ./target/debug/oniux /usr/local/bin/
-        # # cleanup
-        # echo -e "\ncleanan upps\n"
-        # sudo apt autoremove -y
+        cargo install --git https://gitlab.torproject.org/tpo/core/oniux --tag v0.6.1 oniux
     fi
 
 else
