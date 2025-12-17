@@ -62,6 +62,7 @@ if [ ! -z "$1" ]; then
         source $rcfile
     else
         echo -e "\ndotnet installed, skipping install of repo\n"
+        source $rcfile
     fi
     ## dotnet
     ### haveibeenpwned-downloader
@@ -90,6 +91,7 @@ if [ ! -z "$1" ]; then
         source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
+        source $rcfile
     fi
     ### install ponysay
     if [ ! $(which ponysay) ]; then
@@ -98,12 +100,15 @@ if [ ! -z "$1" ]; then
         if ! grep 'ponysay fix' $rcfile; then 
             echo "adding ponysay fix to $rcfile"
             echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+            source $rcfile
         else
             echo "ponysay fix already in $rcfile skipping"
+            source $rcfile
         fi
     else
         echo -e "\nponysay already installed, skipping\n"
     fi
+
     # cargo
     ## oniux
     echo -e "\nINSTALLIN TOR ONIUX\n"
