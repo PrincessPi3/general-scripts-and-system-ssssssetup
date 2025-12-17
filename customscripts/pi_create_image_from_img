@@ -28,7 +28,9 @@ sleepfive () {
     sleep 5
 }
 
-echo -e "\nsettings:\n\tmountpoint: $mountpoint\n\timgpath: $imgpath\n\timgdir: $imgdir\n\txzpath: $xzpath\n\trenamepath: $renamepath\n"
+echo -e "creating pi image from existing .img file $imgpath"
+
+echo -e "\nsettings:\n\tmountpoint: $mountpoint\n\timgpath: $imgpath\n\timgdir: $imgdir\n\txzpath: $xzpath\n\trenamepath: $renamepath\n\tdevice: $device\n"
 
 echo "changing directory to $imgdir"
 cd "$imgdir"
@@ -76,4 +78,4 @@ if [[ "$delimg" =~ ^[yY] ]]; then
     sudo rm -f "$imgpath"
 fi
 
-echo "DONEEE $renamepath"
+echo -e "\nDONEEE $renamepath\n"
