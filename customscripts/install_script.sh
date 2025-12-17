@@ -213,7 +213,7 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     make -C ble.sh install PREFIX=~/.local
     echo '# ble.sh' >> $rcfile
     echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
-    # source $rcfile
+    source $rcfile
     # exec "$SHELL"
 else
     echo -e "\nble.sh already installed, skippping\n"
