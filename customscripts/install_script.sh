@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="grc openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng git-hub btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
+packages="grc gh openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
 
