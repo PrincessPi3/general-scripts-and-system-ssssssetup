@@ -79,9 +79,15 @@ if [ ! -z "$1" ]; then
         test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         ### add to rcfile
-        # echo "# linuxbrew (homebrew/brew)" >> $rcfile
-        # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        # source $rcfile
+        if ! grep -q 'linuxbrew' $rcfile; then
+            echo "adding linuxbrew to $rcfile"
+            echo "# linuxbrew (homebrew/brew)" >> $rcfile
+            echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+        else
+            echo "linuxbrew already in $rcfile skipping"
+        fi
+
+        source $rcfile
     else
         echo -e "\nlinuxbrew installed, skipping install\n"
     fi
@@ -89,7 +95,12 @@ if [ ! -z "$1" ]; then
     if [ ! $(which ponysay) ]; then
         echo -e "\nponysay not fonud, installiing\n"
         brew install ponysay
-        # echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+        if ! grep 'ponysay fix' $rcfile; then 
+            echo "adding ponysay fix to $rcfile"
+            echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+        else
+            echo "ponysay fix already in $rcfile skipping"
+        fi
     else
         echo -e "\nponysay already installed, skipping\n"
     fi
