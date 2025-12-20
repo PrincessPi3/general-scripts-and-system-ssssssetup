@@ -56,5 +56,6 @@ Start-Sleep -Seconds $WaitSeconds
 # Add-Type -AssemblyName PresentationFramework
 # [System.Windows.MessageBox]::Show("PING WORKING", "$RebootTime", 'OK', 'Error')
 
-# Force reboot with no warning
-Restart-Computer -Force
+# x Force reboot with no warning
+# Disabled -Force to let apps close gracefully
+Restart-Computer # -Force

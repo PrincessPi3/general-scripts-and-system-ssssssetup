@@ -1,0 +1,8 @@
+#!/bin/bash
+links_file_tmp=$(mktemp)
+nano "$links_file_tmp"
+cat "$links_file_tmp" | \
+	while read line; do
+		wget "$line"
+	done
+rm -f "$links_file_tmp"

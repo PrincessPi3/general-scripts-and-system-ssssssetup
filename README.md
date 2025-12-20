@@ -59,6 +59,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 * `xrdp-start`
 * `add_apache2_site`
 * `download_file_list`
+* `download_file_list_raw`
 * `message_users`
 * `UNFUCK_HOMEDIR_PERMS.sh`
 * `pi_create_image`
