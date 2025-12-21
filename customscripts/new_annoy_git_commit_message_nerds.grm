@@ -1,0 +1,85 @@
+table main
+{
+    adjective noun chaos operation
+}
+
+table adjective
+{
+    async
+    blocking
+    brittle
+    cached
+    concurrent
+    deprecated
+    distributed
+    flaky
+    immutable
+    leaky
+    monolithic
+    mutable
+    racey
+    recursive
+    redundant
+    sandboxed
+    stale
+    thread-safe
+    undefined
+    unoptimized
+}
+
+table noun
+{
+    api
+    build
+    cache
+    compiler
+    container
+    daemon
+    database
+    endpoint
+    function
+    heap
+    kernel
+    microservice
+    mutex
+    pipeline
+    process
+    queue
+    runtime
+    scheduler
+    stack
+    thread
+}
+
+table chaos
+{
+    overflow
+    deadlock
+    panic
+    segfault
+    bottleneck
+    regression
+    refactor
+    hotfix
+    workaround
+    incident
+}
+
+table operation
+{
+    added
+    removed
+    updated
+    fixed
+    corrected
+    tweaked
+    optimized
+    deleted
+    appended
+    concatanated
+    repaired
+    simplified
+    reverted
+    approved
+    rejected
+}

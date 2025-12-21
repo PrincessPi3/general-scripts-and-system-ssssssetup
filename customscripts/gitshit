@@ -5,7 +5,7 @@ if [ -f './version.txt' ]; then
     message=$(cat './version.txt')
 else
     if [ -z "$1" ]; then
-        message=$(date +%s)
+        message="$(annoy_the_fuck_out_of_commit_message_nerds)"
     else
         message="$*"
     fi

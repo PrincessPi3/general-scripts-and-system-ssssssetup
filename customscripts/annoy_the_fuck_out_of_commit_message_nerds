@@ -1,0 +1,2 @@
+#!/bin/bash
+polygen /usr/share/customscripts/annoy_the_fuck_out_of_commit_message_nerds.grm | tr -d '\n'

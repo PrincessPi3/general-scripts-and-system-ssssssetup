@@ -1,0 +1,17 @@
+I ::=   "title:    Annoy the Fuck Out of Commit Message Nerds\n"
+      ^ "author:   Princess Pi <princesspi@proton.me>\n"
+      ^ "language: english\n"
+      ^ "topic:    annoyances\n"
+      ^ "audience: people who like to fuck off git purists :glimglamgrin:\n"
+      ^ "created:  2025-12-20\n"
+;
+
+S ::= Adjective Noun Chaos Operation;
+
+Adjective ::=  "Async" | "Blocking" | "Brittle" | "Cached" | "Concurrent" | "Deprecated" | "Distributed" | "Flaky" | "Immutable" | "Leaky" | "Monolithic" | "Mutable" | "Racey" | "Recursive" | "Redundant" | "Sandboxed" | "Stale" | "Thread-Safe" | "Undefined" | "Unoptimized";
+
+Noun ::= "api" | "build" | "cache" | "compiler" | "container" | "daemon" | "database" | "endpoint" | "function" | "heap" | "kernel" | "microservice" | "mutex" | "pipeline" | "process" | "queue" | "runtime" | "scheduler" | "stack" | "thread";
+
+Chaos ::= "overflow" | "deadlock" | "panic" | "segfault" | "bottleneck" | "regression" | "refactor" | "hotfix" | "workaround" | "incident";
+
+Operation ::= "added" | "removed" | "updated" | "fixed" | "corrected" | "tweaked" | "optimized" | "deleted" | "appended" | "concatanated" | "repaired" | "simplified" | "reverted" | "approved" | "rejected";
