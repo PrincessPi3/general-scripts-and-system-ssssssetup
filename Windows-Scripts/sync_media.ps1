@@ -19,10 +19,10 @@ Write-Host "`nChanging directory to $media_viewer_dir`n"
 Set-Location "$media_viewer_dir"
 
 # get da synciedink
-Write-Host "`nSyncing`n"
-gitsync
-Write-Host "`nSyncing Again`n"
-gitsync
+# Write-Host "`nSyncing`n"
+# gitsync
+# Write-Host "`nSyncing Again`n"
+# gitsync
 
 # do da synchiedink
 Write-Host "`nDoing the syncy dink`n"
@@ -62,9 +62,9 @@ Write-Host "`nCopying media to local sillyfilly`n"
 wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
 
 # do more sync at enddy to maek syre it goodywoo
-Write-Host "`nSyncing finaly`n"
-gitsync
-Write-Host "`nSyncing finaly again`n"
-gitsync
+# Write-Host "`nSyncing finaly`n"
+# gitsync
+# Write-Host "`nSyncing finaly again`n"
+# gitsync
 
 Write-Host "`naahm done bein a sillyfilly fro noew`n"
