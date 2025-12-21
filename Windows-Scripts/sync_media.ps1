@@ -2,7 +2,7 @@
 ## sync_media [NUKE]
 
 $media_viewer_dir="C:\Users\human\OneDrive\Documents\Git\Media-Viewer"
-$media_viewer_dir_wsl="/mnt/c/Users/human/OneDrive/Documents/Git/Media-Viewer/"
+$media_viewer_dir_wsl="/mnt/c/Users/human/OneDrive/Documents/Git/Media-Viewer"
 
 # select for nuke mode
 if($args[0] -eq "NUKE") {
@@ -56,6 +56,10 @@ if($nuke) {
 } else {
     Write-Host "`nSkipping remote reboot`n"
 }
+
+# copy to localsilly
+Write-Host "`nCopying media to local sillyfilly`n"
+wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
 
 # do more sync at enddy to maek syre it goodywoo
 Write-Host "`nSyncing finaly`n"
