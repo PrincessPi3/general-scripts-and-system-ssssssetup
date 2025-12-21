@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "haveibeenpwned-downloader": {
+      "version": "0.5.25",
+      "commands": [
+        "haveibeenpwned-downloader"
+      ],
+      "rollForward": false
+    }
+  }
+}
