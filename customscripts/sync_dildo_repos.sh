@@ -22,20 +22,26 @@ if $dry_run; then # dry run mode
     echo -e "\nSELECTED MODE DRY RUN\n"
 
     # local www wsl
-    echo -e "\nLOCAL WWWW WSL REPO (DRY RUN)\n"
+    echo -e "\nLOCAL WWWW WSL REPO (DRY RUN)\n\t$local_www_repo\n"
     rsync -avz --exclude='files/' --delete --dry-run "$master_repo" "$local_www_repo"
+    echo -e "\nEND LOCAL WWW WSL REPO: $?\n"
 
     # remote pi3 repo
-    echo -e "\nREMOTE PI3 REPO (DRY RUN)\n"
-    rsync -avz --exclude='files/' --delete --dry-run "$master_repo" "$local_www_repo"
+    echo -e "\nREMOTE PI3 REPO (DRY RUN)\n\t$pi_repo\n"
+    rsync -avz --exclude='files/' --delete --dry-run "$master_repo" "$pi_repo"
+    echo -e "\nEND PI5 REPO: $?\n"
 else
-    echo -e "\nREMOTE PI5 REEPO (DRY RUN)\n"
+    echo -e "\nSELECTED! LIVE! MODE!\n"
 
     # local www wsl
-    echo -e "\nLOCAL WWWW WSL REPO (LIVE!)\n"
+    echo -e "\nLOCAL WWWW WSL REPO (LIVE!)\n\t$local_www_repo\n"
     rsync -az --exclude='files/' --delete "$master_repo" "$local_www_repo"
+    echo -e "\nLOCAL WWW WSL REPO DONE: $?\n"
 
     # remote pi3/pi5-usb-2
-    echo -e "\nREMOTE PI5 REEPO (LIVE!)\n"
-    rsync -az --exclude='files/' --delete "$master_repo" "$local_www_repo"
+    echo -e "\nREMOTE PI5 REEPO (LIVE!)\n\t$pi_repo\n"
+    rsync -az --exclude='files/' --delete "$master_repo" "$pi_repo"
+    echo -e "\nPI5 REPO DONE: $?\n"
 fi
+
+echo -e "\ndone :pope:\n"
