@@ -1,0 +1,14 @@
+#!/bin/bash
+ports="5555,8000"
+hosts="$(mktemp)"
+echo -e "127.0.0.1\n10.0.0.166\n10.0.0.159" > "$hosts"
+
+mkdir -p "$HOME/scans"
+
+nmap_log="$HOME/scans/nmap_xml_log_`date +"%Y-%m-%d-%H%M-%Z"`.xml"
+
+echo -e "\nLogging to $nmap_log\n"
+
+nmap -T4 -Pn -p $ports -oX "$nmap_log" -iL "$hosts" \
+    || rm "$nmap_log" \
+        && echo -e "\nnmap failed! deleting $nmap_log\n"
