@@ -1,7 +1,10 @@
 $media_viewer_dir="C:\Users\human\OneDrive\Documents\Git\Media-Viewer"
 Set-Location "$media_viewer_dir"
 
-Write-Host "Sillyfillyy synching media lolee"
+Write-Host "`nSillyfillyy synching media loleen`n"
+
+Write-Host "`nChanging directory to Media-Viewer`n"
+cd "$media_viewer_dir"
 
 # get da synciedink
 Write-Host "`nSyncing`n"
@@ -31,4 +34,4 @@ gitsync
 Write-Host "`nSyncing finaly again`n"
 gitsync
 
-Write-Host "aahm done bein a sillyfilly fro noew"
+Write-Host "`naahm done bein a sillyfilly fro noew`n"
