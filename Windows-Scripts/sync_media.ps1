@@ -59,7 +59,8 @@ if($nuke) {
 
 # copy to localsilly
 Write-Host "`nCopying media to local sillyfilly`n"
-wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
+# wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
+wsl bash $media_viewer_dir_wsl/dildo_new_full_sync_total.sh
 
 # do more sync at enddy to maek syre it goodywoo
 # Write-Host "`nSyncing finaly`n"
