@@ -1,22 +1,22 @@
 # usage
 ## sync_media [NUKE]
 
-$media_viewer_dir="C:\Users\human\OneDrive\Documents\Git\Media-Viewer"
+# $media_viewer_dir="C:\Users\human\OneDrive\Documents\Git\Media-Viewer"
 $media_viewer_dir_wsl="/mnt/c/Users/human/OneDrive/Documents/Git/Media-Viewer"
 
 # select for nuke mode
-if($args[0] -eq "NUKE") {
-    Write-Host "`nNUKE MODE ACTIVATED`n"
-    $nuke = $True
-} else {
-    Write-Host "`nNormal Mode Activated`n"
-    $nuke = $False  
-}
+# if($args[0] -eq "NUKE") {
+#     Write-Host "`nNUKE MODE ACTIVATED`n"
+#     $nuke = $True
+# } else {
+#     Write-Host "`nNormal Mode Activated`n"
+#     $nuke = $False  
+# }
 
 Write-Host "`nSillyfillyy synching media loleen`n"
 
-Write-Host "`nChanging directory to $media_viewer_dir`n"
-Set-Location "$media_viewer_dir"
+# Write-Host "`nChanging directory to $media_viewer_dir`n"
+# Set-Location "$media_viewer_dir"
 
 # get da synciedink
 # Write-Host "`nSyncing`n"
@@ -25,19 +25,24 @@ Set-Location "$media_viewer_dir"
 # gitsync
 
 # do da synchiedink
-Write-Host "`nDoing the syncy dink`n"
-# wsl -d kali-wsl "\$(whoami) \$(uname -a)" # debug
-if($nuke) {
-    Write-Host "`nNUKING media loleen sync`n"
-    wsl bash $media_viewer_dir_wsl/full_sync_normalization_wsl.sh byfn
-} else {
-    Write-Host "`nNormal media loleen sync`n"
-    wsl bash $media_viewer_dir_wsl/full_sync_normalization_wsl.sh byf
-}
+Write-Host "`n`bPERFORMING THE DILDOSYNC`n`n"
+# wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
+wsl bash $media_viewer_dir_wsl/dildo_new_full_sync_total.sh
+Write-Host "`n`nDILDOSYNC COMPLETE`n`tMAY GOD HAVE MERCY ON YOUR SOUL`n`n"
+
+# Write-Host "`nDoing the syncy dink`n"
+# # wsl -d kali-wsl "\$(whoami) \$(uname -a)" # debug
+# if($nuke) {
+#     Write-Host "`nNUKING media loleen sync`n"
+#     wsl bash $media_viewer_dir_wsl/full_sync_normalization_wsl.sh byfn
+# } else {
+#     Write-Host "`nNormal media loleen sync`n"
+#     wsl bash $media_viewer_dir_wsl/full_sync_normalization_wsl.sh byf
+# }
 
 # normieize media
-Write-Host "`nNormalizing favorites`n"
-ssh pi3 "bash /var/www/html/Media-Viewer/normalize_favorites.sh"
+# Write-Host "`nNormalizing favorites`n"
+# ssh pi3 "bash /var/www/html/Media-Viewer/normalize_favorites.sh"
 
 # remote esp-idf
 Write-Host "`nRunning esp-idf-tools update`n"
@@ -50,18 +55,14 @@ if($nuke) {
 }
 
 # reboot pi3 to apply updates
-if($nuke) {
-    Write-Host "`nNUKING reboot of pi3 to apply updates`n"
-    ssh pi3 "sudo shutdown -r +10 'Rebooting in 10 minutes to apply updates'"
-} else {
-    Write-Host "`nSkipping remote reboot`n"
-}
+# if($nuke) {
+#     Write-Host "`nNUKING reboot of pi3 to apply updates`n"
+#     ssh pi3 "sudo shutdown -r +10 'Rebooting in 10 minutes to apply updates'"
+# } else {
+#     Write-Host "`nSkipping remote reboot`n"
+# }
 
 # copy to localsilly
-Write-Host "`nCopying media to local sillyfilly`n"
-# wsl bash $media_viewer_dir_wsl/copy_local_wsl.sh
-wsl bash $media_viewer_dir_wsl/dildo_new_full_sync_total.sh
-
 # do more sync at enddy to maek syre it goodywoo
 # Write-Host "`nSyncing finaly`n"
 # gitsync
