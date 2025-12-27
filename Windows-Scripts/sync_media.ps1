@@ -59,7 +59,6 @@ if($nuke) {
     ssh pi3 "bash /home/princesspi/esp/esp-idf-tools/esp-idf-tools-cmd.sh"
 }
 
-
 # reboot pi3 to apply updates
 # if($nuke) {
 #     Write-Host "`nNUKING reboot of pi3 to apply updates`n"
