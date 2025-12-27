@@ -67,11 +67,5 @@ if($nuke) {
 #     Write-Host "`nSkipping remote reboot`n"
 # }
 
-# copy to localsilly
-# do more sync at enddy to maek syre it goodywoo
-# Write-Host "`nSyncing finaly`n"
-# gitsync
-# Write-Host "`nSyncing finaly again`n"
-# gitsync
 
 Write-Host "`naahm done bein a sillyfilly fro noew`n"
