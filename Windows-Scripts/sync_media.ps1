@@ -29,8 +29,8 @@ if($nuke) {
 # remote esp-idf
 Write-Host "`nRunning esp-idf-tools update`n"
 if($nuke) {
-    Write-Host "`nNUKING esp-idf-tools update`n"
-    ssh pi3 "bash /home/princesspi/esp/esp-idf-tools/esp-idf-tools-cmd.sh n"
+    Write-Host "`nNUKE REBOOT esp-idf-tools `n"
+    ssh pi3 "bash /home/princesspi/esp/esp-idf-tools/esp-idf-tools-cmd.sh nr"
 } else {
     Write-Host "`nNormal esp-idf-tools update`n"
     ssh pi3 "bash /home/princesspi/esp/esp-idf-tools/esp-idf-tools-cmd.sh"
