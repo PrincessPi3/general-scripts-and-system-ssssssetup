@@ -10,6 +10,12 @@ default_public_files_dir_name="public_files"
 # set here not thrugh interactive
 txt_help_file_name="How_to_Verify_Signature.txt" 
 
+### todo: work in mktemp -d dir?
+### todo: handle file paths better
+### todo: cleanup output
+####    spacing
+####    better feedback for success/fail of shit
+####    clean shit uuuup
 ### todo: allow file input from cli
 ### todo: cli options for generate/sign/verify/all
 ### todo: checksums autogenerate+sign
@@ -117,9 +123,9 @@ cp "$file_to_sign" "$public_files_dir_path" # signed file
 cp "$sig_file_path" "$public_files_dir_path" # sig file
 ## generate the help txt file and put it in place
 ### get filenames only from the paths via basename
-allowed_signers_path_basename="$(basename \"$allowed_signers_path\")"
-sig_file_path_basename="$(basename \"$sig_file_path\")"
-$file_to_sign_basename="$(basename \"$file_to_sign\")"
+allowed_signers_path_basename="$(basename $allowed_signers_path)"
+sig_file_path_basename="$(basename $sig_file_path)"
+file_to_sign_basename="$(basename $file_to_sign)"
 ### format help text
 help_txt="To Verify (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\""
 ### maek da file
