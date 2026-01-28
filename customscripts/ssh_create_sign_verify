@@ -206,17 +206,21 @@ ssh-keygen -Y verify -f "$allowed_signers_path" -I "$email" -n file -s "$file_to
 echo "Creating public files output dir at $public_files_dir_path"
 mkdir "$public_files_dir_path"
 ## copy the pub files there
-echo "Copying publc key, local allowed_signatures file, signed file, and detached signature file to $public_files_dir_path"
+echo "Copying publc key, local allowed_signatures file, signed file, detached signature file, checksums file, and detached checksums signature file to $public_files_dir_path"
 cp "$key_pub_path" "$public_files_dir_path" # public key
 cp "$allowed_signers_path" "$public_files_dir_path" # allowed signers file
 cp "$file_to_sign" "$public_files_dir_path" # signed file
-cp "$sig_file_path" "$public_files_dir_path" # sig file
+cp "$sig_file_path" "$public_files_dir_path" # main file sig file
+cp "$file_to_sign_checksums_path" "$public_files_dir_path" # checksums file
+cp "$file_to_sign_checksums_sig_path" "$public_files_dir_path" # checksums sig file
 ## generate the help txt file and put it in place
 ### get filenames only from the paths via basename
 allowed_signers_path_basename="$(basename $allowed_signers_path)"
 sig_file_path_basename="$(basename $sig_file_path)"
+checksums_sig_file_basename="$(basename $file_to_sign_checksums_sig_path)"
+checksums_file_basename="$(basename $file_to_sign_checksums_path)"
 ### format help text
-help_txt="To Verify (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\""
+help_txt="To Verify Signatures: (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\"\n\tssh-keygen -Y verify -f \"$checksums_sig_file_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$checksums_file_basename\"\n\nTo Verify Normal Checksums (Linux)\n\t sha256sum $file_to_sign_basename\n\tsha256sum $file_to_sign_basename\n\tThen compare to values in $checksums_file_basename\n\nVerify Authenticated Checksums Via Private Salt\n\techo -n -e \"${private_salt}$(cat $file_to_sign_basename)\" | sha256sum\n\techo -n -e \"${private_salt}$(cat $file_to_sign_basename)\" | sha512sum\n\tThen compare to values in $checksums_file_basename"
 ### maek da file
 echo "Creating custom help txt file in $public_files_dir_path/$txt_help_file_name"
 echo -e "$help_txt" > "$public_files_dir_path/$txt_help_file_name"
