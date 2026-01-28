@@ -1,6 +1,8 @@
 #!/bin/bash
-set -euo pipefail # safety shit. fail on error, undeclared var, pipe filure
+# set -x # debug mode
+set -Eeuo pipefail # safety shit. fail to trap on any error, undeclared var, pipe filure
 IFS=$'\n\t' # safer handlin of filenames and shit with spaces, prevents splitting
+trap 'error_handler $?' ERR # prettyful trap for error handlin :3
 
 # these can be adjusted interactively
 default_email="anonymous@anonymous.com"
@@ -10,6 +12,16 @@ default_key_name="Signing_Key_$default_algo"
 default_public_files_dir_name="public_files"
 # set here not thrugh interactive
 txt_help_file_name="How_to_Verify_Signature.txt" 
+
+# my silly pretty lil error handler :3
+error_handler() {
+    local retcode="$1" # get dat retcode
+    # color da error output red :3
+    local RED='\033[0;31m' # red color
+    local NO_COLOR='\033[0m' # reset to no color
+    echo -e "\n\n${RED}ERROR: Failure With Return Code: $retcode on Line: $BASH_LINENO at Second: $SECONDS Timestamp: $(date)${NO_COLOR}"
+    echo -e "${RED}Command:\n\t$BASH_COMMAND\n\n${NO_COLOR}"
+}
 
 ### todo: work in mktemp -d dir?
 ### todo: handle fix perms shit pls
