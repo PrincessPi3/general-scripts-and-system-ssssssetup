@@ -1,4 +1,5 @@
 
+# powershell.exe -ExecutionPolicy Bypass -File "C:\\path\\to\\yourscript.ps1"
 # Check for administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     # Restart with elevated privileges
@@ -21,7 +22,7 @@ Write-Host "RUNNING DISM"
 DISM /Online /Cleanup-Image /RestoreHealth # powershell checks image and replaces bad files
 
 Write-Host "SCHEDULING OFFLINE CHECK DISK OF C: (chkdsk)"
-chkdsk /r C: # cmd checks C drive after reboot to waste time and fix errors
+echo y | chkdsk /r C: # cmd checks C drive after reboot to waste time and fix errors
 
 Write-Host "SCHEDULING WINDOWS DEFENDER OFFLINE SCAN"
 Start-MpWDOScan # powershell starts Windows Defender Offline Scan after reboot
