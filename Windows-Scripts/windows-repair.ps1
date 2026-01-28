@@ -1,5 +1,6 @@
 
-# powershell.exe -ExecutionPolicy Bypass -File "C:\\path\\to\\yourscript.ps1"
+# powershell.exe -ExecutionPolicy Bypass -File %ONEDRIVE%\Desktop\windows-repair.ps1"
+# powershell.exe -ExecutionPolicy Bypass -File $env:ONEDRIVE\Desktop\windows-repair.ps1"
 # Check for administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     # Restart with elevated privileges
