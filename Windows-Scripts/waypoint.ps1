@@ -6,4 +6,4 @@ Write-Host "WAYPOINT!`n`tCommit Message: $commit_message`n"
 git add .
 git commit -m "$commit_message"
 
-Write-Host "Done :`"3"
+Write-Host "`nDone :`"3"
