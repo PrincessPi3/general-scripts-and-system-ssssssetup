@@ -96,7 +96,8 @@ ssh-keygen -Y sign -f "$key_priv_path" -n file "$file_to_sign"
 # create a local allowed_signers file
 echo "Creating alllowed_singers file at $allowed_signers_path with $key_pub_path and identity $email"
 ## format: <email> <pub key>
-echo "$email $(cat \"$key_pub_path\")" > "$allowed_signers_path" # dont append, just one off here
+pub_key_text="$(cat $key_pub_path)" # text of public key
+echo "$email $pub_key_text" > "$allowed_signers_path" # dont append, just one off here
 
 # verify sig
 echo "Verifying signature of $file_to_sign with signature file $sig_file_path for public key $key_pub_path and identitiy $email"
