@@ -21,14 +21,20 @@ txt_help_file_name="How_to_Verify_Signature.txt"
 ### todo: auto-compress pub files? (cleartext zip, encrypted 7z?)
 ### todo: messagging to properly handle dat damn key now lol
 ### todo: sha256+sha1 checksums (straight from the file)
-####    PLUS sha256+sha1 checksums WITH INDEPENDANT SALT/PASSPPHRASE (+ the file)
+####    PLUS sha256+sha512 checksums WITH INDEPENDANT SALT/PASSPPHRASE (+ the file)
 ####    in txt files, both signed.
 ####    meaning dat i can verify my identity not only with my private key, but ALSO independently via revealing the checksum salt/passphrase, without harming the cryptographic security or anonymity of either.
-####    "sha256sum file"+sha256sum(file) > file.checksums, "sha1sum file"+sha1sum(file) >> file.checksums
-####    "salted sha256sum file"+sha256sum(file+passphrase) >> file.checksums, "salted sha1sum file"+sha1sum(file+passphrase) >> file.checksums
+####    prompt twice for SOLID AS SHIT passphrase, like >50 random chars hardcore shit
+####        verify it doesnt match key passphrase, that it passes dat normal pass check, and dat the two imputs match
+####    "sha256sum file: "+sha256sum(file) > file.checksums, "sha512sum file: "+sha512sum(file) >> file.checksums
+####    "salted sha256sum file: "+sha256sum(file+passphrase) >> file.checksums, "salted sha512sum file: "+sha512sum(file+passphrase) >> file.checksums
 ####    sign file.checksums, adding file.checksums.sig
 ####    add checksum salt verify method to help txt
 ####    add normal checksum verify method to help txt
+####    verify normal and salted checksums
+####        prompt once again for passphrase for salted mode
+####    verify checksums file sig
+#### todo: maybe figure out how to unify these sigs and files and shit?
 
 read -p "Enter path to file to sign" file_to_sign
 read -p "Enter working directory (empty for $default_working_dir)" working_dir
