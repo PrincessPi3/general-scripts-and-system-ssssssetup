@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e # fail on any fuckin error ig 
+set -euo pipefail # safety shit. fail on error, undeclared var, pipe filure
+IFS=$'\n\t' # safer handlin of filenames and shit with spaces, prevents splitting
 
 # these can be adjusted interactively
 default_email="anonymous@anonymous.com"
@@ -11,6 +12,7 @@ default_public_files_dir_name="public_files"
 txt_help_file_name="How_to_Verify_Signature.txt" 
 
 ### todo: work in mktemp -d dir?
+### todo: handle fix perms shit pls
 ### todo: handle file paths better
 ### todo: cleanup output
 ####    spacing
@@ -19,8 +21,8 @@ txt_help_file_name="How_to_Verify_Signature.txt"
 ### todo: allow file input from cli
 ### todo: cli options for generate/sign/verify/all
 ### todo: auto-compress pub files? (cleartext zip, encrypted 7z?)
-### todo: messagging to properly handle dat damn key now lol
-### todo: sha256+sha1 checksums (straight from the file)
+### x todo: messagging to properly handle dat damn key now lol
+### todo: sha256+sha512 checksums (straight from the file)
 ####    PLUS sha256+sha512 checksums WITH INDEPENDANT SALT/PASSPPHRASE (+ the file)
 ####    in txt files, both signed.
 ####    meaning dat i can verify my identity not only with my private key, but ALSO independently via revealing the checksum salt/passphrase, without harming the cryptographic security or anonymity of either.
