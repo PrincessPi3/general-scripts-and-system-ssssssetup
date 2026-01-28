@@ -1,5 +1,5 @@
 #!/bin/bash
-# packages: cracklib-runtime, openssh/openssh-client/openssh-clients/openssh-keygen/ssh-keygen
+# packages: cracklib-runtime, openssh-client(s)
 # set -x # debug mode
 set -Eeuo pipefail # safety shit. fail to trap on any error, undeclared var, pipe filure
 IFS=$'\n\t' # safer handlin of filenames and shit with spaces, prevents splitting
@@ -12,45 +12,30 @@ default_working_dir="$PWD"
 default_key_name="Signing_Key_$default_algo"
 default_public_files_dir_name="public_files"
 # set here not thrugh interactive
-txt_help_file_name="How_to_Verify_Signature.txt" 
+txt_help_file_name="How_to_Verify_Files.txt"
+RED='\033[0;31m' # red color for errorz
+NO_COLOR='\033[0m' # reset to no color after red
 
 # my silly pretty lil error handler :3
 error_handler() {
     local retcode="$1" # get dat retcode
     # color da error output red :3
-    local RED='\033[0;31m' # red color
-    local NO_COLOR='\033[0m' # reset to no color
     echo -e "\n\n${RED}ERROR: Failure With Return Code: $retcode on Line: $BASH_LINENO at Second: $SECONDS Timestamp: $(date)${NO_COLOR}"
     echo -e "${RED}Command:\n\t$BASH_COMMAND\n\n${NO_COLOR}"
 }
 
-### x todo: error trap and handle
-### todo: work in mktemp -d dir?
-### todo: handle fix perms shit pls
+### todo: environment check/package installa
+### todo: make input of both passphrases only happen twice, compared against teach other, and tested
+### todo: handle fix perms shit by narrowly changing perms of da private key fiel
 ### todo: handle file paths better
 ### todo: cleanup output
 ####    spacing
-####    better feedback for success/fail of shit
+####    y better feedback for success/fail of shit
 ####    clean shit uuuup
 ### todo: allow file input from cli
 ### todo: cli options for generate/sign/verify/all
 ### todo: auto-compress pub files? (cleartext zip, encrypted 7z?)
-### x todo: messagging to properly handle dat damn key now lol
-### x todo: sha256+sha512 checksums (straight from the file)
-####    x PLUS sha256+sha512 checksums WITH INDEPENDANT SALT/PASSPPHRASE (+ the file)
-####    x in txt files, both signed.
-####    x meaning dat i can verify my identity not only with my private key, but ALSO independently via revealing the checksum salt/passphrase, without harming the cryptographic security or anonymity of either.
-####    x prompt twice for SOLID AS SHIT passphrase, like >50 random chars hardcore shit
-####    x     verify it doesnt match key passphrase, that it passes dat normal pass check, and dat the two imputs match
-####    x "sha256sum file: "+sha256sum(file) > file.checksums, "sha512sum file: "+sha512sum(file) >> file.checksums
-####    x "salted sha256sum file: "+sha256sum(file+passphrase) >> file.checksums, "salted sha512sum file: "+sha512sum(file+passphrase) >> file.checksums
-####    x sign file.checksums, adding file.checksums.sig
-####    x add checksum salt verify method to help txt
-####    x add normal checksum verify method to help txt
-####    x verify normal and salted checksums
-####    x     prompt once again for passphrase for salted mode
-####    x verify checksums file sig
-#### todo: maybe figure out how to unify these sigs and files and shit?
+### todo: maybe figure out how to unify these sigs and files and shit?
 
 read -p "Enter path to file to sign: " file_to_sign
 read -p "Enter Private 50+ Character Passphrase For Checksum Verification: " checksum_passphrase
@@ -220,7 +205,7 @@ sig_file_path_basename="$(basename $sig_file_path)"
 checksums_sig_file_basename="$(basename $file_to_sign_checksums_sig_path)"
 checksums_file_basename="$(basename $file_to_sign_checksums_path)"
 ### format help text
-help_txt="To Verify Signatures: (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\"\n\tssh-keygen -Y verify -f \"$checksums_sig_file_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$checksums_file_basename\"\n\nTo Verify Normal Checksums (Linux)\n\t sha256sum $file_to_sign_basename\n\tsha256sum $file_to_sign_basename\n\tThen compare to values in $checksums_file_basename\n\nVerify Authenticated Checksums Via Private Salt\n\techo -n -e \"${private_salt}$(cat $file_to_sign_basename)\" | sha256sum\n\techo -n -e \"${private_salt}$(cat $file_to_sign_basename)\" | sha512sum\n\tThen compare to values in $checksums_file_basename"
+help_txt="To Verify Signatures: (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\"\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$checksums_sig_file_basename\" < \"$checksums_file_basename\"\n\nTo Verify Normal Checksums (Linux):\n\tsha256sum $file_to_sign_basename\n\tsha256sum $file_to_sign_basename\n\t\tThen compare to values in $checksums_file_basename\n\nTo Verify Authenticated Checksums Via Private Salt (Linux):\n\tprivate_salt="\<PROVIDED SALT HERE\>"\n\techo -n -e \"\${private_salt}\$(cat $file_to_sign_basename)\" | sha256sum\n\techo -n -e \"\${private_salt}\$(cat $file_to_sign_basename)\" | sha512sum\n\t\tThen compare to values in $checksums_file_basename\n"
 ### maek da file
 echo "Creating custom help txt file in $public_files_dir_path/$txt_help_file_name"
 echo -e "$help_txt" > "$public_files_dir_path/$txt_help_file_name"
