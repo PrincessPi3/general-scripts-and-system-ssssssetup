@@ -1,12 +1,10 @@
 # Usage:
-#   Download to $env:USERPROFILE\Downloads (user's Downloads folder)
-#     https://raw.githubusercontent.com/human/Windows-Scripts/main/windows-repair.ps1
 #   Open PowerShell as Administrator
 #     win+x
 #     alt+a
 #     alt+y
 #   Run:
-#     powershell.exe -ExecutionPolicy Bypass -File $env:USERPROFILE\Downloads\windows-repair.ps1
+#     powershell.exe -Command "Invoke-WebRequest -Uri `"https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/Windows-Scripts/windows-repair.ps1`" -OutFile `"$env:TEMP\windows-repair.ps1`"" && powershell.exe -ExecutionPolicy Bypass -File "$env:TEMP\windows-repair.ps1"
 
 # Check for administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
