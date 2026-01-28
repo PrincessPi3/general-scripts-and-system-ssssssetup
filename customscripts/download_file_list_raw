@@ -3,6 +3,6 @@ links_file_tmp=$(mktemp)
 nano "$links_file_tmp"
 cat "$links_file_tmp" | \
 	while read line; do
-		wget "$line"
+		wget -nc "$line" # nc = no clobber, fail if file exists no rename no overwrite
 	done
 rm -f "$links_file_tmp"

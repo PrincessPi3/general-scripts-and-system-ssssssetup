@@ -1,0 +1,129 @@
+#!/bin/bash
+set -e # fail on any fuckin error ig 
+
+# these can be adjusted interactively
+default_email="anonymous@anonymous.com"
+default_algo="ed25519"
+default_working_dir="$PWD"
+default_key_name="Signing_Key_$default_algo"
+default_public_files_dir_name="public_files"
+# set here not thrugh interactive
+txt_help_file_name="How_to_Verify_Signature.txt" 
+
+### todo: allow file input from cli
+### todo: cli options for generate/sign/verify/all
+### todo: checksums autogenerate+sign
+### todo: auto-compress pub files (cleartext zip, encrypted 7z?)
+### todo: messagging to properly handle dat damn key now lol
+
+read -p "Enter path to file to sign" file_to_sign
+read -p "Enter working directory (empty for $default_working_dir)" working_dir
+read -p "Enter email to use (empty for $default_email)" email
+read -p "Enter public key comment (empty for $default_email)" comment
+read -p "Enter algo (empty for $default_algo)" algo
+read -p "Enter new key name (Empty for $default_key_name)" key_name ### todo: test/handle
+read -p "Enter public files output dir name (Empty for $default_public_files_dir_name)" public_files_dir_name
+
+# handle defaults
+## handle default working dir
+### todo: check for dir existance first
+### todo: check for dir rw perms first
+if [ -z "$working_dir" ]; then
+    echo "Changing directory to $default_working_dir"
+    working_dir="$default_working_dir"
+    cd "$working_dir"
+else
+    echo "Changing directory to $working_dir"
+    cd "$working_dir"
+fi
+## handle ddefault email
+if [ -z "$email" ]; then
+    email="$default_email"
+fi
+## handle ddefault pub key comment
+### todo: handle empty comment?
+if [ -z "$comment" ]; then
+    comment="$default_email"
+fi
+## handle ddefault algo
+### todo: check against ssh-keygen
+if [ -z "$algo" ]; then
+    algo="$default_algo"
+fi
+## handle default key name
+if [ -z "$key_name" ]; then
+    key_priv_path="$working_dir/$default_key_name"
+else
+    key_priv_path="$working_dir/$key_name"
+fi
+## handle default publid files dir name/path
+if [ -z "$public_files_dir_name" ]; then
+    public_files_dir_path="$working_dir/$default_public_files_dir_name"
+else
+    public_files_dir_path="$working_dir/$public_files_dir_name"
+fi
+
+# environment checks
+## check if file exists and is regular file
+if [ ! -f "$file_to_sign" ]; then
+    echo "FAIL! $file_to_sign not found or not regular file! Exititng!"
+    exit 1
+fi
+
+# sum housekeeping, makin file pathssss
+sig_file_path="$file_to_sign.sig" # path to detached signature file
+key_pub_path="$key_priv_path.pub" # path to pub key file
+allowed_signers_path="$working_dir/allowed_signers" # path to allowed_signers file
+
+# generate key pair
+## tell user to be sure to use a sdolid passphrase and wait for enter to continue
+echo "BE SURE TO SAVE THIS KEY WITH A SINGLE USE DURABLE STRONG PASSPHRASE WHEB PROMPTED"
+read -p "enter to continue" # wait for enter to contintue, nothign is read
+echo "Generating new key pair $key_priv_path and $key_pub_path with algo $algo with comment/identity $email"
+## -t is algo, -C is comment in pubkey -f is path to key file name
+ssh-keygen -t "$algo" -C "$comment" -f "$key_priv_path"
+## fix perms and pwnership on keyfilez
+echo "Changing perms on dis dir and files to user/group $USER"
+chown $USER:$USER -R "$working_dir"
+find "$working_dir" -type d -exec chmod 700 {} \;
+find "$working_dir" -type f -exec chmod 600 {} \;
+
+# sign da file
+echo "Signing $file_to_sign with detached signature file $sig_file_path"
+## -Y mode (sign) -f private key path -n file (fuile mode) file.txt (file to sign)
+ssh-keygen -Y sign -f "$key_priv_path" -n file "$file_to_sign"
+
+# create a local allowed_signers file
+echo "Creating alllowed_singers file at $allowed_signers_path with $key_pub_path and identity $email"
+## format: <email> <pub key>
+echo "$email $(cat \"$key_pub_path\")" > "$allowed_signers_path" # dont append, just one off here
+
+# verify sig
+echo "Verifying signature of $file_to_sign with signature file $sig_file_path for public key $key_pub_path and identitiy $email"
+## -Y mode (verify) -f path to allowed_signers file -I email specified in allowed_signers file -n file (file mode) -s path to sig file < file.txt input file to verify
+ssh-keygen -Y verify -f "$allowed_signers_path" -I "$email" -n file -s "$sig_file_path" < "$file_to_sign"
+
+# make public files copy
+## create public files dir or fail if exists
+### todo: use -p for ez reuse?
+echo "Creating public files output dir at $public_files_dir_path"
+mkdir "$public_files_dir_path"
+## copy the pub files there
+echo "Copying publc key, local allowed_signatures file, signed file, and detached signature file to $public_files_dir_path"
+cp "$key_pub_path" "$public_files_dir_path" # public key
+cp "$allowed_signers_path" "$public_files_dir_path" # allowed signers file
+cp "$file_to_sign" "$public_files_dir_path" # signed file
+cp "$sig_file_path" "$public_files_dir_path" # sig file
+## generate the help txt file and put it in place
+### get filenames only from the paths via basename
+allowed_signers_path_basename="$(basename \"$allowed_signers_path\")"
+sig_file_path_basename="$(basename \"$sig_file_path\")"
+$file_to_sign_basename="$(basename \"$file_to_sign\")"
+### format help text
+help_txt="To Verify (Linux)\n\tssh-keygen -Y verify -f \"$allowed_signers_path_basename\" -I \"$email\" -n file -s \"$sig_file_path_basename\" < \"$file_to_sign_basename\""
+### maek da file
+echo "Creating custom help txt file in $public_files_dir_path/$txt_help_file_name"
+echo -e "$help_txt" > "$public_files_dir_path/$txt_help_file_name"
+
+# declare victory :3
+echo -e "\nall donesies :3\n"
