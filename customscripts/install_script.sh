@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="7zip apache2 argon2 avahi-daemon btop build-essential byobu cargo cifs-utils clamav cmake cowsay cracklib-runtime detox docker.io exiftool fdupes ffuf gcc-arm-none-eabi grc gzip iotop iptraf-ng jq kpartx libnss-mdns libnewlib-arm-none-eabi librust-git2+openssl-probe-dev libstdc++-arm-none-eabi-newlib locales lynx net-tools nginx openssl php polygen polygen-data procps python3 python3-scapy resolvconf restic ripgrep samba screen seclists snapd thefuck unzip wget xrdp xxd xz-utils zip kali-linux-default"
+packages="7zip apache2 argon2 avahi-daemon btop build-essential byobu cargo cifs-utils clamav cmake cowsay cracklib-runtime detox docker.io docker.io libimage-exiftool-perl fdupes ffuf gzip iotop iptraf-ng jq lynx net-tools nginx openssl php polygen polygen-data python3-scapy restic ripgrep samba seclists snapd thefuck unzip wget xrdp xxd xz-utils zip"
 # packages="grc kpartx openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
@@ -51,63 +51,63 @@ if [ ! -z "$1" ]; then
     echo "installan packages"
     echo -e "\nInstallan my packages\n"
     sudo bash -c "apt install $packages -y"
-    source $rcfile
+    # source $rcfile
     # dotnet conditional install
-    if [ ! $(which dotnet) ]; then
-        echo -e "\ndotnet not found, installing\n"
-        wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
-        chmod +x /tmp/dotnet-install.sh
-        /tmp/dotnet-install.sh --channel STS # latest stable, optinoally LTS
-        echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
-        source $rcfile
-    else
-        echo -e "\ndotnet installed, skipping install of repo\n"
-        source $rcfile
-    fi
-    ## dotnet
+    # if [ ! $(which dotnet) ]; then
+    #     echo -e "\ndotnet not found, installing\n"
+    #     wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh
+    #     chmod +x /tmp/dotnet-install.sh
+    #     /tmp/dotnet-install.sh --channel STS # latest stable, optinoally LTS
+    #     echo -e "## dotnet\nPATH=\$PATH:$userhome/.dotnet:$userhome/.dotnet/tools" >> $rcfile
+    #     source $rcfile
+    # else
+    #     echo -e "\ndotnet installed, skipping install of repo\n"
+    #     source $rcfile
+    # fi
+    ### dotnet
     ### haveibeenpwned-downloader
-    if ! which haveibeenpwned-downloader; then
-        echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
-        dotnet tool install --create-manifest-if-needed haveibeenpwned-downloader
-    else
-        echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
-    fi
+    # if ! which haveibeenpwned-downloader; then
+    #     echo -e "\nhaveibeenpwned-downloader not found, installing with dotnet\n"
+    #     dotnet tool install --create-manifest-if-needed haveibeenpwned-downloader
+    # else
+    #     echo -e "\nhaveibeenpwned-downloader installed, skipping install\n"
+    # fi
     # homebrew
-    if [ ! $(which brew) ]; then
-        ## install homebrew
-        echo -e "\nlinuxbrew not found, installing\n"
-        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        ### add to rcfile
-        if ! grep -q 'linuxbrew' $rcfile; then
-            echo "adding linuxbrew to $rcfile"
-            echo "# linuxbrew (homebrew/brew)" >> $rcfile
-            echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
-        else
-            echo "linuxbrew already in $rcfile skipping"
-        fi
-
-        source $rcfile
-    else
-        echo -e "\nlinuxbrew installed, skipping install\n"
-        source $rcfile
-    fi
-    ### install ponysay
-    if [ ! $(which ponysay) ]; then
-        echo -e "\nponysay not fonud, installiing\n"
-        brew install ponysay
-        if ! grep 'ponysay fix' $rcfile; then 
-            echo "adding ponysay fix to $rcfile"
-            echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
-            source $rcfile
-        else
-            echo "ponysay fix already in $rcfile skipping"
-            source $rcfile
-        fi
-    else
-        echo -e "\nponysay already installed, skipping\n"
-    fi
+    # if [ ! $(which brew) ]; then
+    #     ## install homebrew
+    #     echo -e "\nlinuxbrew not found, installing\n"
+    #     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    #     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    #     test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    #     ### add to rcfile
+    #     if ! grep -q 'linuxbrew' $rcfile; then
+    #         # echo "adding linuxbrew to $rcfile"
+    #         # echo "# linuxbrew (homebrew/brew)" >> $rcfile
+    #         # echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> $rcfile
+    #     else
+    #         echo "linuxbrew already in $rcfile skipping"
+    #     fi
+# 
+    #     # source $rcfile
+    # else
+    #     echo -e "\nlinuxbrew installed, skipping install\n"
+    #     # source $rcfile
+    # fi
+    # ### install ponysay
+    # if [ ! $(which ponysay) ]; then
+    #     echo -e "\nponysay not fonud, installiing\n"
+    #     brew install ponysay
+    #     if ! grep 'ponysay fix' $rcfile; then 
+    #         # echo "adding ponysay fix to $rcfile"
+    #         # echo -e "# ponysay fix\nexport PYTHONWARNINGS=ignore::SyntaxWarning" >> $rcfile
+    #         # source $rcfile
+    #     else
+    #         # echo "ponysay fix already in $rcfile skipping"
+    #         # source $rcfile
+    #     fi
+    # else
+    #     echo -e "\nponysay already installed, skipping\n"
+    # fi
     # cargo
     ## oniux
     echo -e "\nINSTALLIN TOR ONIUX\n"
@@ -181,8 +181,9 @@ pathgrep=$?
 if [ $pathgrep -eq 0 ]; then
     echo -e "\n$finalDir Already in \$PATH Skipping Append\n"
 else
-    echo -e "\nAdding $finalDir to $username's \$PATH by Appending to $rcfile\n"
-    echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
+    # echo -e "\nAdding $finalDir to $username's \$PATH by Appending to $rcfile\n"
+    # echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
+    :
 fi
 
 # install pishrink if not there
@@ -203,22 +204,24 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     cd /tmp
     git clone --recursive --depth 1 --shallow-submodules --single-branch -b master https://github.com/akinomyoga/ble.sh.git
     make -C ble.sh install PREFIX=~/.local
-    echo '# ble.sh' >> $rcfile
-    echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
-    source $rcfile
+    # echo '# ble.sh' >> $rcfile
+    # echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
+    # source $rcfile
     # exec "$SHELL"
 else
-    echo -e "\nble.sh already installed, skippping\n"
-    source $rcfile
+    # echo -e "\nble.sh already installed, skippping\n"
+    # source $rcfile
+    :
 fi
 
 # appeend thefuck to rcfile if not present
 grep -q thefuck $rcfile
 thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
-    echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
-    echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
-    source $rcfile
+    # echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
+    # echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
+    # source $rcfile
+    :
 else
     echo -e "\nthefuck is already in $rcfile, skipping\n"
 fi
