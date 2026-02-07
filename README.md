@@ -10,7 +10,7 @@ script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/Princ
 ```
 without full upgrade and package install
 ```bash
-script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c "$script" && $SHELL /usr/share/customscripts/configure_webhook.sh full && exec $SHELL
+script=/tmp/install_script.sh && curl -s https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/install_script.sh > $script && chmod +x $script && $SHELL -c "$script" && $SHELL /usr/share/customscripts/configure_webhook.sh && exec $SHELL
 ```
 
 ## Usage
