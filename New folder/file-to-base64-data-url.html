@@ -1,0 +1,21 @@
+<input type="file" id="fileItem" accept="*"><br>
+<span id="filename" ></span><br>
+<textarea id="imageBase64" rows="10" cols="50" readonly></textarea>
+
+<script>
+const fileInput = document.querySelector('#fileItem');
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  document.getElementById('filename').textContent = file.name;
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    const base64String = event.target.result;
+    console.log(base64String); // The data URL
+    // Example: document.getElementById('image').src = base64String;
+    document.getElementById('imageBase64').value = base64String;
+  };
+
+  reader.readAsDataURL(file);
+});
+</script>
