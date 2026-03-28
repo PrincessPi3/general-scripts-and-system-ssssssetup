@@ -3,6 +3,19 @@ set -E p # FAIL ON ERROR USE TRAP
 # error handling trap
 trap 'echo "ERROR ON $LINENO! UNSETTING VARS FOR SECURITY"; unset $passphrase1; unset $passphrase2; unset $complexity_check; unset $sha1_digest; unset $first_five; unset $last_35; unset $curl_ret; echo "DONE"; exit 1' ERR
 
+killscript () {
+    echo -e "\nUNSETTING VARS FOR SECURITY"
+    unset $passphrase1
+    unset $passphrase2
+    unset $complexity_check
+    unset $sha1_digest
+    unset $first_five
+    unset $last_35
+    unset $curl_ret
+    echo -e "\nDONE\n"
+    exit 1
+}
+
 pass_min_length=40
 hibp_api="https://api.pwnedpasswords.com/range/"
 
@@ -13,16 +26,16 @@ read -s -p "Re-Enter Passphrase " passphrase2
 echo
 ## Sanity check the salt
 ### not empty
-if [ -z "$passphrase1" -o -z "$passphrase2" ]; then
+if [ -z "$passphrase1" -o -z "$passphrase2" ]; then\
     echo "Input passphrases can NOT be blank!"
-    exit 1
+    killscript
 else
     echo "Passphrases Supplied: OK"
 fi
 ### match
 if [[ "$salt1" != "$salt2" ]]; then
     echo "Passphrases DO NOT MATCH"
-    exit 1
+    killscript
 else
     echo "Passphrases Match: OK"
 fi
@@ -30,7 +43,7 @@ fi
 pass_length=${#passphrase1} # salt len
 if [[ $pass_length -le $pass_min_length ]]; then
     echo "Salt MUST be $pass_min_length characters or longer!"
-    exit 1
+    killscript
 else
     echo "Pass Length: OK"
 fi
@@ -40,7 +53,7 @@ if grep -q 'OK' <<< "$complexity_check"; then
     echo "Complexity: OK"
 else
     echo "Passphrase NOT Complex enough!"
-    exit 1
+    killscript
 fi
 ### query hibP
 sha1_digest=$(echo -n "$passphrase1" | sha1sum | awk '{print $1}')
@@ -52,19 +65,16 @@ curl_ret="$(curl -s ${hibp_api}${first_five})"
 # echo "curl ret: $curl_ret"
 if grep -q -i "${last_35}" <<< "${curl_ret}"; then
     echo "PASS FOUND IN BREACHED LISTS!"
-    exit 1
+    killscript
 else
-    echo "PASS CHECKS OUT"
+    echo -e "\nPASS CHECKS OUT\n"
+    # cleanup
+    unset $passphrase1
+    unset $passphrase2
+    unset $complexity_check
+    unset $sha1_digest
+    unset $first_five
+    unset $last_35
+    unset $curl_ret;
     exit 0
 fi
-
-# cleanup
-echo -e "\nUNSETTING VARS FOR SECURITY\n";
-unset $passphrase1
-unset $passphrase2
-unset $complexity_check
-unset $sha1_digest
-unset $first_five
-unset $last_35
-unset $curl_ret;
-echo -e "\nDONE\n"
