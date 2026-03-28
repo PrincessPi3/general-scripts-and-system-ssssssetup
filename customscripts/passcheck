@@ -1,4 +1,8 @@
 #!/bin/bash
+set -E p # FAIL ON ERROR USE TRAP
+# error handling trap
+trap 'echo "ERROR ON $LINENO! UNSETTING VARS FOR SECURITY"; unset $passphrase1; unset $passphrase2; unset $complexity_check; unset $sha1_digest; unset $first_five; unset $last_35; unset $curl_ret; echo "DONE"; exit 1' ERR
+
 pass_min_length=40
 hibp_api="https://api.pwnedpasswords.com/range/"
 
@@ -53,3 +57,14 @@ else
     echo "PASS CHECKS OUT"
     exit 0
 fi
+
+# cleanup
+echo -e "\nUNSETTING VARS FOR SECURITY\n";
+unset $passphrase1
+unset $passphrase2
+unset $complexity_check
+unset $sha1_digest
+unset $first_five
+unset $last_35
+unset $curl_ret;
+echo -e "\nDONE\n"
