@@ -1,0 +1,63 @@
+#!/bin/bash
+# packages neededed: xxd
+# get da file
+read -p "Input File to prove authorship of: " file
+## sanity check da file
+if [ ! -f "$file" ]; then
+    echo "$file not found!"
+    exit 1
+else
+    echo "File: OK"
+    file=$(realpath $file)
+fi
+echo
+
+# gather salt
+read -s -p "Input Secret Salt " salt1
+echo
+read -s -p "Re-Enter Secret Salt " salt2
+echo
+## Sanity check the salt
+### not empty
+if [ -z "$salt1" -o -z "$salt2" ]; then
+    echo "Input salts can NOT be blank!"
+    exit 1
+else
+    echo "Salt Supplied: OK"
+fi
+### match
+if [[ "$salt1" != "$salt2" ]]; then
+    echo "Salts DO NOT MATCH"
+    exit 1
+else
+    echo "Salts match: OK"
+fi
+### length
+salt_length=${#salt1} # salt len
+if [[ $salt_length -le $salt_min_length ]]; then
+    echo "Salt MUST be $salt_min_length characters or longer!"
+    exit 1
+else
+    echo "Salt Length: OK"
+fi
+### salt safety and complexity
+complexity_check=$(echo -n "$salt1" | cracklib-check)
+if grep -q 'OK' <<< "$complexity_check"; then
+    echo "Complexity: OK"
+else
+    echo "Salt NOT Complex enough!"
+    exit 1
+fi
+
+# do da hashes
+echo -e "\nUnsalted:"
+cat "$file" | sha512sum
+echo -e "\nSalted:"
+echo -n "$(cat $file)$salt1" | sha512sum
+
+## cleanup
+unset $salt1
+unset $salt2
+unset $salt_length
+echo -e "\nDONE"
+exit 0

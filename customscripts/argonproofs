@@ -1,0 +1,61 @@
+#!/bin/bash
+# PACKAGES NEEDDED: argon2, cracklib-check, xxd?
+
+time_cost=3 # time cost (iterations)
+memory_cost=16 # 2^n KiB ex 16 = 64 MiB (mem usage)
+paralellization_cost=1 # threads
+salt_min_length=40
+
+read -p "Input File to prove authorship of:" file
+if [ ! -f "$file" ]; then
+    echo "$file not found!"
+    exit 1
+else
+    echo "File: OK"
+    file=$(realpath $file)
+fi
+
+# gather salt
+read -s -p "Input Secret Salt" salt1
+read -s -p "Re-Enter Secret Salt" salt2
+## Sanity check the salt
+### not empty
+if [ -z "$salt1" -o -z "$salt2" ]; then
+    echo "Input salts can NOT be blank!"
+    exit 1
+else
+    echo "Salt Supplied: OK"
+fi
+### match
+if [[ "$salt1" != "$salt2" ]]; then
+    echo "Salts DO NOT MATCH"
+    exit 1
+else
+    echo "Salts match: OK"
+fi
+### length
+salt_length=${#salt1} # salt len
+if [[ $salt_length -le $salt_min_length ]]; then
+    echo "Salt MUST be $salt_min_length characters or longer!"
+    exit 1
+else
+    echo "Salt Length: OK"
+fi
+### salt safety and complexity
+complexity_check=$(echo -n "$salt1" | cracklib-check)
+if grep -q 'OK' <<< "$complexity_check"; then
+    echo "Complexity: OK"
+else
+    echo "Salt NOT Complex enough!"
+    exit 1
+fi
+
+argon2 "$salt1" -id -t $time_cost -m $memory_cost -p $paralellization_cost -e
+ < "$file"
+
+## cleanup
+unset $salt1
+unset $salt2
+unset $salt_length
+echo "DONE"
+exit 0

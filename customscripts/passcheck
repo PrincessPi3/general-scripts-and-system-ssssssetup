@@ -1,0 +1,55 @@
+#!/bin/bash
+pass_min_length=40
+hibp_api="https://api.pwnedpasswords.com/range/"
+
+# gather salt
+read -s -p "Input Passphrasse " passphrase1
+echo
+read -s -p "Re-Enter Passphrase " passphrase2
+echo
+## Sanity check the salt
+### not empty
+if [ -z "$passphrase1" -o -z "$passphrase2" ]; then
+    echo "Input passphrases can NOT be blank!"
+    exit 1
+else
+    echo "Passphrases Supplied: OK"
+fi
+### match
+if [[ "$salt1" != "$salt2" ]]; then
+    echo "Passphrases DO NOT MATCH"
+    exit 1
+else
+    echo "Passphrases Match: OK"
+fi
+### length
+pass_length=${#passphrase1} # salt len
+if [[ $pass_length -le $pass_min_length ]]; then
+    echo "Salt MUST be $pass_min_length characters or longer!"
+    exit 1
+else
+    echo "Pass Length: OK"
+fi
+### salt safety and complexity
+complexity_check=$(echo -n "$passphrase1" | cracklib-check)
+if grep -q 'OK' <<< "$complexity_check"; then
+    echo "Complexity: OK"
+else
+    echo "Passphrase NOT Complex enough!"
+    exit 1
+fi
+### query hibP
+sha1_digest=$(echo -n "$passphrase1" | sha1sum | awk '{print $1}')
+first_five="${sha1_digest:0:5}" # get furst five chars
+last_35="${sha1_digest:5:35}" # get the rest
+curl_ret="$(curl -s ${hibp_api}${first_five})"
+# echo "first five: $first_five"
+# echo "last 35: $last_35"
+# echo "curl ret: $curl_ret"
+if grep -q -i "${last_35}" <<< "${curl_ret}"; then
+    echo "PASS FOUND IN BREACHED LISTS!"
+    exit 1
+else
+    echo "PASS CHECKS OUT"
+    exit 0
+fi
