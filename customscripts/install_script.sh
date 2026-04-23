@@ -180,10 +180,11 @@ grep -q $finalDir $rcfile
 pathgrep=$?
 if [ $pathgrep -eq 0 ]; then
     echo -e "\n$finalDir Already in \$PATH Skipping Append\n"
-else
+fi
+# else
     # echo -e "\nAdding $finalDir to $username's \$PATH by Appending to $rcfile\n"
     # echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
-fi
+# fi
 
 # install pishrink if not there
 if [ ! -f /usr/local/bin/pishrink ]; then
@@ -207,16 +208,17 @@ if [ ! -d $userhome/.local/share/blesh ]; then
     # echo "source -- ~/.local/share/blesh/ble.sh" >> $rcfile
     # source $rcfile
     # exec "$SHELL"
-else
+fi
+# else
     # echo -e "\nble.sh already installed, skippping\n"
     # source $rcfile
-fi
+# fi
 
 # appeend thefuck to rcfile if not present
 grep -q thefuck $rcfile
 thefuck_present=$?
 if [ $thefuck_present -ne 0 ]; then 
-    # echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
+    echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
     # echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
     # source $rcfile
 else
