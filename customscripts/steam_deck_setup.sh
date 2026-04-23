@@ -1,7 +1,9 @@
 #!/bin/bash
+# usage:
+##   curl -sSL https://tinyurl.com/4meps4as | "$SHELL"
 set -e # we do not fail here :chameleon:
-# curl -sSL https://tinyurl.com/4meps4as | "$SHELL"
-# passwd
+echo -e "\nchanging/setting user password\n"
+passwd
 echo -e "\nsetting os to be writable\n"
 sudo steamos-readonly disable
 echo -e "\ninitalizing keys\n"
