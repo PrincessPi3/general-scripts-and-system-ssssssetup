@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e # we do not fail here :chameleon:
-# curl -sSL https://raw.githubusercontent.com/PrincessPi3/general-scripts-and-system-ssssssetup/refs/heads/main/customscripts/steam_deck_setup.sh | "$SHELL"
+# curl -sSL https://tinyurl.com/4meps4as | "$SHELL"
 # passwd
 echo -e "\nsetting os to be writable\n"
 sudo steamos-readonly disable

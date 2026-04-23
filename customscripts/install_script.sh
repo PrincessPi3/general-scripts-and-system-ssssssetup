@@ -11,7 +11,7 @@ gitRepo='https://github.com/PrincessPi3/general-scripts-and-system-ssssssetup.gi
 tmpDir='/tmp/generalssss'
 tmp_customscripts_dir="$tmpDir/customscripts"
 finalDir='/usr/share/customscripts'
-packages="7zip apache2 argon2 avahi-daemon btop build-essential byobu cargo cifs-utils clamav cmake cowsay cracklib-runtime detox docker.io docker.io libimage-exiftool-perl fdupes ffuf gzip iotop iptraf-ng jq lynx net-tools nginx openssl php polygen polygen-data python3-scapy restic ripgrep samba seclists snapd thefuck unzip wget xrdp xxd xz-utils zip"
+packages="7zip apache2 argon2 avahi-daemon btop build-essential byobu cargo cifs-utils clamav cmake cowsay cracklib-runtime detox docker.io exiftool fdupes ffuf gcc-arm-none-eabi grc gzip iotop iptraf-ng jq kpartx libnss-mdns libnewlib-arm-none-eabi librust-git2+openssl-probe-dev libstdc++-arm-none-eabi-newlib locales lynx net-tools nginx openssl php polygen polygen-data procps python3 python3-scapy resolvconf restic ripgrep samba screen seclists snapd thefuck unzip wget xrdp xxd xz-utils zip kali-linux-default"
 # packages="grc kpartx openssl cracklib-runtime argon2 jq polygen polygen-data apache2 seclists cmake locales python3 build-essential gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib librust-git2+openssl-probe-dev cargo nginx build-essential cowsay iotop iptraf-ng btop screen byobu thefuck wget lynx zip unzip 7zip xz-utils gzip net-tools clamav php restic cifs-utils detox fdupes ripgrep avahi-daemon libnss-mdns xxd xrdp libimage-exiftool-perl kali-tools-hardware kali-tools-crypto-stego kali-tools-fuzzing kali-tools-bluetooth kali-tools-rfid kali-tools-sdr kali-tools-voip kali-tools-802-11 kali-tools-forensics samba procps snapd"
 
 echo -e "\nSTARTING!\n\tUsing Shell $SHELL\n"
@@ -183,7 +183,6 @@ if [ $pathgrep -eq 0 ]; then
 else
     # echo -e "\nAdding $finalDir to $username's \$PATH by Appending to $rcfile\n"
     # echo -e "\n\n# automatically added by customscripts installer\nexport PATH=\"\$PATH:$finalDir\"" >> "$rcfile"
-    :
 fi
 
 # install pishrink if not there
@@ -211,7 +210,6 @@ if [ ! -d $userhome/.local/share/blesh ]; then
 else
     # echo -e "\nble.sh already installed, skippping\n"
     # source $rcfile
-    :
 fi
 
 # appeend thefuck to rcfile if not present
@@ -221,7 +219,6 @@ if [ $thefuck_present -ne 0 ]; then
     # echo -e "\nthefuck alias not fonud in $rcfile, adding\n"
     # echo -e "# thefuck\neval \$(thefuck --alias fuck)" >> $rcfile
     # source $rcfile
-    :
 else
     echo -e "\nthefuck is already in $rcfile, skipping\n"
 fi
