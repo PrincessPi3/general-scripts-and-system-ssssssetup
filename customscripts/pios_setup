@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e # we do not fail here :chameleon:
+# passwd
+echo "setting os to be writable"
+sudo steamos-readonly disable
+echo "initalizing keys"
+sudo pacman-key --init
+echo "populatiing keys"
+sudo pacman-key --populate archlinux holo
+echo "updatikng repos"
+sudo pacman -Syu
+echo "done!~ :3 install shit wikth pacman -S <package name>"
