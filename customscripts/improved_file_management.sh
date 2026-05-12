@@ -19,7 +19,7 @@ when_done () {
 }
 
 delete_sha256_files () {
-    echo -e "${GREEN}Nuking all .sha256 files in $backup_dir${RESET}"
+    echo -e "${GREEN}Nuking all .sha256 files in $backup_dir${RESET}\n"
     find "$backup_dir" -not -path "*.git*" -type f -name "*.sha256" -delete
 }
 
@@ -33,6 +33,7 @@ verify_sha256_files() {
         echo "Checking: $file"
 
         if ! sha256sum -c "$file"; then
+            # here is where i can handle bad checksums
             echo -e "${RED}FAILED: $file${RESET}" >&2
             failed=1
         fi
