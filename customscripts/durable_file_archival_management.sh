@@ -113,8 +113,9 @@ function generate_sha256_checksums () {
     webhook "${GREEN}startin calculatin all dem gay af sha256 files\n\t$SECONDS seconds elapsed\n\tDate: $(date)${RESET}"
 
     # use black magic to generatre da sha256 files
-    find "$backup_dir" -type f -name "*.sha256" -prune -o -name ".git" -exec bash -c "for f in \"$@\"; do sha256sum f{f} | tee -a ${f}.sha256"; done" _ {} + \; # aeswrfgv 
-    # bash -c "for f in \"\$@\"; do if [ -f \"\${f}.sha256\" ]; then continue; fi; sha256sum -c \"\${f}.sha256\" | tee -a \"${path_error_log}\"; done" _ {} + # sum horrifying shitfuck idk
+    find "$backup_dir" -type f -name "*.sha256" -prune -o -name ".git" -exec bash -c "for f in \"\$@\"; do; sha256sum \$f | tee -a \$f.sha256; done; _ {} +"  \; # aeswrfgv 
+    
+    ### bash -c "for f in \"\$@\"; do if [ -f \"\${f}.sha256\" ]; then continue; fi; sha256sum -c \"\${f}.sha256\" | tee -a \"${path_error_log}\"; done" _ {} + # sum horrifying shitfuck idk
 
     webhook "${GREEN}finished calculatin all dem gay af sha256 files\n\t$SECONDS seconds elapsed${RESET}"
 }
