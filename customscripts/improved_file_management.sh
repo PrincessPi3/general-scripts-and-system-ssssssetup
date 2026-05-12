@@ -7,9 +7,12 @@ start_date="$(date)"
 args="$@"
 
 # backup_dir="/mnt/c/Users/human/Downloads/tint"
-backup_dir="/mnt/d/Anbernic_Research_Tinkering_Save"
+backup_dir="/mnt/c/Users/human/Downloads/tint"
 error_log="${backup_dir}/error.log" # errror log path
 cd "$backup_dir" # slide on in
+
+# make errros get logged and also displayed to the terminal
+exec 2> >(tee -a "$error_log" >&2)
 
 # sum text colorz
 RED='\033[0;31m' # anmgry red
@@ -59,7 +62,7 @@ when_done () {
 
 delete_sha256_files () {
     echo -e "${GREEN}Nuking all .sha256 files in $backup_dir${RESET}\n"
-    find "$backup_dir" -not -path "*.git*" -type f -name "*.sha256" -delete
+    find . -type f -name "*.sha256" -not -path "*.git*" -delete
 }
 
 verify_sha256_files() {
