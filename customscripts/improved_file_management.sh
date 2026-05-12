@@ -6,8 +6,9 @@
 start_date="$(date)"
 args="$@"
 
-# backup_dir="/mnt/c/Users/human/Downloads/tint"
-backup_dir="/mnt/c/Users/human/Downloads/tint"
+backup_dir="/mnt/d/Anbernic_Research_Tinkering_Save"
+#backup_dir="/mnt/c/Users/human/Downloads/tint"
+#vbackup_dir="/mnt/c/Users/human/Downloads/tint"
 error_log="${backup_dir}/error.log" # errror log path
 cd "$backup_dir" # slide on in
 
@@ -76,7 +77,7 @@ verify_sha256_files() {
 
         if ! sha256sum -c "$file"; then
             # here is where i can handle bad checksums
-            echo -e "${RED}FAILED: $file${RESET}" >&2
+            echo -e "FAILED: $file" >&2
             failed=1
         fi
     done
@@ -86,9 +87,9 @@ verify_sha256_files() {
 
 generate_sha256_checksums () {
 # make any new checksums
-    find . -type f -not -path "*.git*" -exec bash -c '
-    for file do
-        if [[ "$file" =~ .sha256$ ]]; then
+    find . -type f -not -path "*.git*" -exec sh -c '
+    for file; do
+        if [[ "$file" =~ .sha256 ]]; then
             echo "Skipping $file"
             continue
         else
@@ -96,7 +97,7 @@ generate_sha256_checksums () {
             sha256sum "$file" | tee "$file.sha256"
         fi
     done
-    ' bash {} + # idk what this hippie bullshit voodoo witchcraft this syntax is, kill nme now
+    ' sh {} + \;  # idk what this hippie bullshit voodoo witchcraft this syntax is, kill nme now
 }
 
 do_git () {
@@ -134,7 +135,7 @@ if [[ "$args" =~ nuke ]]; then
 fi
 check_error_log # verify error log faggot
 
-while $true; do # do an infinite loop to keep em all running and operating at all times :3
+while true; do # do an infinite loop to keep em all running and operating at all times :3
     verify_sha256_files # check files against their sha256 checksum
     generate_sha256_checksums # create the checksums from the files to generate each file its own *.sha256 buddy \o/
     do_git # archive for version controll
