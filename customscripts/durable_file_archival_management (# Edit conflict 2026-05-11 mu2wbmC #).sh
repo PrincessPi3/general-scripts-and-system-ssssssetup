@@ -113,8 +113,7 @@ function generate_sha256_checksums () {
     webhook "${GREEN}startin calculatin all dem gay af sha256 files\n\t$SECONDS seconds elapsed\n\tDate: $(date)${RESET}"
 
     # use black magic to generatre da sha256 files
-    find "$backup_dir" -type f -name "*.sha256" -prune -o -name ".git" -exec bash -c "for f in \"$@\"; do sha256sum f{f} | tee -a ${f}.sha256"; done" _ {} + \; # aeswrfgv 
-    # bash -c "for f in \"\$@\"; do if [ -f \"\${f}.sha256\" ]; then continue; fi; sha256sum -c \"\${f}.sha256\" | tee -a \"${path_error_log}\"; done" _ {} + # sum horrifying shitfuck idk
+    find "$backup_dir" -prune -o -name ".git" -type f -name "*.sha256" -exec bash -c "sha256sum {} | tee -a {}.sha256" \; # bash -c "for f in \"\$@\"; do if [ -f \"\${f}.sha256\" ]; then continue; fi; sha256sum -c \"\${f}.sha256\" | tee -a \"${path_error_log}\"; done" _ {} + # sum horrifying shitfuck idk
 
     webhook "${GREEN}finished calculatin all dem gay af sha256 files\n\t$SECONDS seconds elapsed${RESET}"
 }
@@ -129,13 +128,13 @@ do_git () {
     webhook "doin sum git"
     # do da git conditionally if need be init
     if [ ! -d "${backup_dir}/.git" ]; then # if .git dir not be there, initialize it fag
-        git -C "$backup_dir" init 2>>"$path_error_log"  # init git if da shit aint there
+        git -C "$backup_dir" init 2>/dev/null  # init git if da shit aint there
         # git -C "$backup_dir" branch -m master # set branch to main (?)
-        git -C "$backup_dir" add "$backup_dir" 2>>"$path_error_log"
-        git -C "$backup_dir" commit -m "initial auto archive date: $(date +%s)" 2>>"$path_error_log"
+        git -C "$backup_dir" add "$backup_dir"
+        git -C "$backup_dir" commit -m "initial auto archive date: $(date +%s)"
     else
-        git -C "$backup_dir" add "$backup_dir" 2>>"$path_error_log"
-        git -C "$backup_dir" commit -m "auto archive $(date +%s)" 2>>"$path_error_log" # commit wit date
+        git -C "$backup_dir" add "$backup_dir" # add
+        git -C "$backup_dir" commit -m "auto archive $(date +%s)" # commit wit date
         # notify finished with fuckgit
     fi
 
@@ -166,7 +165,7 @@ check_generate_checksums () {
 
     webhook "\n\nchecking pre-calculated sha256 sums"
     # find every sha256 file do the checksum
-    find "$backup_dir" -prune -o -name ".git" -type f -iname "*.sha256" -exec bash -c "echo -e \"${GREEN}\nstarting check sha256sums of files\n\tcurrent file: {}\n\t total elpapsed: $SECONDS seconds\n\"; sha256sum -c {} | tee -a \"${path_error_log}\"; echo -e \"ARGS: $@\n\n${RESET}\"" \; 
+        find "$backup_dir" -prune -o -name ".git" -type f -iname "*.sha256" -exec bash -c "echo -e \"${GREEN}\nstarting check sha256sums of files\n\tcurrent file: {}\n\t total elpapsed: $SECONDS seconds\n\"; sha256sum -c {} | tee -a \"${path_error_log}\"; echo -e \"ARGS: $@\n\n${RESET}\"" \; 
 }
 
 restic_backups () {
@@ -186,7 +185,7 @@ box_force_shutdown () {
 }
 
 environment_checks
-# do_git
+do_git
 check_generate_checksums
 restic_backups
 # box_force_shutdown
