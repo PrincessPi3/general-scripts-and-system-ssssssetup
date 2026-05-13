@@ -19,5 +19,6 @@ fi
 
 echo -e "\n\nall dne :3 free space haz been zeroed nuaa~\n\n"
 
+# shutdown for reboot, it needs it
 echo "shuttan down nowww to recoverrr"
 sudo shutdown -r now
