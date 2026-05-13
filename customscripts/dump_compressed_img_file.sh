@@ -1,8 +1,17 @@
 #!/bin/bash
 # todo:
+# offline option
+## dd raw .img
 ## enum partitions
 ### file zero fill empty space of good partitions
 ### dd zero fill unformatted space and such
+### xz compress
+# online option
+## enum partitions
+## attempt to mount all possible
+## file zero fill them
+## dd zero fill unformatted space
+## take offline for xz inline rip
 
 set -e # fail explicitly on any error
 

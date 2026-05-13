@@ -1,0 +1,35 @@
+#!/bin/bash
+echo "nukan .ssh and github token"
+rm -rf $HOME/.ssh $HOME/.gh_token
+
+echo "logging out of github"
+gh auth logout
+
+echo "removing user.name and user.email from git configs"
+git config --unset user.name
+git config --unset user.email
+
+echo "change pass to princesspi"
+passwd
+
+echo "now to set pw to be reset on first login"
+sudo passwd -e princesspi
+
+echo "zeroing out all da fuckin space fuuck"
+zero_file_path="$HOME/0.0"
+sudo dd if=/dev/zero bs=4M status=progress > "$zero_file_path" || echo -e "$zero_file_path file reached max size, deleting"; sudo rm -f "$zero_file_path"; echo -e "retcode: $?"
+
+echo "thank fuck that fucking ended"
+
+echo "now manually clear all bluetooth and wifi now"
+
+echo "once those are clear, all donesies"
+
+echo "shut down? y/n"
+
+read check
+if [[ "$check" =~ [yY] ]]; then
+    sudo shutdown now
+else
+    exit
+fi
