@@ -1,4 +1,9 @@
 #!/bin/bash
+# todo:
+## enum partitions
+### file zero fill empty space of good partitions
+### dd zero fill unformatted space and such
+
 set -e # fail explicitly on any error
 
 # todo: interactive, cli options
