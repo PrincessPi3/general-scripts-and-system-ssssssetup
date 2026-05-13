@@ -3,7 +3,7 @@ set -e # fail explicitly on any error
 
 # todo: interactive, cli options
 disk=/dev/sda
-outname="disk_image_$(date +%Y-%m-%d-%H%M-%Z)"
+outname="test_disk_image_post0_$(date +%Y-%m-%d-%H%M-%Z)"
 outname="$outname.img.xz"
 
 # do the disk image dump using inline xz
