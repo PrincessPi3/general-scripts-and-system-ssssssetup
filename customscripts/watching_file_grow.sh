@@ -1,0 +1,1 @@
+img_name=2026-05-18-0635-MDT_Kali-Pi5-1TB-Working.img && logfile=2026-05-18-0652-MDT_img_dump_testin.log && watch -n 10 "du -h $img_name; du -b $img_name; echo; ls \"$img_name\" 2>/dev/null; ls \"$logfile\" 2>/dev/null; ls \"$img_name.xz\" 2>/dev/null; echo; \"echo Checksums:\" ls \"$img_name.sha256\" 2>/dev/null; ls \"$img_name.img.xz.sha256\" 2>/dev/null"
