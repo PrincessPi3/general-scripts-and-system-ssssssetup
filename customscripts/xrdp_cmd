@@ -1,0 +1,22 @@
+#!/bin/bash
+port=3389
+
+if systemctl is-active --quiet xrdp; then 
+    echo "Running XRDP Service Found Running, Stopping..."
+    sudo systemctl stop xrdp && echo "OK! XRDP Stopped!" || echo "ERROR: XRDP Failed To Start! Retcode: $?"
+fi
+
+if systemctl is-active --quiet lightdm; then 
+    echo "Window Manager Found Running, Stopping It..."
+    sudo systemctl stop lightdm && "OK! lightdm Stopped!" || echo "ERROR! Lightdm Did Not Stop! Retcode $?" # lightdm is xfce default
+fi
+
+echo "Starting XRDP..."
+sudo systemctl start xrdp && echo "OK! XRDP Running!" || echo "ERROR: XRDP Failed To Start Retcode: $?"
+
+echo "Starting Window Manager..."
+sudo nohup startxfce4 > /dev/null 2>&1 & # fork dis to da background, alsooo use nohup to keep it live if terminal closes
+
+echo "should be on RDP $(hostname -I | awk '{print $1}'):${port}"
+echo -e "\n\ndonesizessn nyaa~ :3\n\t$(hostname -I | awk '{print $1}'):${port}"\n\n"
+

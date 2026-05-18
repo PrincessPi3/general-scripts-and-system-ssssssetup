@@ -17,24 +17,20 @@ set -e # fail explicitly on any error
 
 # todo: interactive, cli options
 # disk=/dev/sda
-user=princesspi
-# outname="test_disk_image_post0_$(date +%Y-%m-%d-%H%M-%Z)"
-outname="$outname.img.xz"
-zerofile="/home/$user/0.0"
+outname="$HOME/$(date +%Y-%m-%d-%H%M-%Z)"
 
-echo "zeroing out empty space"
-sudo if=/dev/zero of="$zerofile" bs=4M status=progress || sudo rf -f "$zerofile"
+outname="$outname.img.xz"
 
 # do the disk image dump using inline xz
-# echo "runnin inline xz on $disk to file $outname"
-# sudo dd if=$disk status=progress bs=4M | xz -c > "$outname"
+echo "runnin inline xz on $disk to file $outname"
+sudo dd if=$disk status=progress bs=1M | xz -c > "$outname"
 
 # test xz integrity
-# echo "testing disk image integrity"
-# xz -t -v "$outname"
+echo "testing disk image integrity"
+xz -t -v "$outname"
 
 # make the sha256 file
-# echo "generating sha256 checksum file"
-# sha256sum "$outname" | tee "$outname.sha256"
+echo "generating sha256 checksum file"
+sha256sum "$outname" | tee "$outname.sha256"
 
 echo "all donesies :3"
