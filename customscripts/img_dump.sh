@@ -1,14 +1,15 @@
 #!/bin/bash
 # todo:
-## environment checks for webhook, xz-tools, and pishrink
+## x environment checks for webhook, xz-tools, and pishrink
 ### install if not found
 ## sanity checks in cleanup error trap to make sure nothing is wrongly deleted
-## ERR/TERMINATE traps
-### NO cleanup trap on EXIT
-## finish the pi query
+## x ERR/TERMINATE traps
+### x NO cleanup trap on EXIT
+## x finish the pi query
 ## add filename query
 
-set -e # fail on fuckups to iterate fasterrr
+set -euo pipefail # fail on fuckups to iterate fasterrr :pope: strict fuk u mode :3
+
 timestamp="$(date +%Y-%m-%d-%H%M-%Z)"
 disk=""
 log="${timestamp}_img_dump_testin.log"
@@ -24,7 +25,7 @@ check_command() {
 }
 
 # check da needed cmds~
-for cmd in webhook xz pishrink sha256 sudo; do
+for cmd in webhook xz pishrink sha256 sudo lsblk dd; do
     check_command "$cmd"
 done
 
@@ -33,11 +34,12 @@ cleanup () {
     webhook "$0 errored! Cleaning up! seconds: $SECONDS line: $LINENO command: $BASHCOMMAND" true
     # supress errors if they not there
     # to save me from testing each one or writing a fun :poe:
-    rm -f "$img_name" 2>/dev/null
-    rm -f "$img_name.sha256" 2>/dev/null
-    rm -f "$img_name.xz" 2>/dev/null
-    rm -f "$img_name.xz.sha256" 2>/dev/null
-    rm -f "$log" 2>/dev/null
+    for file in "$img_name" "$img_name.sha256" "$img_name.xz" "$img_name.xz.sha256" "$log"; do
+        if [ -f "$file" ]; then 
+            echo "Deleting $file"
+            sudo rm -f "$file" 2>/dev/null
+        fi
+    done
 }
 
 # cleanup any errant files on error/termination
