@@ -11,10 +11,9 @@
 set -euo pipefail # fail on fuckups to iterate fasterrr :pope: strict fuk u mode :3
 
 timestamp="$(date +%Y-%m-%d-%H%M-%Z)"
-disk=""
-log="${timestamp}_img_dump_testin.log"
-echo > "$log" # initialize to empty
-img_name="${timestamp}_Kali-Pi5-1TB-Working.img"
+# disk=""
+# log="${timestamp}_img_dump_testin.log"
+# img_name="${timestamp}_Kali-Pi5-1TB-Working.img"
 
 check_command() {
     command -v "$1" >/dev/null 2>&1 || {
@@ -49,15 +48,32 @@ trap cleanup SIGTERM
 
 echo -e "\n\n\nSTARTING DUMP OPS\n\n\n"
 
+# get disk
 lsblk
 read -p "Enter Disk Name (ex. sda, sdb no /dev or anything else) " disk_choice
 disk="/dev/$disk_choice"
+if [ ! -e "$disk" ]; then
+    echo "ERROR! /dev/$disk is not a device device!"
+    exit 1
+fi
 
 read -p "For Raspberry Pi? y\n default y" picheck
 
 # for when ask for tag
-# read -p "Input File Tag" filetag
+read -p "Input File Tag" filetag
+# sanity check it
+if [ -z "$filetag" ];
+    echo "ERROR! File Tag is Emprty!"
+    exit 1
+fi
+
+log="${timestamp}_${filetag}.log"
+echo > "$log" # initialize to empty
+img_name="${timestamp_${filetag}.img"
 clear
+
+# logging optinos to log file
+echo "Selections! filetag: $filetag disk: $disk picheck: $picheck log: $log img_name: $img_name" | tee -a "$log"
 
 webhook "runnan raw dd img on $disk at to $img_name using 4M bs size (Script Has Run $SECONDS Seconds)"
 sudo dd if="$disk" of="$img_name" status=progress bs=4M | tee -a "$log"
@@ -71,7 +87,7 @@ sha256sum "$img_name" | tee -a "$img_name.sha256"
 
 if [[ "$picheck" =~ [nN] ]]; then
     webhook "Doing non-pi xz compression on $img_name into $img_name.xz"
-    xz -v "$img_name" | tee -a "$log"
+    xz -v -k "$img_name" | tee -a "$log" # keeping for now so fiddle wit later
 else
     # pishrink
     ## -v verbose
